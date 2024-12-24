@@ -8,8 +8,8 @@ categoryBtn.addEventListener('click', function () {
 
 function updateCategoryPosition () {
     const contentRect = content.getBoundingClientRect();
-    categoryModal.style.left = `${contentRect.left + 680}px`
-    indexModal.style.left = `${contentRect.left - 190}px`
+    categoryModal.style.left = `${contentRect.left + 680}px`;
+    indexModal.style.left = `${contentRect.left - 190}px`;
 }
 // 미디어 쿼리 설정
 const mediaQuery = window.matchMedia('(min-width: 1024px)');

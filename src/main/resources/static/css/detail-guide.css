@@ -2,13 +2,30 @@
     position: relative;
     display: block;
     max-width: 100%;
+    margin-bottom: 15rem;
 }
 /*****************************/
 
-.detail-content img {
+.detail-content .detail-thumbnail {
+    display: flex;
     width: 100%;
-    height: auto;
+    aspect-ratio: 16 / 9;
     margin: 1.5rem 0;
+    justify-content: center; /* 이미지 수평 중앙 정렬 */
+    align-items: center; /* 이미지 수직 중앙 정렬 */
+    background-color: #454545;
+}
+.detail-thumbnail img {
+    aspect-ratio: 1 / 1; /* 이미지의 비율을 1:1로 유지 */
+    max-width: 100%; /* 너비 최대로 */
+    max-height: 100%; /* 높이 최대로 */
+    object-fit: contain; /* 여백을 유지하면서 중앙을 채움 */
+    object-position: center; /* 이미지 중앙 정렬 */
+
+}
+.detail-content img {
+    max-width: 100%;
+    height: auto;
 }
 .detail-content p {
     margin: 3rem 0;
@@ -68,4 +85,11 @@
 .highlight {
     background-color: #354692;
 }
-
+@media (min-width: 1024px) {
+    .view-count-box img {
+        max-width: 1.5rem;
+        margin: 0;
+        height: auto;
+        object-fit: cover;
+    }
+}

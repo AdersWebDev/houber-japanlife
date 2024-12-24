@@ -10,7 +10,7 @@ footer {
     align-items: center;
     background-color: #212121;
 }
-.footer-left {
+.m-footer-left {
     width: 13rem;
     padding: 1.7rem 0 0 2.3rem ;
     flex-direction: column;
@@ -19,7 +19,7 @@ footer {
     gap: 0.2rem;
     display: inline-flex;
 }
-.footer-logo {
+.m-footer-logo {
     font-size: 10rem;
     font-weight: bold;
     margin: 0;
@@ -28,7 +28,7 @@ footer {
     height: 2.18rem;
     opacity: 0.40
 }
-.footer-left p {
+.m-footer-left p {
     width: 13rem;
     opacity: 0.2;
     color: white;
@@ -37,13 +37,110 @@ footer {
     line-height: normal;
     margin: 0;
 }
-.footer-right {
+.m-footer-right {
     justify-content: center;
     align-items: flex-start;
     gap: 10px;
     display: inline-flex;
 }
-.footer-right img {
+.m-footer-right img {
     width: 3rem;
     height: 3rem;
+}
+/* 왼쪽 영역 (로고) */
+.footer-left {
+    display: none;
+    width: 14rem;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.footer-left img.footer-logo {
+    height: 3rem; /* 로고 높이 지정 */
+    object-fit: contain;
+    opacity: 0.40
+}
+
+/* 중간 영역 (소개 텍스트) */
+.footer-middle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left; /* 텍스트 중앙 정렬 */
+    width: 21rem;
+}
+
+footer .xs {
+    margin: 0.3rem 0; /* 텍스트 간격 */
+    font-size: 0.9rem;
+    opacity: 0.4;
+}
+
+/* 오른쪽 영역 (아이콘 및 주소) */
+.footer-right {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 16.5rem;
+}
+.footer-right .xxs {
+    font-size: 0.7rem;
+    opacity: 0.4;
+    margin: 0;
+}
+.footer-right .icons {
+    display: flex;
+    gap: 1.5rem; /* 아이콘 간 간격 */
+    margin-bottom: 0.5rem;
+}
+
+.footer-right img {
+    width: 2rem; /* 아이콘 크기 설정 */
+    height: 2rem;
+    object-fit: contain;
+}
+
+@media (min-width: 1024px) {
+    .m-footer-left,
+    .m-footer-right {
+        display: none;
+    }
+    footer {
+        gap: 2rem;
+        height: 5rem;
+    }
+    footer .xs {
+        margin: 0.1rem;
+    }
+    .footer-left,
+    .footer-middle,
+    .footer-right {
+        display: flex;
+    }
+    .footer-right .icons {
+        margin: 0;
+    }
+}
+@media (min-width: 1440px) {
+    .m-footer-left,
+    .m-footer-right {
+        display: none;
+    }
+    footer {
+        gap: 2rem;
+        height: 8rem;
+    }
+    footer .xs {
+        font-size: 1rem;
+        margin: 0.1rem;
+    }
+    .footer-left,
+    .footer-middle,
+    .footer-right {
+        display: flex;
+    }
+    .footer-right .icons {
+        margin: 0;
+    }
 }

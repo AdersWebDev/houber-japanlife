@@ -28,6 +28,10 @@ header {
     cursor: pointer;
 }
 @media (min-width: 1024px) {
+    header {
+        position: absolute;
+        top: 0;
+    }
     .logo {
         width: 8.3rem;
         height: auto;
