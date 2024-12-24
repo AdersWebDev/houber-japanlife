@@ -1,0 +1,67 @@
+#main-content {
+    width: 84%;
+    height: auto;
+    margin: 4rem auto;
+    position: relative;
+}
+
+
+
+#main-content img {
+    width: 100%;
+    height: auto;
+    padding: 3rem 0;
+}
+#main-content .h2-back {
+    background-color: #1860C3;
+}
+#main-content .h2-back .h2-front {
+    background-color: #2d2d2d;
+    height: 100%;
+    margin-left: 5px;
+    padding-left: 10px;
+}
+#main-content h3 {
+    text-decoration: underline dotted #7dbeff;
+    text-decoration-thickness: 0.4rem; /* 밑줄 두께 */
+    text-underline-position: under; /* 밑줄 위치 */
+}
+
+.highlight {
+    text-decoration: #ffff9c wavy underline;
+    text-decoration-thickness: 0.2rem; /* 밑줄 두께 */
+    text-underline-position: under; /* 밑줄 위치 */
+}
+.with-circle {
+    position: relative;
+    padding-left: 2rem;
+}
+.with-circle::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    transform: translateY(-50%);
+    background-color: #1860C3; /* 원의 색상 */
+    border-radius: 50%;
+    width: 12px; /* 원의 너비 */
+    height: 12px; /* 원의 높이 */
+}
+
+/* 애니메이션 정의 */
+@keyframes highlight-underline {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+@media (min-width: 760px) {
+
+}
+@media (min-width: 1023px) {
+    #main-content {
+        width: 60%;
+    }
+}

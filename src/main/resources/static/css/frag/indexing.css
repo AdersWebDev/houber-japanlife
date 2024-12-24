@@ -1,0 +1,110 @@
+#indexing-control {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 3%;
+    background-color: #535353;
+    width: 1.9rem;
+    height: 6rem;
+    z-index: 5;
+    border-radius: 2px;
+    overflow: hidden;
+}
+#indexing-control img {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+#indexing-control.active{
+    transform: rotate(180deg);
+    left: 20.8rem;
+}
+#indexing-modal {
+    position: fixed;
+    top: 53%;
+    left: -10%;
+    background-color: #323232;
+    width: 15rem;
+    height: 30rem;
+    z-index: 5;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    transform: translateY(-50%);
+    transition: left 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.5s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+#indexing-modal.active {
+    left: 5%;
+    opacity: 1;
+    visibility: visible;
+}
+#indexing-modal.closing {
+    left: -100%; /* 화면 밖으로 이동 */
+    opacity: 0; /* 투명하게 설정 */
+    visibility: hidden; /* 숨김 */
+}
+/* 제목 스타일 */
+#indexing-modal h3 {
+    font-size: 1.8rem;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0 1.5rem 0.5rem;
+}
+
+/* 목록 스타일 */
+#indexing-modal ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#indexing-modal .ordered-nav {
+    font-size: 1.4rem;
+    color: #d9d9d9;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* 마우스 호버 효과 */
+#indexing-modal .ordered-nav:hover {
+    background-color: #444;
+    color: #fff;
+}
+
+/* 활성화된 섹션 하이라이트 */
+#indexing-modal .ordered-nav.active {
+    background-color: #0044ff; /* 파란색 하이라이트 */
+    color: #fff;
+    font-weight: bold;
+}
+#indexing-modal::-webkit-scrollbar {
+    width: 6px; /* 세로 스크롤바의 너비 */
+    height: 6px; /* 가로 스크롤바의 높이 */
+}
+#indexing-modal::-webkit-scrollbar-track {
+    background: #616060; /* 트랙의 기본 배경색 */
+
+}
+#indexing-modal::-webkit-scrollbar-thumb {
+    background: #323232; /* 핸들의 색상 */
+    /*border: 3px solid rgba(240, 240, 240, 0); !* 핸들의 외곽선, 트랙 배경과 동일한 색상 *!*/
+}
+@media (min-width: 1024px) {
+    #indexing-control{
+        display: none;
+    }
+    #indexing-modal {
+        top: 24.4rem;
+        left: 10%;
+        z-index: 10;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 1rem;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+    }
+}

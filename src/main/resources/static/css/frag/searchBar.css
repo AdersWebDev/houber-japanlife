@@ -1,0 +1,46 @@
+.search-bar {
+    display: flex;
+    align-items: center;
+    height: 2.5rem;
+    background-color: #5d5d5d;
+    border-radius: 25px;
+    padding: 0 20px;
+    margin: 3.7rem 0;
+}
+
+.search-bar img {
+    padding: 0.5rem 1rem 0.5rem 0;
+}
+
+.search-bar input {
+    flex: 1; /* 남은 공간을 차지 */
+    border: none;
+    outline: none;
+    background: none;
+    color: white;
+    font-size: 1.8rem;
+    padding: 0;
+    height: 80%;
+}
+
+.search-bar input::placeholder {
+    color: #bdbdbd;
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+@media (min-width: 760px) {
+    .search-bar {
+        margin: 3.7rem 0;
+    }
+}
+@media (min-width: 768px) {
+    .search-bar {
+        display: flex;
+        align-items: center;
+        height: 3.5rem;
+    }
+
+}

@@ -1,0 +1,26 @@
+.content {
+    position: relative;
+    display: flex;
+    margin: 8.7rem auto 4.2rem;
+    padding: 0 5rem;
+    height: 80%;
+    /*padding: 0;*/
+    align-content: center;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+.items {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    margin: 0 0 10rem;
+}
+@media (min-width: 700px) {
+    .content {
+        padding: 0;
+    }
+}

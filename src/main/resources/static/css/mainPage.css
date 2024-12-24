@@ -1,0 +1,53 @@
+/* 슬라이드 컨테이너 */
+.slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    touch-action: pan-y; /* 모바일에서 세로 스크롤 방지 */
+}
+@media (min-width: 430px) {
+    .slider-container {
+        margin: 0 auto;
+    }
+}
+/* 슬라이더 */
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+    gap: 1.1rem;
+    cursor: grab;
+}
+
+/* 각 슬라이드 아이템 */
+.item {
+    min-width: 14rem;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.item img {
+    width: 100%;
+    height: auto;
+}
+
+/* 인덱스 점 (Dots) */
+.dots-container {
+    text-align: center;
+    margin-top: 0.6rem;
+}
+
+.dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 5px;
+    background-color: #333;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dot.active {
+    background-color: #ccc;
+}
