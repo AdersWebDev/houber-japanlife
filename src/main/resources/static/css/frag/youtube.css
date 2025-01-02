@@ -1,0 +1,59 @@
+.youtube-box {
+    display: block;
+}
+
+.plane {
+    display: block;
+    width: 80%;
+    aspect-ratio: 16/9;
+    margin: 0 auto;
+}
+.short {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9/16;
+    margin: 0 auto;
+}
+iframe.instagram-media {
+    min-width: 0 !important;
+}
+.youtube-box-footer p {
+    font-size: 1.1rem;
+    margin: 0.1rem;
+}
+.youtube-box-footer {
+    margin: 3rem auto 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+.youtube-box-footer a{
+    height: auto;
+}
+.youtube-box-footer a img{
+    width: 30%;
+    height: auto;
+}
+.instagram-box {
+    display: block;
+    margin: 0 auto;
+}
+@media (min-width: 768px) {
+    .youtube-box-footer p {
+        font-size: 1.4rem;
+    }
+    .short {
+        width: 60%;
+    }
+    .plane {
+        width: 100%;
+    }
+}
+@media (min-width: 1440px) {
+    .short {
+        width: 40%;
+    }
+}

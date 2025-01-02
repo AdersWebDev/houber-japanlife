@@ -10,7 +10,6 @@ html,body {
     font-size: 10px;
 }
 body {
-    /*position: relative;*/
     font-family: 'Pretendard-Regular', sans-serif;
     background-color: #212121;
     color: white;
@@ -37,7 +36,7 @@ body {
 }
 #go-top {
     position: fixed;
-    bottom: 10%;
+    bottom: 13%;
     right: 5%;
     width: 3rem;
     height: 5rem;
@@ -61,6 +60,7 @@ body {
 h1 {
     font-size: 2rem;
     font-weight: 700;
+    line-height: 25px;
 }
 h2 {
     font-size: 1.8rem;
@@ -73,6 +73,7 @@ h3 {
 p {
     font-size: 1.4rem;
     font-weight: 400;
+    line-height: 20px;
 }
 .s {
     font-size: 1.2rem;
@@ -82,43 +83,32 @@ p {
 
 }
 @media (min-width: 1023px) {
-    #go-top {
-        position: fixed;
-        bottom: 14%;
-        right: 12%;
-        width: 3rem;
-        height: 5rem;
-        display: flex;
-        z-index: 5;
-        flex-direction: column;
-        cursor: pointer;
-    }
     h1 {
-        font-size: 2.6rem;
+        font-size: 2.3rem;
         font-weight: 700;
+        line-height: 34px;
     }
     h2 {
-        font-size: 2.3rem;
+        font-size: 2rem;
         font-weight: 600;
+        line-height: 30px;
     }
     h3 {
-        font-size: 2.0rem;
+        font-size: 1.7rem;
         font-weight: 500;
+        line-height: 25px;
     }
     p {
-        font-size: 1.7rem;
+        font-size: 1.4rem;
         font-weight: 400;
+        line-height: 25px;
     }
     .s {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
+        line-height: 0;
     }
     .xs {
         font-size: 0.9rem;
-
-    }
-}
-@media (min-width: 1440px) {
-    #go-top {
-        right: 23%;
+        line-height: normal;
     }
 }

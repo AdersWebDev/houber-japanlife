@@ -5,10 +5,22 @@
     overflow: hidden;
     touch-action: pan-y; /* 모바일에서 세로 스크롤 방지 */
 }
-@media (min-width: 430px) {
-    .slider-container {
-        margin: 0 auto;
-    }
+.content-title {
+    display: flex;
+    width: 100%;
+    height: 4.6rem;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+}
+.content-title a{
+    text-decoration: none;
+    color: white;
+}
+.content-title h3,
+.content-title p{
+    margin: 0;
+    padding: 1rem 0;
 }
 /* 슬라이더 */
 .slider {
@@ -34,7 +46,7 @@
 /* 인덱스 점 (Dots) */
 .dots-container {
     text-align: center;
-    margin-top: 0.6rem;
+    margin: 0.6rem 0 3rem;
 }
 
 .dot {
@@ -50,4 +62,9 @@
 
 .dot.active {
     background-color: #ccc;
+}
+@media (min-width: 430px) {
+    .slider-container {
+        margin: 0 auto;
+    }
 }

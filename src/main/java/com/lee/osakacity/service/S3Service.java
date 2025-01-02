@@ -3,6 +3,7 @@ package com.lee.osakacity.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.lee.osakacity.dto.restful.ImgResponse;
 import com.lee.osakacity.infra.entity.File;
 import com.lee.osakacity.infra.repository.S3FileRepo;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,10 @@ public class S3Service {
      * @param file 업로드할 파일
      * @return 업로드된 파일의 S3 URL
      */
-    public String uploadFile(MultipartFile file) {
+    public ImgResponse uploadFile(MultipartFile file) {
         try {
             // 파일 이름 설정 (UUID 활용)
-            String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
+            String fileName =file.getOriginalFilename() + "-" + UUID.randomUUID();
 
             // 메타데이터 설정
             ObjectMetadata metadata = new ObjectMetadata();
@@ -46,11 +47,12 @@ public class S3Service {
                     .modifiedDate(LocalDateTime.now())
                     .fileUrl(fileUrl)
                     .fileName(fileName)
+                    .isUsed(false)
                     .build();
 
             s3FileRepo.save(fileEntity);
 
-            return fileUrl;
+            return new ImgResponse(fileEntity);
 
         } catch (IOException e) {
             throw new RuntimeException("File upload failed", e);

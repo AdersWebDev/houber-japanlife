@@ -1,21 +1,48 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head th:fragment="head(title, description, keywords)">
+<head th:fragment="head(title, description, keywords, siteUrl, thumbnail)">
   <title th:text="${title}">Default Title</title>
+  <meta charset="UTF-8">
+  <meta name="robots" content="index, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" th:content="${description}">
   <meta name="keywords" th:content="${keywords}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="Content-Security-Policy" content="frame-src 'self' https://www.youtube.com https://www.instagram.com/;">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="thumbnail" th:content="${thumbnail}"><!-- -->
 
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="houber-japanlife.com">
+  <meta property="og:type" content="article">
+  <meta property="og:title" th:content="${title}">
+  <meta property="og:url" th:content="${siteUrl}">
+  <meta property="og:description" th:content="${description}">
+  <meta property="og:image" th:content="${thumbnail}">
+
+  <meta property="twitter:card" content="article">
+  <meta property="twitter:title" th:content="${title}">
+  <meta property="twitter:description" th:content="${description}">
+  <meta property="twitter:image" th:content="${thumbnail}">
+  <meta name="twitter:creator" content="@houber">
+
+  <link rel="preload" href="/css/main.css" as="style">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="canonical"  th:href="${siteUrl}">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/frag/header.css">
   <link rel="stylesheet" href="/css/frag/footer.css">
-  <link rel="stylesheet" href="/css/mainContent.css">
   <link rel="stylesheet" href="/css/frag/searchBar.css">
   <link rel="stylesheet" href="/css/frag/category.css">
   <link rel="stylesheet" href="/css/frag/content.css">
   <link rel="stylesheet" href="/css/frag/indexing.css">
+  <link rel="stylesheet" href="/css/mainPage.css">
+  <link rel="stylesheet" href="/css/frag/grid-items.css">
+  <link rel="stylesheet" href="/css/detail.css">
+  <link rel="stylesheet" href="/css/searchPage.css">
+  <link rel="stylesheet" href="/css/frag/youtube.css">
 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6VNPQYE8J8"></script>
+  <script>gtag('config', 'G-6VNPQYE8J8');</script>
 </head>
-</html>
+

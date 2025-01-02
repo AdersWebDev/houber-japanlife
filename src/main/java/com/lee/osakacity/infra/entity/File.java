@@ -25,11 +25,21 @@ public class File{
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createDate;
+
     @LastModifiedDate
     @Column()
     private LocalDateTime modifiedDate;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String fileUrl;
+
+    @Column(nullable = false)
     private String fileName;
+
+    @Column(nullable = false)
+    private boolean isUsed;
+
+    public void isUsed(boolean value) {
+        this.isUsed = value;
+    }
 }

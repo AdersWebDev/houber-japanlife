@@ -1,5 +1,6 @@
 package com.lee.osakacity.controller;
 
+import com.lee.osakacity.dto.restful.ImgResponse;
 import com.lee.osakacity.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class S3Controller {
     private final S3Service s3Service;
     @PostMapping()
-    public String uploadFile(@ModelAttribute MultipartFile file) {
+    public ImgResponse uploadFile(@ModelAttribute MultipartFile file) {
         return s3Service.uploadFile(file);
     }
 }

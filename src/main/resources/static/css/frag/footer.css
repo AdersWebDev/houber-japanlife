@@ -88,6 +88,7 @@ footer .xs {
     font-size: 0.7rem;
     opacity: 0.4;
     margin: 0;
+    line-height: normal;
 }
 .footer-right .icons {
     display: flex;

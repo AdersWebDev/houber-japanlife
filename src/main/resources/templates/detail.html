@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{fragments/head :: head(
+    title=${title},
+    description=${description},
+    keywords=${keywords},
+    siteUrl=${siteUrl},
+    thumbnail=${thumbnail}
+    )}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<nav th:replace="~{fragments/category :: category}"></nav>
+<div th:replace="~{fragments/go-top :: go-top}"></div>
+
+<section class="content">
+  <div th:replace="~{fragments/searchBar :: searchBar}"></div>
+  <main>
+    <section class="detail-content">
+
+      <div id="indexing-control">
+        <img src="/asset/indexing-controller.png" alt="내부 목차 열기(open aside)">
+      </div>
+      <aside id="indexing-modal">
+        <h3>Index</h3>
+        <ul>
+          <li th:each="item : ${tableOfContents}">
+            <a th:href="'#' + ${item['id']}">
+              <span th:text="${item['text']}"></span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <div th:utext ="${mainContent}" id="detail-content"></div>
+    </section>
+  </main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</section>
+</body>
+<script src="/js/main.js"></script>
+<script src="/js/navControl.js"></script>
+<script src="/js/detailControl.js"></script>
+<script src="/js/asideControl.js"></script>
+</html>
+

@@ -5,7 +5,10 @@ categoryBtn.addEventListener('click', function () {
         categoryModal.classList.add('active');
     }
 })
-
+window.addEventListener('load', function () {
+    const contentRect = content.getBoundingClientRect();
+    goTop.style.right = `${contentRect.left}px`;
+})
 function updateCategoryPosition () {
     const contentRect = content.getBoundingClientRect();
     categoryModal.style.left = `${contentRect.left + 680}px`;

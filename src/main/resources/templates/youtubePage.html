@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head th:replace="~{fragments/head :: head(
+    title=${title},
+    description=${description},
+    keywords=${keywords},
+    siteUrl=${siteUrl},
+    thumbnail=${thumbnail}
+    )}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<nav th:replace="~{fragments/category :: category}"></nav>
+<div th:replace="~{fragments/go-top :: go-top}"></div>
+<section class="content">
+    <div th:replace="~{fragments/searchBar :: searchBar}"></div>
+    <div class="youtube-box">
+        <iframe th:class="${class}"
+                th:src="${url}"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+        </iframe>
+    </div>
+    <div class="youtube-box-footer">
+        <div style="display: flex; flex-direction: row; justify-content: space-between;">
+            <p>이건 어때요?</p>
+            <a href="https://www.youtube.com/@Houber_Official"><img src="/asset/shortcutYoutube.png" alt="유튜브 채널 바로가기(houber youtube shortcut)"></a>
+        </div>
+        <div class="grid-items sns">
+            <div class="grid-item sns">
+                <a href="/"><img th:src="${thumbnail}"></a>
+            </div>
+            <div class="grid-item sns">
+                <a href="/"><img th:src="${thumbnail}"></a>
+            </div>
+            <div class="grid-item sns">
+                <a href="/"><img th:src="${thumbnail}"></a>
+            </div>
+            <div class="grid-item sns">
+                <a href="/"><img th:src="${thumbnail}"></a>
+            </div>
+        </div>
+
+    </div>
+</section>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+<script src="/js/main.js"></script>
+<script src="/js/detailControl.js"></script>
+<script src="/js/navControl.js"></script>
+</html>
