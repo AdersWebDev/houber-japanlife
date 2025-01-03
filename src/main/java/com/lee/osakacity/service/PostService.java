@@ -5,10 +5,7 @@ import com.lee.osakacity.custom.Category;
 import com.lee.osakacity.dto.mvc.PostResponseDto;
 import com.lee.osakacity.dto.mvc.SimpleResponse;
 import com.lee.osakacity.dto.restful.PostRequestDto;
-import com.lee.osakacity.infra.entity.File;
-import com.lee.osakacity.infra.entity.Post;
-import com.lee.osakacity.infra.entity.QFile;
-import com.lee.osakacity.infra.entity.QPost;
+import com.lee.osakacity.infra.entity.*;
 import com.lee.osakacity.infra.repository.PostRepo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +29,7 @@ public class PostService {
 
     QPost qPost = QPost.post;
     QFile qFile = QFile.file;
+    QSnsContent qSnsContent = QSnsContent.snsContent;
 //    public List<SimpleResponse> getTopView() {
 //
 //    }
@@ -64,6 +62,20 @@ public class PostService {
                     .orderBy(qPost.id.desc())
                     .limit(20)
                     .fetch();
+        } else if (category.equals(Category.HOUBER_SNS_CONTENT)) {
+            List<SnsContent> result;
+            result = jpaQueryFactory
+                    .selectFrom(qSnsContent)
+                    .where(
+                            cursorId != null
+                                    ? qPost.id.lt(cursorId)
+                                    : null
+                    )
+                    .orderBy(qSnsContent.localDateTime.desc())
+                    .limit(20)
+                    .fetch();
+            return result.stream().map(SimpleResponse::new).toList();
+
         } else {
             eList = jpaQueryFactory
                     .selectFrom(qPost)

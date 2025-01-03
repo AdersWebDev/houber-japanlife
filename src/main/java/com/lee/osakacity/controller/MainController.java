@@ -48,8 +48,8 @@ public class MainController {
 //    }
     @GetMapping("/{category}/list")
     public String listPage(@PathVariable String category,
-                           @RequestParam Long cursorId,
-                           @RequestParam Integer cursorView,
+                           @RequestParam(required = false) Long cursorId,
+                           @RequestParam(required = false) Integer cursorView,
                            Model model) {
         Category enumCategory = this.convertCategory(category);
         model.addAttribute("title", "리스트 페이지");
@@ -138,6 +138,7 @@ public class MainController {
             case "working-holiday": yield Category.WORKING_HOLIDAY;
             case "japan-study": yield Category.JAPAN_STUDY;
             case "japan-life": yield Category.JAPAN_LIFE;
+            case "houber-sns" : yield Category.HOUBER_SNS_CONTENT;
             case "view-all": yield Category.VIEW_ALL;
             default: throw new IllegalArgumentException();
         };

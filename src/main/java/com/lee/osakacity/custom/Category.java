@@ -10,6 +10,7 @@ public enum Category {
     WORKING_HOLIDAY("working-holiday"),
     JAPAN_STUDY("japan-study"),
     JAPAN_LIFE("japan-life"),
+    HOUBER_SNS_CONTENT("houber-sns-content"),
     VIEW_ALL("view-all");
 
     private final String value;
