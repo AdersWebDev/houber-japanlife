@@ -32,32 +32,25 @@ public class MainController {
         model.addAttribute("description", "여기는 메인 페이지입니다.");
         model.addAttribute("keywords", "메인, Thymeleaf, Spring Boot");
         model.addAttribute("siteUrl", "https://houber-japanlife.com");
-        model.addAttribute("thumbnail","https://houber-japanlife.com/favicon.png");
+        model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
 
         return "index";
     }
-//    @GetMapping("/{category}/list")
-//    public String listPage(@PathVariable String category, Model model) {
-//        Category enumCategory = this.convertCategory(category);
-//        model.addAttribute("title", "리스트 페이지");
-//        model.addAttribute("description", "여기는 메인 페이지입니다.");
-//        model.addAttribute("keywords", "메인, Thymeleaf, Spring Boot");
-//        model.addAttribute("mainContent",postService.getList(enumCategory, null, null));
-//
-//        return "listPage";
-//    }
-    @GetMapping("/{category}/list")
-    public String listPage(@PathVariable String category,
+
+    @GetMapping("/list")
+    public String listPage(@RequestParam Category category,
                            @RequestParam(required = false) Long cursorId,
                            @RequestParam(required = false) Integer cursorView,
                            Model model) {
-        Category enumCategory = this.convertCategory(category);
-        model.addAttribute("title", "리스트 페이지");
-        model.addAttribute("description", "여기는 메인 페이지입니다.");
-        model.addAttribute("keywords", "메인, Thymeleaf, Spring Boot");
-        model.addAttribute("siteUrl", "https://houber-japanlife.com/"+category+"/list");
-        model.addAttribute("thumbnail","https://houber-japanlife.com/favicon.png");
-        model.addAttribute("mainContent",postService.getList(enumCategory, cursorId, cursorView));
+
+        model.addAttribute("title",  "하우버 - " + category.getTitle() + "콘텐츠 보기");
+        model.addAttribute("description", category.getTitle() +"에서 최신 일본 워킹홀리데이 및 생활 정보를 확인하세요. 하우버가 전하는 생생한 포스트를 만나보세요!");
+        model.addAttribute("keywords", "하우버, "+category.getTitle()+", 일본, 일본 정보, 일본 워홀, 워킹홀리데이");
+        model.addAttribute("siteUrl", "https://houber-japanlife.com/list?category="+category);
+        model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
+        model.addAttribute("mainContent",postService.getList(category, cursorId, cursorView));
+        model.addAttribute("content_h1",category.getTitle());
+        model.addAttribute("content_p",category.getDescription());
 
         return "listPage";
     }
@@ -68,7 +61,7 @@ public class MainController {
         model.addAttribute("description", "여기는 메인 페이지입니다.");
         model.addAttribute("keywords", "메인, Thymeleaf, Spring Boot");
         model.addAttribute("siteUrl", "https://houber-japanlife.com/search");
-        model.addAttribute("thumbnail","https://houber-japanlife.com/favicon.png");
+        model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
         return "searchPage";
     }
 
@@ -132,17 +125,17 @@ public class MainController {
             return "youtubePage";
 
     }
-    private Category convertCategory (String category) {
-        return switch (category) {
-            case "hot-post" : yield Category.HOT_POST;
-            case "working-holiday": yield Category.WORKING_HOLIDAY;
-            case "japan-study": yield Category.JAPAN_STUDY;
-            case "japan-life": yield Category.JAPAN_LIFE;
-            case "houber-sns" : yield Category.HOUBER_SNS_CONTENT;
-            case "view-all": yield Category.VIEW_ALL;
-            default: throw new IllegalArgumentException();
-        };
-    }
+//    private Category convertCategory (String category) {
+//        return switch (category) {
+//            case "hot-post" : yield Category.HOT_POST;
+//            case "working-holiday": yield Category.WORKING_HOLIDAY;
+//            case "japan-study": yield Category.JAPAN_STUDY;
+//            case "japan-life": yield Category.JAPAN_LIFE;
+//            case "houber-sns" : yield Category.HOUBER_SNS_CONTENT;
+//            case "view-all": yield Category.VIEW_ALL;
+//            default: throw new IllegalArgumentException();
+//        };
+
 
 
 }

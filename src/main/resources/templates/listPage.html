@@ -14,7 +14,8 @@
 <section class="content">
   <div style="margin: 0 auto; width: 100%; height: auto">
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>
-    <h3>[워킹 홀리데이]</h3>
+    <h1 th:text="'[ ' + ${content_h1} + ' ]'"></h1>
+    <p th:text="${content_p}"></p>
     <div class="items">
       <div class="grid-items">
         <div class="grid-item" th:each="item : ${mainContent}">

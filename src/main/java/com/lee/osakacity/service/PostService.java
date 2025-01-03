@@ -37,7 +37,7 @@ public class PostService {
 
         List<Post> eList;
 
-        if (category.equals(Category.HOT_POST)) {
+        if (category.equals(Category.hot_post)) {
             eList = jpaQueryFactory
                     .selectFrom(qPost)
                     .where(
@@ -50,7 +50,7 @@ public class PostService {
                     .limit(20)
                     .fetch();
 
-        } else if (category.equals(Category.VIEW_ALL)) {
+        } else if (category.equals(Category.all)) {
 
             eList = jpaQueryFactory
                     .selectFrom(qPost)
@@ -62,7 +62,7 @@ public class PostService {
                     .orderBy(qPost.id.desc())
                     .limit(20)
                     .fetch();
-        } else if (category.equals(Category.HOUBER_SNS_CONTENT)) {
+        } else if (category.equals(Category.houber_sns)) {
             List<SnsContent> result;
             result = jpaQueryFactory
                     .selectFrom(qSnsContent)
