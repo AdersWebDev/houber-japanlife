@@ -5,13 +5,16 @@ indexController.addEventListener('click', function () {
 
         indexModal.classList.add('closing');
         indexController.classList.remove('active');
-
+        indexController.style.left = '3%';
         indexModal.addEventListener('transitionend', () => {
             indexModal.classList.remove('closing');
         }, { once: true });
+
     } else {
         indexModal.classList.add('active');
         indexController.classList.add('active');
+
+        indexController.style.left = `${(window.innerWidth * 0.05)+172}px`;
     }
 })
 document.addEventListener('DOMContentLoaded', () => {

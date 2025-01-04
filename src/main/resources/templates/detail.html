@@ -14,7 +14,6 @@
 
 <section class="content">
   <div th:replace="~{fragments/searchBar :: searchBar}"></div>
-  <main>
     <section class="detail-content">
 
       <div id="indexing-control">
@@ -33,8 +32,6 @@
 
       <div th:utext ="${mainContent}" id="detail-content"></div>
     </section>
-  </main>
-
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </section>
 </body>
