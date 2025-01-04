@@ -31,6 +31,19 @@
       </aside>
 
       <div th:utext ="${mainContent}" id="detail-content"></div>
+
+      <div th:if="${not #lists.isEmpty(moreContents)}" class="slider-container">
+        <h2>이어지는 콘텐츠를 보여드릴게요!</h2>
+        <div class="slider">
+          <div th:each="item : ${moreContents}" class="item">
+            <a th:href="${item.link}">
+              <img th:src = "${item.thumbnailUrl}"
+                   th:alt = "${item.title}">
+            </a>
+          </div>
+       </div>
+      </div>
+
     </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </section>
@@ -39,5 +52,6 @@
 <script src="/js/navControl.js"></script>
 <script src="/js/detailControl.js"></script>
 <script src="/js/asideControl.js"></script>
+<script src="/js/slideItem.js"></script>
 </html>
 

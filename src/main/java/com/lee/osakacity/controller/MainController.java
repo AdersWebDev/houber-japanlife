@@ -98,6 +98,7 @@ public class MainController {
         }
 
         model.addAttribute("tableOfContents", toc);
+        model.addAttribute("moreContents", postService.moreContents(dto.getCategory(), dto.getId()));
         return "detail";
     }
     @GetMapping("/detail/sns-content/{id}")
@@ -122,17 +123,5 @@ public class MainController {
             return "youtubePage";
 
     }
-//    private Category convertCategory (String category) {
-//        return switch (category) {
-//            case "hot-post" : yield Category.HOT_POST;
-//            case "working-holiday": yield Category.WORKING_HOLIDAY;
-//            case "japan-study": yield Category.JAPAN_STUDY;
-//            case "japan-life": yield Category.JAPAN_LIFE;
-//            case "houber-sns" : yield Category.HOUBER_SNS_CONTENT;
-//            case "view-all": yield Category.VIEW_ALL;
-//            default: throw new IllegalArgumentException();
-//        };
-
-
 
 }

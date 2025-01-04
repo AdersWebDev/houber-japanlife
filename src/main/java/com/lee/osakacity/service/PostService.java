@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -146,6 +147,36 @@ public class PostService {
         }
     }
 
+    public List<SimpleResponse> moreContents(Category category, long id) {
+        List<SimpleResponse> dtoList = new ArrayList<>(
+                jpaQueryFactory
+                        .select(Projections.constructor(SimpleResponse.class,
+                                qPost.id,
+                                qPost.view,
+                                qPost.title,
+                                qPost.thumbnailUrl,
+                                Expressions.constant("/detail/")
+                        ))
+                        .from(qPost)
+                        .where(qPost.category.eq(category).and(qPost.id.ne(id)))
+                        .limit(15)
+                        .orderBy(qPost.id.asc())
+                        .fetch()
+        );
+
+        // 2. 리스트 분리 및 재정렬
+        List<SimpleResponse> greaterList = dtoList.stream()
+                .filter(dto -> dto.getId() > id)
+                .toList();
+
+        List<SimpleResponse> lesserList = dtoList.stream()
+                .filter(dto -> dto.getId() < id)
+                .toList();
+
+        // 3. 최종 리스트 합치기 (큰 값이 먼저, 그 뒤 작은 값)
+        return Stream.concat(greaterList.stream(), lesserList.stream())
+                .collect(Collectors.toList());
+    }
     public PostResponseDto getDetail(Long id) {
         Post post =  postRepo.findById(id)
                 .orElseThrow(()->new NotFoundException("404 NOT FOUND"));
@@ -155,7 +186,7 @@ public class PostService {
     }
 
     //==================
-    @Transactional()
+    @Transactional
     public void create(HttpServletRequest request, PostRequestDto dto) {
         String key =  request.getHeader("authorization");
         if ( !key.equals(KEY) )

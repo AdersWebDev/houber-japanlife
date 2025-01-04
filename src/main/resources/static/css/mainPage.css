@@ -34,6 +34,8 @@
 /* 각 슬라이드 아이템 */
 .item {
     min-width: 14rem;
+    max-width: 14rem;
+    height: auto;
     box-sizing: border-box;
     text-align: center;
 }

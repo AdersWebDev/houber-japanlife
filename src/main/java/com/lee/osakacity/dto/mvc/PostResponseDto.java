@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 public class PostResponseDto {
+    private final Long id;
     private final Category category;
     private final String title;
     private final String thumbnailUrl;
@@ -18,6 +19,7 @@ public class PostResponseDto {
     private final String content;
 
     public PostResponseDto(Post post) {
+        this.id = post.getId();
         this.category = post.getCategory();
         this.modifiedDate = post.getModifiedDate().toLocalDate();
         this.title = post.getTitle();

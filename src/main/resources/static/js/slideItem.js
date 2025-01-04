@@ -1,7 +1,8 @@
 const slider = document.querySelector('.slider');
 const items = document.querySelectorAll('.slider .item');
-const dotsContainer = document.querySelector('.dots-container');
 
+const dotsContainer = document.querySelector('.dots-container');
+let isMain = (dotsContainer != null);
 let currentIndex = 0;
 let isDragging = false;
 let startPos = 0;
@@ -9,22 +10,26 @@ let currentTranslate = 0;
 let prevTranslate = 0;
 
 // 🔹 1. 점(dot) 생성
-items.forEach((_, index) => {
-    const dot = document.createElement('div');
-    dot.classList.add('dot');
-    if (index === 0) dot.classList.add('active');
-    dot.addEventListener('click', () => goToSlide(index));
-    dotsContainer.appendChild(dot);
-});
+if (isMain) {
+    items.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+    });
+}
 
 const dots = document.querySelectorAll('.dot');
 
 // 🔹 2. 슬라이드 이동 함수
 function updateSliderPosition() {
     slider.style.transform = `translateX(-${currentIndex * 150}px)`;
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentIndex);
-    });
+    if (isMain) {
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+    }
 }
 
 // 🔹 3. 마우스 & 터치 이벤트

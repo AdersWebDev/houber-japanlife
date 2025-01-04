@@ -21,6 +21,10 @@ body {
     scroll-behavior: smooth;
     height: 100%;
 }
+img {
+    user-drag: none; /* Safari 브라우저 지원 */
+    -webkit-user-drag: none; /* Safari와 Chrome 브라우저 지원 */
+}
 ::-webkit-scrollbar {
     width: 12px; /* 세로 스크롤바의 너비 */
     height: 12px; /* 가로 스크롤바의 높이 */
