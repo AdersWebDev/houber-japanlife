@@ -5,8 +5,13 @@ import com.lee.osakacity.custom.SnsCategory;
 import com.lee.osakacity.dto.YouTubeSearchItem;
 import com.lee.osakacity.dto.SnsContentResponseDto;
 import com.lee.osakacity.dto.YoutubeResponse;
+import com.lee.osakacity.dto.mvc.SimpleResponse;
+import com.lee.osakacity.infra.entity.QSnsContent;
 import com.lee.osakacity.infra.entity.SnsContent;
 import com.lee.osakacity.infra.repository.SnsContentRepo;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +20,19 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class SnsContentService {
     private final SnsContentRepo snsContentRepo;
     private final RestTemplate restTemplate;
-
+    private final JPAQueryFactory jpaQueryFactory;
     @Value("${google.console.key}")
     private String KEY;
 
+    QSnsContent qSnsContent = QSnsContent.snsContent;
     public SnsContentResponseDto getDetail(Long id) {
         SnsContent snsContent =  snsContentRepo.findById(id)
                 .orElseThrow(()->new NotFoundException("404 NOT FOUND"));
@@ -108,5 +116,36 @@ public class SnsContentService {
         }
 
         return null;
+    }
+
+    public List<SimpleResponse> moreContents(Long id) {
+        List<SimpleResponse> dtoList = new ArrayList<>(
+                jpaQueryFactory
+                        .select(Projections.constructor(SimpleResponse.class,
+                                qSnsContent.id,
+                                qSnsContent.view,
+                                qSnsContent.title,
+                                qSnsContent.thumbnailUrl,
+                                Expressions.constant("/detail/sns-content/")
+                        ))
+                        .from(qSnsContent)
+                        .where(qSnsContent.id.ne(id))
+                        .limit(15)
+                        .orderBy(qSnsContent.id.asc())
+                        .fetch()
+        );
+
+        // 2. 리스트 분리 및 재정렬
+        List<SimpleResponse> greaterList = dtoList.stream()
+                .filter(dto -> dto.getId() > id)
+                .toList();
+
+        List<SimpleResponse> lesserList = dtoList.stream()
+                .filter(dto -> dto.getId() < id)
+                .toList();
+
+        // 3. 최종 리스트 합치기 (큰 값이 먼저, 그 뒤 작은 값)
+        return Stream.concat(greaterList.stream(), lesserList.stream())
+                .collect(Collectors.toList());
     }
 }

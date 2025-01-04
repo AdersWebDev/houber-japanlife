@@ -2,7 +2,6 @@ package com.lee.osakacity.controller;
 
 import com.lee.osakacity.custom.Category;
 import com.lee.osakacity.dto.mvc.PostResponseDto;
-import com.lee.osakacity.custom.SnsCategory;
 import com.lee.osakacity.dto.SnsContentResponseDto;
 import com.lee.osakacity.service.PostService;
 import com.lee.osakacity.service.SnsContentService;
@@ -113,13 +112,14 @@ public class MainController {
 
         model.addAttribute("url", "https://www.youtube.com/embed/"
                 +dto.getContent()
-                +"?modestbranding=1&rel=0&iv_load_policy=3"
+                +"?loop=1&playlist=" + dto.getContent()
+                + "&modestbranding=1&rel=0&iv_load_policy=3"
         );
         model.addAttribute("class", dto.getSnsCategory().getClassValue());
-
-        if (dto.getSnsCategory().equals(SnsCategory.INSTAGRAM))
-            return "instagramPage";
-        else
+        model.addAttribute("moreContents", snsContentService.moreContents(dto.getId()));
+//        if (dto.getSnsCategory().equals(SnsCategory.INSTAGRAM))
+//            return "instagramPage";
+//        else
             return "youtubePage";
 
     }

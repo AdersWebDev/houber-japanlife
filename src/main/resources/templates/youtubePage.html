@@ -23,26 +23,21 @@
                 allowfullscreen>
         </iframe>
     </div>
-    <div class="youtube-box-footer">
-        <div style="display: flex; flex-direction: row; justify-content: space-between;">
-            <p>이건 어때요?</p>
+    <div th:if="${not #lists.isEmpty(moreContents)}" class="slider-container">
+        <div class="slider-head">
+            <p>Based in Osaka.<br>
+                V-log / Japanese / Contents</p>
             <a href="https://www.youtube.com/@Houber_Official"><img src="/asset/shortcutYoutube.png" alt="유튜브 채널 바로가기(houber youtube shortcut)"></a>
         </div>
-        <div class="grid-items sns">
-            <div class="grid-item sns">
-                <a href="/"><img th:src="${thumbnail}"></a>
-            </div>
-            <div class="grid-item sns">
-                <a href="/"><img th:src="${thumbnail}"></a>
-            </div>
-            <div class="grid-item sns">
-                <a href="/"><img th:src="${thumbnail}"></a>
-            </div>
-            <div class="grid-item sns">
-                <a href="/"><img th:src="${thumbnail}"></a>
+        <h2>관련 콘텐츠 더보기</h2>
+        <div class="slider">
+            <div th:each="item : ${moreContents}" class="item">
+                <a th:href="${item.link}">
+                    <img th:src = "${item.thumbnailUrl}"
+                         th:alt = "${item.title}">
+                </a>
             </div>
         </div>
-
     </div>
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
