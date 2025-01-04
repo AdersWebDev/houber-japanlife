@@ -115,13 +115,13 @@ public class PostService {
                             qSnsContent.view,
                             qSnsContent.title,
                             qSnsContent.thumbnailUrl,
-                            Expressions.constant("/detail/sns-content/")
-                    ))
+                            qSnsContent.publishTime,
+                            Expressions.constant("/detail/sns-content/")))
                     .from(qSnsContent)
                     .where(
-                            cursorId != null ? qSnsContent.id.lt(cursorId) : null
+                            cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
                     )
-                    .orderBy(qSnsContent.id.desc())
+                    .orderBy(qSnsContent.publishTime.desc())
                     .limit(limit)
                     .fetch();
 
