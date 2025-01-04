@@ -114,7 +114,7 @@ public class PostService {
                             qSnsContent.view,
                             qSnsContent.title,
                             qSnsContent.thumbnailUrl,
-                            Expressions.constant("/detail/sns-content")
+                            Expressions.constant("/detail/sns-content/")
                     ))
                     .from(qSnsContent)
                     .where(
