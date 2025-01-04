@@ -7,6 +7,8 @@ import com.lee.osakacity.dto.mvc.SimpleResponse;
 import com.lee.osakacity.dto.restful.PostRequestDto;
 import com.lee.osakacity.infra.entity.*;
 import com.lee.osakacity.infra.repository.PostRepo;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,68 +34,118 @@ public class PostService {
     QPost qPost = QPost.post;
     QFile qFile = QFile.file;
     QSnsContent qSnsContent = QSnsContent.snsContent;
-//    public List<SimpleResponse> getTopView() {
-//
-//    }
-    public List<SimpleResponse> getList (Category category, Long cursorId, Integer cursorView) {
 
-        List<Post> eList;
+    public List<SimpleResponse> getList (Category category,Long cursorId, Integer cursorView, LocalDateTime cursorTime) {
+        int limit = 10;
 
         if (category.equals(Category.hot_post)) {
-            eList = jpaQueryFactory
-                    .selectFrom(qPost)
+            // Post 데이터 가져오기
+            return jpaQueryFactory
+                    .select(Projections.constructor(SimpleResponse.class,
+                            qPost.id,
+                            qPost.view,
+                            qPost.title,
+                            qPost.thumbnailUrl,
+                            Expressions.constant("/detail/")
+                    ))
+                    .from(qPost)
                     .where(
-                            (cursorId != null && cursorView != null)
-                            ? qPost.view.lt(cursorView)
-                                    .or(qPost.view.eq(cursorView).and(qPost.id.lt(cursorId)))
+                            (cursorView != null && cursorId != null)
+                                    ? qPost.view.lt(cursorView)
+                                        .or(qPost.view.eq(cursorView).and(qPost.id.lt(cursorId)))
                                     : null
                     )
                     .orderBy(qPost.view.desc(), qPost.id.desc())
-                    .limit(20)
+                    .limit(limit)
                     .fetch();
 
         } else if (category.equals(Category.all)) {
 
-            eList = jpaQueryFactory
-                    .selectFrom(qPost)
+            List<SimpleResponse> pList = new ArrayList<>(jpaQueryFactory
+                    .select(Projections.constructor(SimpleResponse.class,
+                            qPost.id,
+                            qPost.view,
+                            qPost.title,
+                            qPost.thumbnailUrl,
+                            qPost.modifiedDate,
+                            Expressions.constant("/detail/")))
+                    .from(qPost)
                     .where(
-                            cursorId != null
-                                ? qPost.id.lt(cursorId)
-                                : null
+                            cursorTime != null ? qPost.modifiedDate.lt(cursorTime) : null
                     )
-                    .orderBy(qPost.id.desc())
-                    .limit(20)
-                    .fetch();
+                    .orderBy(qPost.modifiedDate.desc())
+                    .limit(limit / 2)
+                    .fetch());
+
+            // 📌 SnsContent 데이터 가져오기 (limit + extraFetch)
+            List<SimpleResponse> sList = new ArrayList<>(jpaQueryFactory
+                    .select(Projections.constructor(SimpleResponse.class,
+                            qSnsContent.id,
+                            qSnsContent.view,
+                            qSnsContent.title,
+                            qSnsContent.thumbnailUrl,
+                            qSnsContent.publishTime,
+                            Expressions.constant("/detail/sns-content/")))
+                    .from(qSnsContent)
+                    .where(
+                            cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
+                    )
+                    .orderBy(qSnsContent.publishTime.desc())
+                    .limit(limit / 2)
+                    .fetch());
+
+            // 📌 두 리스트 병합
+            List<SimpleResponse> combinedList = new ArrayList<>();
+            combinedList.addAll(pList);
+            combinedList.addAll(sList);
+
+            // 📌 뷰 기준으로 정렬
+            combinedList.sort(Comparator.comparing(SimpleResponse::getCursorTime, Comparator.reverseOrder()));
+
+            // 📌 최종적으로 limit 만큼만 반환
+            return combinedList.stream()
+                    .limit(limit)
+                    .collect(Collectors.toList());
+
         } else if (category.equals(Category.houber_sns)) {
-            List<SnsContent> result;
-            result = jpaQueryFactory
-                    .selectFrom(qSnsContent)
+            return jpaQueryFactory
+                    .select(Projections.constructor(SimpleResponse.class,
+                            qSnsContent.id,
+                            qSnsContent.view,
+                            qSnsContent.title,
+                            qSnsContent.thumbnailUrl,
+                            Expressions.constant("/detail/sns-content")
+                    ))
+                    .from(qSnsContent)
                     .where(
-                            cursorId != null
-                                    ? qPost.id.lt(cursorId)
-                                    : null
+                            cursorId != null ? qSnsContent.id.lt(cursorId) : null
                     )
-                    .orderBy(qSnsContent.localDateTime.desc())
-                    .limit(20)
+                    .orderBy(qSnsContent.id.desc())
+                    .limit(limit)
                     .fetch();
-            return result.stream().map(SimpleResponse::new).toList();
 
         } else {
-            eList = jpaQueryFactory
-                    .selectFrom(qPost)
+            return jpaQueryFactory
+                    .select(Projections.constructor(SimpleResponse.class,
+                            qPost.id,
+                            qPost.view,
+                            qPost.title,
+                            qPost.thumbnailUrl,
+                            Expressions.constant("/detail/")
+                    ))
+                    .from(qPost)
                     .where(
                             cursorId != null
-                                ? qPost.id.lt(cursorId)
-                                : qPost.category.eq(category)
+                                    ? qPost.category.eq(category).and(qPost.id.lt(cursorId))
+                                    : qPost.category.eq(category)
                     )
                     .orderBy(qPost.id.desc())
-                    .limit(20)
+                    .limit(limit)
                     .fetch();
+
         }
-
-
-        return eList.stream().map(SimpleResponse::new).toList();
     }
+
     public PostResponseDto getDetail(Long id) {
         Post post =  postRepo.findById(id)
                 .orElseThrow(()->new NotFoundException("404 NOT FOUND"));
@@ -120,8 +174,8 @@ public class PostService {
         }
 
         Post post = Post.builder()
-                .createDate(LocalDate.now())
-                .modifiedDate(LocalDate.now())
+                .createDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
                 .fileList(fileList)
                 .category(dto.getCategory())
                 .thumbnailUrl(dto.getThumbnailUrl())

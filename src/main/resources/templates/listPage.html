@@ -20,10 +20,15 @@
       <div class="grid-items">
         <div class="grid-item" th:each="item : ${mainContent}">
           <a th:href="${item.link}">
-            <img th:src="${item.thumbnailUrl}" th:alt="${item.title}">
+            <img th:src="${item.thumbnailUrl}"
+                 th:alt="${item.title}"
+                 th:data-id="${item.id}"
+                 th:data-view="${item.view}"
+                 th:data-time="${item.cursorTime}">
           </a>
         </div>
       </div>
+      <div id="loading" style="display: none;">Loading...</div>
     </div>
   </div>
 </section>
@@ -32,5 +37,6 @@
 <script src="/js/main.js"></script>
 <script src="/js/navControl.js"></script>
 <script src="/js/detailControl.js"></script>
+<script src="/js/infiniteScroll.js"></script>
 
 </html>

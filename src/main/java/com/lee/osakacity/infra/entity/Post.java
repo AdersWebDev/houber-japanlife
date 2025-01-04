@@ -10,7 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +27,9 @@ public class Post{
     private Long id;
     @CreatedDate
     @Column(updatable = false)
-    private LocalDate createDate;
+    private LocalDateTime createDate;
     @LastModifiedDate
-    private LocalDate modifiedDate;
+    private LocalDateTime modifiedDate;
 
     @OneToMany
     private List<File> fileList = new ArrayList<>();

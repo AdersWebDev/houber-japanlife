@@ -1,26 +1,36 @@
 package com.lee.osakacity.dto.mvc;
 
-import com.lee.osakacity.infra.entity.Post;
-import com.lee.osakacity.infra.entity.SnsContent;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class SimpleResponse {
-    private String title;
-    private String thumbnailUrl;
-    private String link;
+    private final Long id;
+    private final String title;
+    private final String thumbnailUrl;
+    private final int view;
+    private final String link;
+    private LocalDateTime cursorTime;
 
-    public SimpleResponse(Post post) {
-        this.title = post.getTitle();
-        this.thumbnailUrl = post.getThumbnailUrl();
-        this.link = "/detail/"+ post.getId();
+    public SimpleResponse(Long id, int view, String title, String thumbnailUrl, String link) {
+        this.id = id;
+        this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
+        this.view = view;
+        this.cursorTime = null;
+        this.link = link +id;
     }
-    public SimpleResponse(SnsContent snsContent) {
-        this.title = snsContent.getTitle();
-        this.thumbnailUrl = snsContent.getThumbnailUrl();
-        this.link = "/detail/sns-content/"+snsContent.getId();
+
+    public SimpleResponse(Long id, int view, String title, String thumbnailUrl, LocalDateTime cursorTime, String link) {
+        this.id = id;
+        this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
+        this.view = view;
+        this.cursorTime = cursorTime;
+        this.link = link +id;
     }
 
 }

@@ -21,7 +21,7 @@ public class SnsContent {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime localDateTime;
+    private LocalDateTime publishTime;
 
     @Column()
     private SnsCategory snsCategory;

@@ -19,7 +19,7 @@ public class PostResponseDto {
 
     public PostResponseDto(Post post) {
         this.category = post.getCategory();
-        this.modifiedDate = post.getModifiedDate();
+        this.modifiedDate = post.getModifiedDate().toLocalDate();
         this.title = post.getTitle();
         this.thumbnailUrl = post.getThumbnailUrl();
         this.description = post.getDescription();

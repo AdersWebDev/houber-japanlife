@@ -3,7 +3,6 @@ package com.lee.osakacity.service;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.lee.osakacity.custom.SnsCategory;
 import com.lee.osakacity.dto.YouTubeSearchItem;
-import com.lee.osakacity.dto.mvc.SimpleResponse;
 import com.lee.osakacity.dto.SnsContentResponseDto;
 import com.lee.osakacity.dto.YoutubeResponse;
 import com.lee.osakacity.infra.entity.SnsContent;
@@ -25,10 +24,7 @@ public class SnsContentService {
 
     @Value("${google.console.key}")
     private String KEY;
-    public List<SimpleResponse> snsList() {
-        List<SnsContent> snsContents = snsContentRepo.findAll();
-        return snsContents.stream().map(SimpleResponse::new).toList();
-    }
+
     public SnsContentResponseDto getDetail(Long id) {
         SnsContent snsContent =  snsContentRepo.findById(id)
                 .orElseThrow(()->new NotFoundException("404 NOT FOUND"));
@@ -67,7 +63,7 @@ public class SnsContentService {
 
             newSnsContent.add(
                     SnsContent.builder()
-                            .localDateTime(y.getSnippet().getPublishedAt())
+                            .publishTime(y.getSnippet().getPublishedAt())
                             .snsCategory(snsCategory)
                             .thumbnailUrl(y.getSnippet().getThumbnails().getHigh().getUrl())
                             .title("houber-" + y.getSnippet().getTitle())

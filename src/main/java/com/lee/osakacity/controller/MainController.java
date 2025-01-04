@@ -38,17 +38,14 @@ public class MainController {
     }
 
     @GetMapping("/list")
-    public String listPage(@RequestParam Category category,
-                           @RequestParam(required = false) Long cursorId,
-                           @RequestParam(required = false) Integer cursorView,
-                           Model model) {
+    public String listPage(@RequestParam Category category, Model model) {
 
         model.addAttribute("title",  "하우버 - " + category.getTitle() + "콘텐츠 보기");
         model.addAttribute("description", category.getTitle() +"에서 최신 일본 워킹홀리데이 및 생활 정보를 확인하세요. 하우버가 전하는 생생한 포스트를 만나보세요!");
         model.addAttribute("keywords", "하우버, "+category.getTitle()+", 일본, 일본 정보, 일본 워홀, 워킹홀리데이");
         model.addAttribute("siteUrl", "https://houber-japanlife.com/list?category="+category);
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
-        model.addAttribute("mainContent",postService.getList(category, cursorId, cursorView));
+        model.addAttribute("mainContent",postService.getList(category, null, null, null));
         model.addAttribute("content_h1",category.getTitle());
         model.addAttribute("content_p",category.getDescription());
 
