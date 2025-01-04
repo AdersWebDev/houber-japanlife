@@ -32,6 +32,8 @@ public class MainController {
         model.addAttribute("keywords", "메인, Thymeleaf, Spring Boot");
         model.addAttribute("siteUrl", "https://houber-japanlife.com");
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
+        model.addAttribute("hot_post",postService.getList(Category.hot_post, 5, null, null, null));
+        model.addAttribute("all_guide",postService.getGuideOnly(12));
 
         return "index";
     }
@@ -44,7 +46,7 @@ public class MainController {
         model.addAttribute("keywords", "하우버, "+category.getTitle()+", 일본, 일본 정보, 일본 워홀, 워킹홀리데이");
         model.addAttribute("siteUrl", "https://houber-japanlife.com/list?category="+category);
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
-        model.addAttribute("mainContent",postService.getList(category, null, null, null));
+        model.addAttribute("mainContent",postService.getList(category, 10, null, null, null));
         model.addAttribute("content_h1",category.getTitle());
         model.addAttribute("content_p",category.getDescription());
 

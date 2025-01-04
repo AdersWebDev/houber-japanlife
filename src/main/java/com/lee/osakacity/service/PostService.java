@@ -36,8 +36,7 @@ public class PostService {
     QFile qFile = QFile.file;
     QSnsContent qSnsContent = QSnsContent.snsContent;
 
-    public List<SimpleResponse> getList (Category category,Long cursorId, Integer cursorView, LocalDateTime cursorTime) {
-        int limit = 10;
+    public List<SimpleResponse> getList (Category category, int limit ,Long cursorId, Integer cursorView, LocalDateTime cursorTime) {
 
         if (category.equals(Category.hot_post)) {
             // Post 데이터 가져오기
@@ -146,7 +145,20 @@ public class PostService {
 
         }
     }
-
+    public List<SimpleResponse> getGuideOnly(int limit) {
+        return jpaQueryFactory
+                .select(Projections.constructor(SimpleResponse.class,
+                        qPost.id,
+                        qPost.view,
+                        qPost.title,
+                        qPost.thumbnailUrl,
+                        Expressions.constant("/detail/")
+                ))
+                .from(qPost)
+                .orderBy(Expressions.numberTemplate(Double.class, "function('RAND')").asc())
+                .limit(limit)
+                .fetch();
+    }
     public List<SimpleResponse> moreContents(Category category, long id) {
         List<SimpleResponse> dtoList = new ArrayList<>(
                 jpaQueryFactory
