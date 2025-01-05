@@ -67,11 +67,14 @@ public class MainController {
     public String detailPage(@PathVariable Long id, Model model) {
 
         PostResponseDto dto = postService.getDetail(id);
-        model.addAttribute("title", dto.getTitle());
+        model.addAttribute("title","houber-"+ dto.getTitle());
         model.addAttribute("description", dto.getDescription());
         model.addAttribute("keywords", dto.getKeyword());
         model.addAttribute("siteUrl", "https://houber-japanlife.com/detail/"+id);
         model.addAttribute("thumbnail",dto.getThumbnailUrl());
+        model.addAttribute("h1",dto.getTitle());
+        model.addAttribute("category", dto.getCategory());
+        model.addAttribute("view",dto.getView());
 
         List<Map<String, String>> toc = new ArrayList<>();
 

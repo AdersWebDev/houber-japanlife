@@ -30,7 +30,23 @@
         </ul>
       </aside>
 
-      <div th:utext ="${mainContent}" id="detail-content"></div>
+      <div id="detail-content">
+        <div class="detail-header">
+          <h1 th:text="${h1}"></h1>
+          <div class="detail-header-under">
+            <span class="s">
+              <a href="/" style="text-decoration: none; color: #fff">메인</a>
+              >
+              <a th:href="@{/list(category=${category})}" th:text="${category.title}" style="text-decoration: none; color: #fff"></a>
+            </span>
+            <div class="view-count-box">
+              <img src="/asset/viewCount.png" alt="게시글이 읽힌 수(counting post view)">
+              <span class="s" th:text="${view}"></span>
+            </div>
+          </div>
+        </div>
+        <th:block th:utext="${mainContent}"></th:block>
+      </div>
 
       <div th:if="${not #lists.isEmpty(moreContents)}" class="slider-container">
         <h2>이어지는 콘텐츠를 보여드릴게요!</h2>

@@ -189,6 +189,7 @@ public class PostService {
         return Stream.concat(greaterList.stream(), lesserList.stream())
                 .collect(Collectors.toList());
     }
+    @Transactional
     public PostResponseDto getDetail(Long id) {
         Post post =  postRepo.findById(id)
                 .orElseThrow(()->new NotFoundException("404 NOT FOUND"));

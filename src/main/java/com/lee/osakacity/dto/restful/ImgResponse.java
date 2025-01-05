@@ -7,9 +7,11 @@ import lombok.Getter;
 public class ImgResponse {
     private final Long id;
     private final String url;
+    private final String alt;
 
     public ImgResponse (File file) {
         this.id = file.getId();
         this.url = file.getFileUrl();
+        this.alt = file.getAlt();
     }
 }
