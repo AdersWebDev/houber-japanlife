@@ -91,7 +91,7 @@ public class MainController {
                 headingMap.put("id", "header"+index); // ID 추가
 
                 if (head.tagName().equals("h2")) {
-                    headingMap.put("text", index + ". " + head.text()); // h2는 번호 추가
+                    headingMap.put("text", head.text()); // h2는 번호 추가
                 } else {
                     headingMap.put("text", "- " + head.text()); // h3는 - 추가
                 }
