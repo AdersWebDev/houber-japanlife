@@ -14,17 +14,16 @@
 <section class="content">
     <div style="margin: 0 auto; width: 100%; height: auto">
         <div th:replace="~{fragments/searchBar :: searchBar}"></div>
-        <h1 th:text="'[ ' + ${search_keyword} + ' ]의 ' + ${searched_list.size()} + '건의 검색결과'"></h1>
-        <div class="searched-list">
-
+        <h1 th:text="'[ ' + ${search_keyword} + ' ]의 검색결과'" style="margin: 1.2rem"></h1>
+        <div class="searched-list" th:data-keyword="${search_keyword}">
 <!--        <h3>[워킹홀리데이] 검색 결과</h3>-->
             <div th:each="item : ${searched_list}" class="searched-box">
                 <a th:href="${item.link}" style="color: #fff; text-decoration: none">
-                    <div>
+                    <div th:data-time="${item.dateTime}">
                         <h3 th:text="${item.title}"></h3>
                         <p th:text="${item.description}"></p>
                         <div class="view-count-box">
-                            <img src="/asset/viewCount.png" alt="게시글이 읽힌 수(counting post view">
+                            <img src="/asset/viewCount.png" alt="게시글이 읽힌 수(counting post view)">
                             <span class="s" th:text="${item.view}"></span>
                         </div>
                     </div>
@@ -37,11 +36,13 @@
             </div>
         </div>
     </div>
+    <div id="loading" style="display: none;">Loading...</div>
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 <script src="/js/main.js"></script>
 <script src="/js/detailControl.js"></script>
 <script src="/js/navControl.js"></script>
+<script src="/js/searchControl.js"></script>
 
 </html>
