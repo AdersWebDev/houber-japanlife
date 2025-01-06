@@ -30,6 +30,9 @@
 .detail-content p {
     margin: 3rem 0;
 }
+.detail-content .checkList {
+    margin: 1.5rem 0;
+}
 .detail-content h3 {
     height: auto;
     padding-left: 0.5rem;

@@ -24,7 +24,7 @@ public class MainRestController {
                                          @RequestParam(required = false) Integer cursorView,
                                          @RequestParam(required = false) LocalDateTime cursorTime) {
 
-       return postService.getList(category, cursorId, cursorView, cursorTime);
+       return postService.getList(category,10, cursorId, cursorView, cursorTime);
 
     }
 

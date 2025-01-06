@@ -36,8 +36,7 @@ public class PostService {
     QFile qFile = QFile.file;
     QSnsContent qSnsContent = QSnsContent.snsContent;
 
-    public List<SimpleResponse> getList (Category category,Long cursorId, Integer cursorView, LocalDateTime cursorTime) {
-        int limit = 10;
+    public List<SimpleResponse> getList (Category category, int limit ,Long cursorId, Integer cursorView, LocalDateTime cursorTime) {
 
         if (category.equals(Category.hot_post)) {
             // Post 데이터 가져오기
@@ -115,13 +114,13 @@ public class PostService {
                             qSnsContent.view,
                             qSnsContent.title,
                             qSnsContent.thumbnailUrl,
-                            Expressions.constant("/detail/sns-content/")
-                    ))
+                            qSnsContent.publishTime,
+                            Expressions.constant("/detail/sns-content/")))
                     .from(qSnsContent)
                     .where(
-                            cursorId != null ? qSnsContent.id.lt(cursorId) : null
+                            cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
                     )
-                    .orderBy(qSnsContent.id.desc())
+                    .orderBy(qSnsContent.publishTime.desc())
                     .limit(limit)
                     .fetch();
 
@@ -146,7 +145,20 @@ public class PostService {
 
         }
     }
-
+    public List<SimpleResponse> getGuideOnly(int limit) {
+        return jpaQueryFactory
+                .select(Projections.constructor(SimpleResponse.class,
+                        qPost.id,
+                        qPost.view,
+                        qPost.title,
+                        qPost.thumbnailUrl,
+                        Expressions.constant("/detail/")
+                ))
+                .from(qPost)
+                .orderBy(Expressions.numberTemplate(Double.class, "function('RAND')").asc())
+                .limit(limit)
+                .fetch();
+    }
     public List<SimpleResponse> moreContents(Category category, long id) {
         List<SimpleResponse> dtoList = new ArrayList<>(
                 jpaQueryFactory
@@ -177,6 +189,7 @@ public class PostService {
         return Stream.concat(greaterList.stream(), lesserList.stream())
                 .collect(Collectors.toList());
     }
+    @Transactional
     public PostResponseDto getDetail(Long id) {
         Post post =  postRepo.findById(id)
                 .orElseThrow(()->new NotFoundException("404 NOT FOUND"));

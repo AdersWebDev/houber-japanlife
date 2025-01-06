@@ -44,9 +44,9 @@ public class S3Service {
             String fileUrl = amazonS3.getUrl(bucketName, fileName).toString();
             File fileEntity = File.builder()
                     .createDate(LocalDateTime.now())
-                    .modifiedDate(LocalDateTime.now())
                     .fileUrl(fileUrl)
                     .fileName(fileName)
+                    .alt(this.getOriginFileNameWithOutType(file.getOriginalFilename()))
                     .isUsed(false)
                     .build();
 
@@ -58,7 +58,14 @@ public class S3Service {
             throw new RuntimeException("File upload failed", e);
         }
     }
-
+    private String getOriginFileNameWithOutType(String originalFilename){
+        int dotIndex = originalFilename.lastIndexOf('.');
+        if (dotIndex > 0) { // 확장자가 존재할 경우
+            return originalFilename.substring(0, dotIndex);
+        } else {
+            return originalFilename; // 확장자가 없을 경우 전체 이름 반환
+        }
+    }
     public void deleteFile(String fileName) {
         amazonS3.deleteObject(bucketName, fileName);
     }

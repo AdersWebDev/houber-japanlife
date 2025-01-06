@@ -11,50 +11,41 @@
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/category :: category}"></nav>
-<div th:replace="~{fragments/go-top :: go-top}"></div>
 <section class="content">
   <div style="margin: 0 auto; width: 100%; height: auto">
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>
     <div class="content-title">
-      <h3>가장 인기있는 글을 한눈에</h3>
-      <p><a href="/category/list">더보기</a></p>
+      <h3>가장 인기있는 게시글을 한눈에</h3>
+      <p><a href="/list?category=hot_post">더보기</a></p>
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div class="item"><a href="/category/list"><img src="/asset/워킹홀리데이.png" alt="Slide 1"></a></div>
-        <div class="item"><a href="/category/list"><img src="/asset/워홀 귀국 전 가이드.png" alt="Slide 2"></a></div>
-        <div class="item"><a href="/category/list"><img src="/asset/워홀 서류 작성하기.png" alt="Slide 3"></a></div>
-        <div class="item"><a href="/category/list"><img src="/asset/워홀 신청 방법 안내.png" alt="Slide 3"></a></div>
-        <div class="item"><a href="/category/list"><img src="/asset/워홀 입국 전 꿀팁.png" alt="Slide 3"></a></div>
+        <div th:each="item : ${hot_post}" class="item">
+          <a th:href="${item.link}">
+            <img th:src = "${item.thumbnailUrl}"
+                 th:alt = "${item.title}">
+          </a>
+        </div>
       </div>
     </div>
+
     <div class="dots-container"></div>
     <div class="content-title">
-      <h3>최신 글을 확인해보세요</h3>
-      <p><a href="/category/list">더보기</a></p>
+      <h3>다양한 가이드를 확인해보세요</h3>
+      <p><a href="/list?category=all">더보기</a></p>
     </div>
+
     <div class="items">
       <div class="grid-items">
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워킹홀리데이.png" alt="Slide 1"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 지원 자격 조건.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/일본에서 알바 구하는 TIP.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워킹홀리데이.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 서류 작성하기.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 신청 방법 안내.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 입국 후 가이드.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 지원 자격 조건.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/일본에서 알바 구하는 TIP.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워킹홀리데이.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 서류 작성하기.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 신청 방법 안내.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 입국 후 가이드.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 지원 자격 조건.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/일본에서 알바 구하는 TIP.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워킹홀리데이.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 서류 작성하기.png" alt="Slide 2"></a></div>
-        <div class="grid-item"><a href="/category/list"><img src="/asset/워홀 신청 방법 안내.png" alt="Slide 2"></a></div>
+        <div th:each="item : ${all_guide}" class="grid-item">
+          <a th:href="${item.link}">
+            <img th:src="${item.thumbnailUrl}"
+                 th:alt="item.title">
+          </a>
+        </div>
       </div>
     </div>
+
   </div>
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>

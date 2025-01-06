@@ -31,8 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const rect = header.getBoundingClientRect();
             const viewportHeight = window.innerHeight;
 
-            if (rect.top <= viewportHeight / 2 && rect.bottom >= viewportHeight / 2) {
-                activeIndex = index;
+            const detectionPoint = viewportHeight * 2 / 3;
+
+            if (rect.top <= detectionPoint && rect.bottom >= detectionPoint) {
+                activeIndex = index; // 화면 4/5 지점에 요소가 걸칠 때만 업데이트
             }
         });
 
