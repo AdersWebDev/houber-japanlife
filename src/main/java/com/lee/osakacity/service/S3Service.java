@@ -9,6 +9,7 @@ import com.lee.osakacity.infra.repository.S3FileRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class S3Service {
     @Value("${aws.s3.bucket-name}")
     private String bucketName;
@@ -28,6 +30,7 @@ public class S3Service {
      * @param file 업로드할 파일
      * @return 업로드된 파일의 S3 URL
      */
+    @Transactional
     public ImgResponse uploadFile(MultipartFile file) {
         try {
             // 파일 이름 설정 (UUID 활용)
@@ -66,6 +69,7 @@ public class S3Service {
             return originalFilename; // 확장자가 없을 경우 전체 이름 반환
         }
     }
+    @Transactional
     public void deleteFile(String fileName) {
         amazonS3.deleteObject(bucketName, fileName);
     }
