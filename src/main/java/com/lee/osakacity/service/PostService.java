@@ -232,10 +232,12 @@ public class PostService {
 
         postRepo.save(post);
     }
+    @Transactional
     public String update(Category category) {
 
         return null;
     }
+    @Transactional
     public void delete(Long id) {
 
     }
