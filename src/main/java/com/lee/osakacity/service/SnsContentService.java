@@ -76,7 +76,7 @@ public class SnsContentService {
                             .publishTime(y.getSnippet().getPublishedAt())
                             .snsCategory(snsCategory)
                             .thumbnailUrl(y.getSnippet().getThumbnails().getHigh().getUrl())
-                            .title("houber-" + y.getSnippet().getTitle())
+                            .title(y.getSnippet().getTitle())
                             .description(y.getSnippet().getDescription())
                             .keyword("test")
                             .content(y.getId().getVideoId())

@@ -27,7 +27,7 @@ public class SnsContentResponseDto {
         this.id = snsContent.getId();
         this.snsCategory = snsContent.getSnsCategory();
         this.thumbnailUrl = snsContent.getThumbnailUrl();
-        this.title = snsContent.getTitle();
+        this.title = "houber-"+snsContent.getTitle();
         this.description = snsContent.getDescription();
         this.keyword = snsContent.getKeyword();
         this.content = snsContent.getContent();
