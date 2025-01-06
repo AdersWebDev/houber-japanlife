@@ -28,7 +28,11 @@
     transition: transform 0.5s ease-in-out;
     will-change: transform;
     gap: 1.1rem;
-    cursor: grab;
+    cursor: pointer;
+}
+.slider.dragging {
+    transition: none; /* 드래그 중에는 transition 비활성화 */
+    cursor: grabbing;
 }
 
 /* 각 슬라이드 아이템 */
@@ -39,10 +43,23 @@
     box-sizing: border-box;
     text-align: center;
 }
-
-.item img {
+.item a {
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+.item a:focus  {
+    outline: none;
+}
+.item a img {
     width: 100%;
     height: auto;
+    user-drag: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 /* 인덱스 점 (Dots) */
