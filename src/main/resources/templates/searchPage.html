@@ -14,150 +14,26 @@
 <section class="content">
     <div style="margin: 0 auto; width: 100%; height: auto">
         <div th:replace="~{fragments/searchBar :: searchBar}"></div>
-        <h3>[워킹홀리데이] 검색 결과</h3>
+        <h1 th:text="'[ ' + ${search_keyword} + ' ]의 ' + ${searched_list.size()} + '건의 검색결과'"></h1>
         <div class="searched-list">
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
+
+<!--        <h3>[워킹홀리데이] 검색 결과</h3>-->
+            <div th:each="item : ${searched_list}" class="searched-box">
+                <a th:href="${item.link}" style="color: #fff; text-decoration: none">
+                    <div>
+                        <h3 th:text="${item.title}"></h3>
+                        <p th:text="${item.description}"></p>
+                        <div class="view-count-box">
+                            <img src="/asset/viewCount.png" alt="게시글이 읽힌 수(counting post view">
+                            <span class="s" th:text="${item.view}"></span>
+                        </div>
                     </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
+                </a>
+                <a th:href="${item.link}" style="color: #fff; text-decoration: none" >
+                    <div class="searched-box-thumbnail">
+                        <img th:src="${item.thumbnailUrl}" th:alt="${item.title}">
                     </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
-                    </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
-                    </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
-                    </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
-                    </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
-                    </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
-                    </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
-                    </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
-                    </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
-            </div>
-            <div class="searched-box">
-                <div>
-                    <h3>워킹 홀리데이 시작하기 한번더?</h3>
-                    <p style="font-size: 1.2rem">조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요 조니워커 블루라벨 뱀띠 에디션 명품 조니우커어 불루라벨이 흘러넘치는걸 막아요</p>
-                    <div class="view-count-box">
-                        <img src="/asset/viewCount.png" alt="">
-                        <span class="s">37890</span>
-                    </div>
-                </div>
-                <div class="searched-box-thumbnail">
-                    <img src="/asset/워킹홀리데이.png" alt="">
-                </div>
+                </a>
             </div>
         </div>
     </div>
@@ -165,7 +41,6 @@
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 <script src="/js/main.js"></script>
-<script src="/js/mainPage.js"></script>
 <script src="/js/detailControl.js"></script>
 <script src="/js/navControl.js"></script>
 

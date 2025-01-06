@@ -1,6 +1,7 @@
 package com.lee.osakacity.controller;
 
 import com.lee.osakacity.custom.Category;
+import com.lee.osakacity.dto.mvc.SearchResponseDto;
 import com.lee.osakacity.dto.mvc.SimpleResponse;
 import com.lee.osakacity.dto.restful.PostRequestDto;
 import com.lee.osakacity.service.PostService;
@@ -26,6 +27,10 @@ public class MainRestController {
 
        return postService.getList(category,10, cursorId, cursorView, cursorTime);
 
+    }
+    @GetMapping("/search")
+    public List<SearchResponseDto> searchPage(@RequestParam String keyword, @RequestParam LocalDateTime cursorTime) {
+        return postService.search(keyword, 10, cursorTime);
     }
 
     @PostMapping()
