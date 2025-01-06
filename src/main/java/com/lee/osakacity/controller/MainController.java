@@ -59,7 +59,11 @@ public class MainController {
         model.addAttribute("description", "여기는 메인 페이지입니다.");
         model.addAttribute("keywords", "메인, Thymeleaf, Spring Boot");
         model.addAttribute("siteUrl", "https://houber-japanlife.com/search");
+        //위에 cancol 수정
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
+        model.addAttribute("search_keyword",keyword);
+        model.addAttribute("searched_list",postService.search(keyword, 10, null));
+
         return "searchPage";
     }
 

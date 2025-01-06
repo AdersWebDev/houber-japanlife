@@ -3,6 +3,7 @@ package com.lee.osakacity.service;
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.lee.osakacity.custom.Category;
 import com.lee.osakacity.dto.mvc.PostResponseDto;
+import com.lee.osakacity.dto.mvc.SearchResponseDto;
 import com.lee.osakacity.dto.mvc.SimpleResponse;
 import com.lee.osakacity.dto.restful.PostRequestDto;
 import com.lee.osakacity.infra.entity.*;
@@ -52,7 +53,7 @@ public class PostService {
                     .where(
                             (cursorView != null && cursorId != null)
                                     ? qPost.view.lt(cursorView)
-                                        .or(qPost.view.eq(cursorView).and(qPost.id.lt(cursorId)))
+                                    .or(qPost.view.eq(cursorView).and(qPost.id.lt(cursorId)))
                                     : null
                     )
                     .orderBy(qPost.view.desc(), qPost.id.desc())
@@ -159,6 +160,76 @@ public class PostService {
                 .limit(limit)
                 .fetch();
     }
+    /**
+     * 특수기호 제외시키기
+     * @param keyword 검색 키워드
+     * @return 검색 결과 도출
+     */
+    public List<SearchResponseDto> search(String keyword, int limit, LocalDateTime cursorTime) {
+        if (keyword == null || keyword.isEmpty())
+            return null;
+        else if( keyword.matches(".*[<>!@#$%^&*(),.?\":{}|].*") )
+            return null;
+
+        List<SearchResponseDto> result = new ArrayList<>();
+        result.addAll(
+                jpaQueryFactory
+                .select(Projections.constructor(SearchResponseDto.class,
+                        qPost.id,
+                        qPost.title,
+                        qPost.view,
+                        qPost.content,
+                        qPost.thumbnailUrl,
+                        qPost.createDate,
+                        Expressions.constant("/detail/"))
+                )
+                .from(qPost)
+                .where(
+                        cursorTime == null
+                                ? qPost.title.contains(keyword)
+                                .or(qPost.keyword.contains(keyword))
+                                .or(qPost.content.contains(keyword))
+                                : qPost.createDate.before(cursorTime).and(
+                                        qPost.title.contains(keyword)
+                                                .or(qPost.keyword.contains(keyword))
+                                                .or(qPost.content.contains(keyword))
+                        )
+
+
+                )
+                .orderBy(qPost.modifiedDate.desc())
+                .limit(limit)
+                .fetch()
+        );
+        result.addAll(
+                jpaQueryFactory
+                        .select(Projections.constructor(SearchResponseDto.class,
+                                qSnsContent.id,
+                                qSnsContent.title,
+                                qSnsContent.view,
+                                qSnsContent.description,
+                                qSnsContent.thumbnailUrl,
+                                qSnsContent.publishTime,
+                                Expressions.constant("/detail/sns-content/"))
+                        )
+                        .from(qSnsContent)
+                        .where(
+                                cursorTime == null
+                                        ? qSnsContent.title.contains(keyword).or(qSnsContent.description.contains(keyword))
+                                        : qSnsContent.publishTime.before(cursorTime).and(
+                                                qSnsContent.title.contains(keyword)
+                                                        .or(qSnsContent.description.contains(keyword)
+                                                        )
+                                                )
+                        )
+                        .orderBy(qSnsContent.publishTime.desc())
+                        .limit(limit)
+                        .fetch()
+        );
+
+        result.sort(Comparator.comparing(SearchResponseDto::getDateTime).reversed());
+        return result;
+    }
     public List<SimpleResponse> moreContents(Category category, long id) {
         List<SimpleResponse> dtoList = new ArrayList<>(
                 jpaQueryFactory
@@ -239,5 +310,6 @@ public class PostService {
     public void delete(Long id) {
 
     }
+
 
 }
