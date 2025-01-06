@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -33,13 +34,14 @@ public class SnsContentService {
     private String KEY;
 
     QSnsContent qSnsContent = QSnsContent.snsContent;
+    @Transactional
     public SnsContentResponseDto getDetail(Long id) {
         SnsContent snsContent =  snsContentRepo.findById(id)
                 .orElseThrow(()->new NotFoundException("404 NOT FOUND"));
         snsContent.increaseView();
         return new SnsContentResponseDto(snsContent);
     }
-
+    @Transactional
     public void youtubeUpdate(String channelId) {
         String url = "https://www.googleapis.com/youtube/v3/search?key="
                 + KEY
