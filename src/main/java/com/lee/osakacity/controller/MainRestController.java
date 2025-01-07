@@ -25,12 +25,12 @@ public class MainRestController {
                                          @RequestParam(required = false) Integer cursorView,
                                          @RequestParam(required = false) LocalDateTime cursorTime) {
 
-       return postService.getList(category,10, cursorId, cursorView, cursorTime);
+       return postService.getList(category,20, cursorId, cursorView, cursorTime);
 
     }
     @GetMapping("/search")
     public List<SearchResponseDto> searchPage(@RequestParam String keyword, @RequestParam LocalDateTime cursorTime) {
-        return postService.search(keyword, 10, cursorTime);
+        return postService.search(keyword, 20, cursorTime);
     }
 
     @PostMapping()

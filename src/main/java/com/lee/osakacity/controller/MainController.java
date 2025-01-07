@@ -46,7 +46,7 @@ public class MainController {
         model.addAttribute("keywords", "하우버, "+category.getTitle()+", 일본, 일본 정보, 일본 워홀, 워킹홀리데이");
         model.addAttribute("siteUrl", "https://houber-japanlife.com/list?category="+category);
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
-        model.addAttribute("mainContent",postService.getList(category, 10, null, null, null));
+        model.addAttribute("mainContent",postService.getList(category, 20, null, null, null));
         model.addAttribute("content_h1",category.getTitle());
         model.addAttribute("content_p",category.getDescription());
 
@@ -62,7 +62,7 @@ public class MainController {
         //위에 cancol 수정
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
         model.addAttribute("search_keyword",keyword);
-        model.addAttribute("searched_list",postService.search(keyword, 10, null));
+        model.addAttribute("searched_list",postService.search(keyword, 20, null));
 
         return "searchPage";
     }
