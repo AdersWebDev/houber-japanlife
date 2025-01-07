@@ -33,6 +33,9 @@
 .detail-content .checkList {
     margin: 1.5rem 0;
 }
+.detail-content .checkList-li{
+    margin: 1.5rem 0 1.5rem 1rem;
+}
 .detail-content h3 {
     height: auto;
     padding-left: 0.5rem;

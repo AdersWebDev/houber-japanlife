@@ -20,11 +20,14 @@
       <div class="grid-items">
         <div class="grid-item" th:each="item : ${mainContent}">
           <a th:href="${item.link}">
-            <img th:src="${item.thumbnailUrl}"
-                 th:alt="${item.title}"
-                 th:data-id="${item.id}"
-                 th:data-view="${item.view}"
-                 th:data-time="${item.cursorTime}">
+            <div class="image-wrapper">
+              <img th:src="${item.thumbnailUrl}"
+                   th:alt="${item.title}"
+                   th:data-id="${item.id}"
+                   th:data-view="${item.view}"
+                   th:data-time="${item.cursorTime}">
+              <div class="title" th:text="${item.title}"></div>
+            </div>
           </a>
         </div>
       </div>

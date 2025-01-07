@@ -46,14 +46,21 @@ async function fetchMoreContent() {
                 const link = document.createElement('a');
                 link.href = item.link;
 
+                const imageWrapper = document.createElement('div');
+                imageWrapper.classList.add('image-wrapper')
                 const img = document.createElement('img');
                 img.src = item.thumbnailUrl;
                 img.alt = item.title;
                 img.dataset.id = item.id;
                 img.dataset.view = item.view;
                 img.dataset.time = item.cursorTime;
+                const divTitle = document.createElement('div');
+                divTitle.classList.add('title');
+                divTitle.innerText = item.title;
 
-                link.appendChild(img);
+                imageWrapper.appendChild(img);
+                imageWrapper.appendChild(divTitle);
+                link.appendChild(imageWrapper);
                 gridItem.appendChild(link);
                 contentContainer.appendChild(gridItem);
             });

@@ -39,8 +39,11 @@
       <div class="grid-items">
         <div th:each="item : ${all_guide}" class="grid-item">
           <a th:href="${item.link}">
-            <img th:src="${item.thumbnailUrl}"
-                 th:alt="item.title">
+            <div class="image-wrapper">
+              <img th:src="${item.thumbnailUrl}"
+                   th:alt="item.title">
+              <div class="title" th:text="${item.title}"></div>
+            </div>
           </a>
         </div>
       </div>
