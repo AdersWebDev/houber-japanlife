@@ -57,11 +57,11 @@
 }
 
 /* 호버 효과 */
-.grid-item:hover .image-wrapper img {
+.image-wrapper:hover img {
     filter: brightness(70%);
 }
 
-.grid-item:hover .image-wrapper .title {
+.image-wrapper:hover .title {
     opacity: 1;
 }
 @media (min-width: 600px) {

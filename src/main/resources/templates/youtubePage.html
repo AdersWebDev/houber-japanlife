@@ -33,11 +33,15 @@
         <div class="slider">
             <div th:each="item : ${moreContents}" class="item">
                 <a th:href="${item.link}">
-                    <img th:src = "${item.thumbnailUrl}"
-                         th:alt = "${item.title}">
+                    <div class="image-wrapper">
+                        <img th:src = "${item.thumbnailUrl}"
+                             th:alt = "${item.title}">
+                        <div class="title" th:text = "${item.title}"></div>
+                    </div>
                 </a>
             </div>
         </div>
+    </div>
     </div>
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
@@ -45,4 +49,5 @@
 <script src="/js/main.js"></script>
 <script src="/js/detailControl.js"></script>
 <script src="/js/navControl.js"></script>
+<script src="/js/slideItem.js"></script>
 </html>
