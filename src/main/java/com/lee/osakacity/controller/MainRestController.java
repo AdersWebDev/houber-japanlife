@@ -48,5 +48,9 @@ public class MainRestController {
     public String sitemap() {
         return sitemapService.makeSiteMap();
     }
-
+    @GetMapping(value = "/rss.xml", produces = "application/xml")
+    @ResponseBody
+    public String rssFeed() {
+        return sitemapService.makeRss();
+    }
 }
