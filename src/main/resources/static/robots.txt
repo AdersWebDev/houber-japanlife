@@ -2,3 +2,4 @@ User-agent: *
 Disallow:
 
 Sitemap: https://houber-japanlife.com/sitemap.xml
+RSS: https://houber-japanlife.com/rss.xml
