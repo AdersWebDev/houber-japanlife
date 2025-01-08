@@ -14,8 +14,9 @@ function updateCategoryPosition() {
     } else {
         // 모바일 화면에서는 위치 초기화
         categoryModal.style.left = '';
-        indexModal.style.left = '';
         goTop.style.left = `${contentRect.right + 2}px`;
+        indexModal.style.left = '';
+
     }
 }
 
