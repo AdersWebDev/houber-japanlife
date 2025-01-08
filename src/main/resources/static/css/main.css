@@ -46,12 +46,12 @@ img {
     border: 3px solid rgba(240, 240, 240, 0); /* 핸들의 외곽선, 트랙 배경과 동일한 색상 */
 }
 #go-top {
+    display: flex;
     position: fixed;
-    bottom: 13%;
-    right: 5%;
+    top: 64rem;
+    left: 76%;
     width: 3rem;
     height: 5rem;
-    display: flex;
     z-index: 5;
     flex-direction: column;
     cursor: pointer;
@@ -94,6 +94,7 @@ p {
 
 }
 @media (min-width: 1023px) {
+
     h1 {
         font-size: 2.3rem;
         font-weight: 700;
