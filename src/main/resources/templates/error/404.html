@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
 <head th:replace="~{fragments/head :: head(
     title=${title},
     description=${description},
@@ -10,43 +11,34 @@
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/category :: category}"></nav>
-<div th:replace="~{fragments/go-top :: go-top}"></div>
 <section class="content">
   <div style="margin: 0 auto; width: 100%; height: auto">
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>
-    <h1 th:text="'[ ' + ${content_h1} + ' ]'" style="margin: 1.2rem 0"></h1>
-    <p th:text="${content_p}"></p>
 
-    <!-- mainContent가 비어있지 않은 경우 -->
-    <div class="items" th:if="${mainContent != null and !#lists.isEmpty(mainContent)}">
+    <img class="error" src="/asset/404.png" alt="not_found_page">
+    <div class="content-title">
+      <h3>이런 가이드는 어때요?</h3>
+      <p><a href="/list?category=all">더보기</a></p>
+    </div>
+    <div class="items">
       <div class="grid-items">
-        <div class="grid-item" th:each="item : ${mainContent}">
+        <div th:each="item : ${all_guide}" class="grid-item">
           <a th:href="${item.link}">
             <div class="image-wrapper">
               <img th:src="${item.thumbnailUrl}"
-                   th:alt="${item.title}"
-                   th:data-id="${item.id}"
-                   th:data-view="${item.view}"
-                   th:data-time="${item.cursorTime}">
+                   th:alt="item.title">
               <div class="title" th:text="${item.title}"></div>
             </div>
           </a>
         </div>
       </div>
-      <div id="loading" style="display: none;">Loading...</div>
     </div>
-
-    <!-- mainContent가 비어있거나 null인 경우 -->
-
-      <img class="error" th:if="${mainContent == null or #lists.isEmpty(mainContent)}" src="/asset/500.png" alt="No Content Available">
 
   </div>
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 <script src="/js/main.js"></script>
-<script src="/js/navControl.js"></script>
 <script src="/js/detailControl.js"></script>
-<script src="/js/infiniteScroll.js"></script>
-
+<script src="/js/navControl.js"></script>
 </html>
