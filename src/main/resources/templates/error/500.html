@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head th:replace="~{fragments/head :: head(
+    title=${title},
+    description=${description},
+    keywords=${keywords},
+    siteUrl=${siteUrl},
+    thumbnail=${thumbnail}
+    )}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+<nav th:replace="~{fragments/category :: category}"></nav>
+<section class="content">
+    <div style="margin: 0 auto; width: 100%; height: auto">
+        <div th:replace="~{fragments/searchBar :: searchBar}"></div>
+
+        <img class="error" src="/asset/500.png" alt="server-error">
+        <div class="content-title">
+            <h3>다양한 가이드를 확인해보세요</h3>
+            <p><a href="/list?category=all">더보기</a></p>
+        </div>
+        <div class="items">
+            <div class="grid-items">
+                <div th:each="item : ${all_guide}" class="grid-item">
+                    <a th:href="${item.link}">
+                        <div class="image-wrapper">
+                            <img th:src="${item.thumbnailUrl}"
+                                 th:alt="item.title">
+                            <div class="title" th:text="${item.title}"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+<script src="/js/main.js"></script>
+<script src="/js/detailControl.js"></script>
+<script src="/js/navControl.js"></script>
+</html>

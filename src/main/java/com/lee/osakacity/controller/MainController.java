@@ -29,11 +29,11 @@ public class MainController {
     public String index(Model model) {
         model.addAttribute("title", "메인 페이지");
         model.addAttribute("description", "여기는 메인 페이지입니다.");
-        model.addAttribute("keywords", "메인, Thymeleaf, Spring Boot");
+        model.addAttribute("keywords", "houber, 하우버, japan-life, 일본, 일본 워홀, 워킹홀리데이, 일본 워킹홀리데이");
         model.addAttribute("siteUrl", "https://houber-japanlife.com");
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
         model.addAttribute("hot_post",postService.getList(Category.hot_post, 5, null, null, null));
-        model.addAttribute("all_guide",postService.getGuideOnly(12));
+        model.addAttribute("all_guide",postService.getGuideOnly(8));
 
         return "index";
     }
