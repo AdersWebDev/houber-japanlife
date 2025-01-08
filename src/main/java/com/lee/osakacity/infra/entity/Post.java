@@ -11,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,7 +31,7 @@ public class Post{
     private LocalDateTime modifiedDate;
 
     @OneToMany
-    private List<File> fileList = new ArrayList<>();
+    private List<File> fileList;
 
     @Column(nullable = false)
     private Category category;

@@ -33,7 +33,7 @@ public class SnsContent {
     private String title;
 
     @Column(nullable = false)
-    private int view = 0;
+    private int view;
 
     @Column(nullable = false)
     private String description;
