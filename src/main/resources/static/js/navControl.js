@@ -1,37 +1,26 @@
+// 📌 카테고리 버튼 클릭 이벤트
 categoryBtn.addEventListener('click', function () {
-    if (categoryModal.classList.contains('active')) {
-        categoryModal.classList.remove('active');
-    } else {
-        categoryModal.classList.add('active');
-    }
-})
-window.addEventListener('load', function () {
+    categoryModal.classList.toggle('active');
+});
+
+// 📌 화면 로드 및 리사이즈 시 위치 업데이트 함수
+function updateCategoryPosition() {
     const contentRect = content.getBoundingClientRect();
-    goTop.style.left = `${contentRect.right+2}px`;
-})
-function updateCategoryPosition () {
-    const contentRect = content.getBoundingClientRect();
-    categoryModal.style.left = `${contentRect.right + 10}px`;
-    indexModal.style.left = `${contentRect.left - 190}px`;
-}
-// 미디어 쿼리 설정
-const mediaQuery = window.matchMedia('(min-width: 1024px)');
-
-// 미디어 쿼리 상태 변화 감지
-function handleMediaChange(event) {
-    if (event.matches) {
-
-        updateCategoryPosition();
-        window.addEventListener('resize', updateCategoryPosition);
+    if (window.innerWidth >= 1024) {
+        // 데스크탑 화면에서는 위치 설정
+        categoryModal.style.left = `${contentRect.right + 10}px`;
+        indexModal.style.left = `${contentRect.left - 190}px`;
+        goTop.style.left = `${contentRect.right + 2}px`;
     } else {
-
+        // 모바일 화면에서는 위치 초기화
         categoryModal.style.left = '';
-        window.removeEventListener('resize', updateCategoryPosition);
+        indexModal.style.left = '';
+        goTop.style.left = '';
     }
 }
 
-// 초기 실행
-handleMediaChange(mediaQuery);
-
-// 미디어 쿼리 변경 시 리스너 실행
-mediaQuery.addEventListener('change', handleMediaChange);
+// 📌 이벤트 리스너 등록
+window.addEventListener('load', updateCategoryPosition);
+window.addEventListener('resize', updateCategoryPosition);
+window.addEventListener('orientationchange', updateCategoryPosition);
+window.matchMedia('(min-width: 1024px)').addEventListener('change', updateCategoryPosition);
