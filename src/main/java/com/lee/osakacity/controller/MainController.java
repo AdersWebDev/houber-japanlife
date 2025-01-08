@@ -27,8 +27,8 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("title", "메인 페이지");
-        model.addAttribute("description", "여기는 메인 페이지입니다.");
+        model.addAttribute("title", "하우버 - 일본 생활의 모든 정보를 한눈에");
+        model.addAttribute("description", "일본 생활 정보, 워킹홀리데이, 유학등 모든 콘텐츠를 알려드려요!");
         model.addAttribute("keywords", "houber, 하우버, japan-life, 일본, 일본 워홀, 워킹홀리데이, 일본 워킹홀리데이");
         model.addAttribute("siteUrl", "https://houber-japanlife.com");
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
