@@ -44,9 +44,11 @@ public class SitemapService {
     }
     public String makeSiteMap () {
         List<SiteMap> list = siteMapQueryFactory();
-        StringBuilder xml = new StringBuilder("""
-        <?xml version="1.0" encoding="UTF-8"?>
-        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        StringBuilder xml = new StringBuilder();
+        xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        xml.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
+
+        xml.append("""
             <url>
                 <loc>https://houber-japanlife.com/</loc>
                 <lastmod>2025-01-08</lastmod>
@@ -99,7 +101,7 @@ public class SitemapService {
                 .forEach(xml::append);
 
         xml.append("</urlset>");
-        return xml.toString();
+        return xml.toString().trim();
 
     }
 }
