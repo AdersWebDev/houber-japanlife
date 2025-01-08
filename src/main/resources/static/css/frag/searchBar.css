@@ -1,4 +1,5 @@
 .search-bar {
+    position: relative;
     display: flex;
     align-items: center;
     height: 2.5rem;
@@ -7,27 +8,30 @@
     padding: 0 20px;
     margin: 3.7rem 0;
 }
-
+.search-bar form {
+    flex: 1;
+    height: 80%;
+}
 .search-bar img {
     padding: 0.5rem 1rem 0.5rem 0;
 }
 
-.search-bar input {
-    flex: 1; /* 남은 공간을 차지 */
+.search-bar form input {
+    width: 100%;
+    height: 100%;
     border: none;
     outline: none;
     background: none;
     color: white;
     font-size: 1.8rem;
     padding: 0;
-    height: 80%;
 }
 
-.search-bar input::placeholder {
+.search-bar form input::placeholder {
     color: #bdbdbd;
 }
 
-.search-bar input:focus {
+.search-bar form input:focus {
     outline: none;
 }
 

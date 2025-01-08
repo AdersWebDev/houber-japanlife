@@ -1,0 +1,45 @@
+server:
+  port: 40002
+  servlet:
+    session:
+      cookie:
+        same-site: strict
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+spring:
+  application:
+    name: houber-city;
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(idl2geIwGDCdXZQsDOR9WOUp8RiBjhggnRqWpXrKIs9ZM+ARjC9vM/aBJQJ0GvaF61u4kH8zIOYKoEAUx6vVMSNyTJetNhhnD6C7sZMT03OCReNNvzEqvohDg2+SEbMJCakGIzKSuwx/hKJMcYN4X+CWj6XE3exgvKAW6SAeEMo=)
+    username: ENC(JqvCY/zpdKTqcQHx6iPmzBi2Rphyj5V0g9eK/fIE4n6L17jB2JVXx8Wp1h/xzFhU)
+    password: ENC(+zrkl6TI1fW39BV8k4KHlSpDor6887ZWk6NoArm0/iDMOnJjDy+//kdkS4AlbFtS)
+  jpa:
+    hibernate:
+      ddl-auto: update
+  thymeleaf:
+    cache: false
+  web:
+    resources:
+      cache:
+        period: 0
+      chain:
+        cache: false
+
+aws:
+  s3:
+    region: ENC(rDkJjm0BM8bNNMaf1wHGskFjVGimN8Lb+fNYPb+L6fKbkxY2u7/Dqc+86Xr71053)
+    accessKey: ENC(7f/Bi/xfIv3zGOfTpRSDRVC+NPfPAXyjWvPpww32euUZjmmzJJMCyWMDNtnatq2QQiG2155I+P2zTqBWk043aw==)
+    secretKey: ENC(3JceHfENUZXvNxWnhfFxm+mo2CYbg5j0vFfBrmhxusSwn+c0N9AOwONL2KzrLkAViY2h3/DnZZRxQWUfW6Ola4L0LPjqPdZkZeH1mq9qW0A=)
+    bucket-name: ENC(4/kbFdraMzV0CAEEWwFy11aiqpD/sVVDKFghvs4/hvMm/4/GaLE/mkNp1pzlnYZd)
+
+google:
+  console:
+    key: ENC(T7L4tsu+rSlFNw9TZeEYMl7VADaMSw9Tygv0Nzr18P+ptugEKES7j7aYaII5cS6r/geK8c4/nCSSSPeJtAM0SZpeihqAlJxXjmlg8ESkM4U=)
+naver:
+  client:
+    X-Naver-Client-Id: ENC(ybceS1JBvWY3QGOle5ZbqiGU13sVJS71xQym/vaRbK2a09ogrOkua1uNxqtpxmE8k/ema1p4+43KIY65r0Rwqw==)
+    X-Naver-Client-Secret: ENC(7d/cX3NE2CJjv0ObMHOgI13epA8ZZ7+fZoXJvLndoqZ2cenzlPFMKAHCPJqYVJD4)

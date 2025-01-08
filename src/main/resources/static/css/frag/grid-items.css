@@ -1,36 +1,90 @@
 
 .grid-items {
+    grid-template-columns: repeat(2, 14rem);
+    grid-template-rows: repeat(auto-fit, 14rem);
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    /*grid-template-columns: repeat(2, 1fr);*/
     width: 100%;
     height: 100%;
-    grid-gap: 0.5rem;
+    grid-gap: 1rem;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
 }
 .grid-item {
+    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    aspect-ratio: 1/1;
 }
-.grid-item img {
+.grid-items .sns,
+.grid-item .sns {
+    align-items: flex-start;
+    aspect-ratio: 16/9;
+}
+.grid-item a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.image-wrapper {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+.image-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: filter 0.3s ease-in-out;
+}
+
+
+/* 제목 스타일 */
+.image-wrapper .title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 13rem;
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* 호버 효과 */
+.image-wrapper:hover img {
+    filter: brightness(70%);
+}
+
+.image-wrapper:hover .title {
+    opacity: 1;
 }
 @media (min-width: 600px) {
     .grid-items {
+        grid-template-columns: repeat(auto-fit, 14rem);
+        grid-template-rows: repeat(auto-fit, 14rem);
+        grid-gap: 1rem;
+    }
+    .grid-items.sns {
         grid-template-columns: repeat(auto-fit, 16rem);
-        grid-template-rows: repeat(auto-fit, 16rem);
+        grid-template-rows: repeat(auto-fit, 9rem);
         grid-gap: 1rem;
     }
 }
 @media (min-width: 1023px) {
     .grid-items {
-        display: grid;
+        grid-template-columns: repeat(auto-fit, 14rem);
+        grid-template-rows: repeat(auto-fit, 14rem);
+        grid-gap: 1rem;
+    }
+    .grid-items.sns {
         grid-template-columns: repeat(auto-fit, 16rem);
-        grid-template-rows: repeat(auto-fit, 16rem);
+        grid-template-rows: repeat(auto-fit, 9rem);
         grid-gap: 1rem;
     }
 }

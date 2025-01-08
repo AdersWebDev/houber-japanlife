@@ -2,10 +2,9 @@
     display: none;
     position: fixed;
     width: 16rem;
-    height: 33rem;
+    height: 30rem;
     top: 10rem;
     margin-left: 1rem;
-
     z-index: 10;
     background-color: #323232;
 }
@@ -40,7 +39,7 @@
     width: 16rem;
     height: 3rem;
     left: 0;
-    top: 28rem;
+    top: 25.5rem;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -59,10 +58,8 @@
         display: block;
         position: fixed;
         width: 16rem;
-        height: 33rem;
-        top: 24.4rem;
+        height: 30rem;
+        top: 24.2rem;
         left: 76%;
-        z-index: 10;
-        background-color: #323232;
     }
 }

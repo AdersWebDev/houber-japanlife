@@ -5,10 +5,13 @@ categoryBtn.addEventListener('click', function () {
         categoryModal.classList.add('active');
     }
 })
-
+window.addEventListener('load', function () {
+    const contentRect = content.getBoundingClientRect();
+    goTop.style.left = `${contentRect.right+2}px`;
+})
 function updateCategoryPosition () {
     const contentRect = content.getBoundingClientRect();
-    categoryModal.style.left = `${contentRect.left + 680}px`;
+    categoryModal.style.left = `${contentRect.right + 10}px`;
     indexModal.style.left = `${contentRect.left - 190}px`;
 }
 // 미디어 쿼리 설정

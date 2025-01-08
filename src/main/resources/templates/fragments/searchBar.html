@@ -1,4 +1,6 @@
 <div th:fragment="searchBar" class="search-bar">
-    <img src="/asset/searchIcon.png" alt="하우버에서 컨탠츠 검색(search content)">
-    <input type="text" placeholder="">
+    <img src="/asset/searchIcon.png" alt="하우버에서 컨텐츠 검색(search content)">
+    <form th:action="@{/search}" method="get">
+        <input type="text" name="keyword" placeholder="" required>
+    </form>
 </div>
