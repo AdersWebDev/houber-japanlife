@@ -23,6 +23,21 @@
     object-position: center; /* 이미지 중앙 정렬 */
 
 }
+.detail-content .center-div {
+    display: block;
+    margin: 0 auto;
+    border: #0123b4 2px solid;
+    background-color: #525252;
+    border-radius: 20px 5px 20px 5px;
+    max-width: 75%;
+    height: auto;
+    padding: 0.5rem;
+}
+.detail-content .center-text {
+    display: block;
+    text-align: center;
+    margin: 1.5rem auto;
+}
 .detail-content img {
     max-width: 100%;
     height: auto;
