@@ -87,23 +87,35 @@ public class PostService {
                     .orderBy(qPost.modifiedDate.desc())
                     .limit(limit / 2)
                     .fetch());
+            long id = pList.get(pList.size() - 1).getId();
+            Long lastPostId = jpaQueryFactory
+                    .select(qPost.id)
+                    .from(qPost)
+                    .orderBy(qPost.id.desc())
+                    .limit(1)
+                    .fetchOne();
 
+            List<SimpleResponse> sList = new ArrayList<>();
+            if ( !(id < lastPostId) ) {
+                sList.addAll(
+                        jpaQueryFactory
+                        .select(Projections.constructor(SimpleResponse.class,
+                                qSnsContent.id,
+                                qSnsContent.view,
+                                qSnsContent.title,
+                                qSnsContent.thumbnailUrl,
+                                qSnsContent.publishTime,
+                                Expressions.constant("/detail/sns-content/")))
+                        .from(qSnsContent)
+                        .where(
+                                cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
+                        )
+                        .orderBy(qSnsContent.publishTime.desc())
+                        .limit(limit)
+                        .fetch());
+            }
             // 📌 SnsContent 데이터 가져오기 (limit + extraFetch)
-            List<SimpleResponse> sList = new ArrayList<>(jpaQueryFactory
-                    .select(Projections.constructor(SimpleResponse.class,
-                            qSnsContent.id,
-                            qSnsContent.view,
-                            qSnsContent.title,
-                            qSnsContent.thumbnailUrl,
-                            qSnsContent.publishTime,
-                            Expressions.constant("/detail/sns-content/")))
-                    .from(qSnsContent)
-                    .where(
-                            cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
-                    )
-                    .orderBy(qSnsContent.publishTime.desc())
-                    .limit(limit / 2)
-                    .fetch());
+
 
             // 📌 두 리스트 병합
             List<SimpleResponse> combinedList = new ArrayList<>();
