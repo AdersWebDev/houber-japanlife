@@ -32,11 +32,21 @@ public class PostService {
     private final JPAQueryFactory jpaQueryFactory;
     @Value("${jasypt.encryptor.password}")
     private String KEY;
+    private final S3Service s3Service;
 
     QPost qPost = QPost.post;
     QFile qFile = QFile.file;
     QSnsContent qSnsContent = QSnsContent.snsContent;
+    @Transactional
+    public void delete(Long id, HttpServletRequest request) {
+        String key =  request.getHeader("authorization");
+        if ( !key.equals(KEY) )
+            throw new IllegalArgumentException();
 
+        Post post = postRepo.findById(id).orElseThrow(()->new NotFoundException("e"));
+        s3Service.deleteFileInjection(post.getFileList());
+        postRepo.delete(post);
+    }
     public List<SimpleResponse> getList (Category category, int limit ,Long cursorId, Integer cursorView, LocalDateTime cursorTime) {
 
         if (category.equals(Category.hot_post)) {
@@ -308,10 +318,7 @@ public class PostService {
 
         return null;
     }
-    @Transactional
-    public void delete(Long id) {
 
-    }
 
 
 }

@@ -40,8 +40,11 @@ public class MainRestController {
     }
     @PatchMapping("/post")
     public void update(){}
-    @DeleteMapping("/post")
-    public void delete(){}
+
+    @DeleteMapping("/post/{id}")
+    public void delete(@PathVariable Long id, HttpServletRequest request){
+        postService.delete(id, request);
+    }
 
     @GetMapping(value = "/sitemap.xml", produces = "application/xml")
     @ResponseBody

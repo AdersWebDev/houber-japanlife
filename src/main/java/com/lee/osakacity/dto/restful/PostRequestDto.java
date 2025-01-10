@@ -11,9 +11,9 @@ import java.util.List;
 @Setter
 public class PostRequestDto {
     private List<Long> imgList = new ArrayList<>();
-    private Category category;
-    private String thumbnailUrl;
-    private String title;
+    private Category category;//
+    private String thumbnailUrl;//
+    private String title;//
     private String description;
     private String keyword;
     private String content;

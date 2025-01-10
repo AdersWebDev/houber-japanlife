@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>글쓰기 페이지</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/frag/header.css">
+  <link rel="stylesheet" href="/css/frag/footer.css">
+  <link rel="stylesheet" href="/css/frag/searchBar.css">
+  <link rel="stylesheet" href="/css/frag/category.css">
+  <link rel="stylesheet" href="/css/frag/content.css">
+  <link rel="stylesheet" href="/css/frag/indexing.css">
+  <link rel="stylesheet" href="/css/mainPage.css">
+  <link rel="stylesheet" href="/css/frag/grid-items.css">
+  <link rel="stylesheet" href="/css/detail.css">
+  <link rel="stylesheet" href="/css/write.css"> <!-- 글쓰기 전용 CSS -->
+  <script src="/js/write.js" defer></script> <!-- 글쓰기 전용 JS -->
+</head>
+<body>
+<!-- 헤더 -->
+<header>
+  <a href="/"><img class="logo" src="/asset/logo.png" alt="Houber 로고"></a>
+</header>
+
+<!-- 글쓰기 페이지 컨테이너 -->
+<section class="content" style="padding: 0">
+  <div class="detail-content" style="margin-bottom: 0; min-height: 70rem">
+    <div class="write-container">
+      <!-- 글쓰기 에디터 영역 -->
+      <div id="editor" class="editor" contenteditable="true">
+        <!-- 글쓰기 텍스트 및 미리보기 영역 -->
+      </div>
+
+      <aside class="post-info">
+        <h3>글 정보 작성</h3>
+        <input type="text" placeholder="게시글 제목을 입력하세요" class="input-title">
+        <input type="text" placeholder="키워드를 입력하세요 예)워홀, 하우버 워홀" class="input-keywords">
+        <input type="text" placeholder="글의 내용을 설명해주세요" class="input-description">
+        <!-- 카테고리 선택 -->
+        <label for="category-select">카테고리를 선택하세요:</label>
+        <select id="category-select" class="input-category">
+          <option value="working_holiday">워킹 홀리데이</option>
+          <option value="study_abroad">유학</option>
+          <option value="japan_life">일본 생활</option>
+          <option value="career">취업</option>
+          <option value="other">기타</option>
+        </select>
+      </aside>
+      <!-- 사이드바: CSS 스타일 선택 -->
+      <aside class="cssSidebar">
+        <h3>스타일 선택</h3>
+        <button class="style-btn" onclick="addThumbnail()">썸네일 지정란</button>
+        <button class="style-btn" onclick="addImg()">일반 이미지</button>
+        <button class="style-btn" onclick="h2()">중제목</button>
+        <button class="style-btn" onclick="h3()">소제목</button>
+        <button class="style-btn" onclick="p()">일반 문장</button>
+        <button class="style-btn" onclick="checkList()">여백이 좁은 문장</button>
+        <button class="style-btn" onclick="checkListLi()">좌측 들여쓰기</button>
+        <button class="style-btn" onclick="highlight()">하이라이트 주기</button>
+        <button class="style-btn" onclick="line()">가로 선 긋기</button>
+        <button class="style-btn" onclick="clearStyle()">스타일 초기화</button>
+        <hr>
+        <button class="save-btn" onclick="submitPost()">저장하기</button>
+      </aside>
+    </div>
+  </div>
+
+<!--  <button class="save-btn" onclick="saveContent()">저장하기</button>-->
+</section>
+
+</body>
+</html>

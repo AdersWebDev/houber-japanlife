@@ -27,7 +27,7 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("title", "하우버 - 일본 생활의 모든 정보를 한눈에");
+        model.addAttribute("title", "하우버 | 일본 생활의 모든 정보를 한눈에");
         model.addAttribute("description", "일본 생활 정보, 워킹홀리데이, 유학등 모든 콘텐츠를 알려드려요!");
         model.addAttribute("keywords", "houber, 하우버, japan-life, 일본, 일본 워홀, 워킹홀리데이, 일본 워킹홀리데이");
         model.addAttribute("siteUrl", "https://houber-japanlife.com");
@@ -41,7 +41,7 @@ public class MainController {
     @GetMapping("/list")
     public String listPage(@RequestParam Category category, Model model) {
 
-        model.addAttribute("title",  "하우버 - " + category.getTitle() + "콘텐츠 보기");
+        model.addAttribute("title",  "하우버 | " + category.getTitle() + "콘텐츠 보기");
         model.addAttribute("description", category.getTitle() +"에서 최신 일본 워킹홀리데이 및 생활 정보를 확인하세요. 하우버가 전하는 생생한 포스트를 만나보세요!");
         model.addAttribute("keywords", "하우버, "+category.getTitle()+", 일본, 일본 정보, 일본 워홀, 워킹홀리데이");
         model.addAttribute("siteUrl", "https://houber-japanlife.com/list?category="+category);
@@ -55,10 +55,10 @@ public class MainController {
 
     @GetMapping("/search")
     public String searchPage(@RequestParam String keyword, Model model) {
-        model.addAttribute("title", "메인 페이지");
-        model.addAttribute("description", "여기는 메인 페이지입니다.");
-        model.addAttribute("keywords", "메인, Thymeleaf, Spring Boot");
-        model.addAttribute("siteUrl", "https://houber-japanlife.com/search");
+        model.addAttribute("title", "하우버 |" +keyword +"검색결과");
+        model.addAttribute("description", "houber"+keyword+"검색 결과입니다");
+        model.addAttribute("keywords", "houber, 하우버, japan-life, 일본, 일본 워홀, 워킹홀리데이, 일본 워킹홀리데이");
+        model.addAttribute("siteUrl", "https://houber-japanlife.com/search?keyword=houber");
         //위에 cancol 수정
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
         model.addAttribute("search_keyword",keyword);
@@ -71,8 +71,8 @@ public class MainController {
     public String detailPage(@PathVariable Long id, Model model) {
 
         PostResponseDto dto = postService.getDetail(id);
-        model.addAttribute("title","houber-"+ dto.getTitle());
-        model.addAttribute("description", dto.getDescription());
+        model.addAttribute("title",dto.getTitle());
+        model.addAttribute("description", "houber-"+dto.getDescription());
         model.addAttribute("keywords", dto.getKeyword());
         model.addAttribute("siteUrl", "https://houber-japanlife.com/detail/"+id);
         model.addAttribute("thumbnail",dto.getThumbnailUrl());
@@ -113,8 +113,8 @@ public class MainController {
     public String detailSnsPage(@PathVariable Long id, Model model) {
         SnsContentResponseDto dto = snsContentService.getDetail(id);
 
-        model.addAttribute("title", dto.getTitle());
-        model.addAttribute("description", dto.getDescription());
+        model.addAttribute("title", "하우버 | "+dto.getTitle());
+        model.addAttribute("description","houber | "+ dto.getDescription());
         model.addAttribute("keywords", dto.getKeyword());
         model.addAttribute("siteUrl", "https://houber-japanlife.com/detail/sns-content/"+id);
         model.addAttribute("thumbnail", dto.getThumbnailUrl());

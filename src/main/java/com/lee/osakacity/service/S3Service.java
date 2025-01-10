@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -61,6 +62,36 @@ public class S3Service {
             throw new RuntimeException("File upload failed", e);
         }
     }
+    @Transactional
+    public void deleteFile(List<Long> idList, String fileName) {
+        try {
+            for (long id : idList) {
+                // S3에서 파일 삭제
+                amazonS3.deleteObject(bucketName, fileName);
+
+                // 데이터베이스에서 파일 엔티티 삭제
+                s3FileRepo.deleteById(id);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("File deletion failed", e);
+        }
+    }
+    @Transactional
+    public void deleteFileInjection(List<File> FileList) {
+        try {
+            for (File f : FileList) {
+                // S3에서 파일 삭제
+                amazonS3.deleteObject(bucketName, f.getFileName());
+
+                // 데이터베이스에서 파일 엔티티 삭제
+                s3FileRepo.deleteById(f.getId());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("File deletion failed", e);
+        }
+    }
     private String getOriginFileNameWithOutType(String originalFilename){
         int dotIndex = originalFilename.lastIndexOf('.');
         if (dotIndex > 0) { // 확장자가 존재할 경우
@@ -68,9 +99,5 @@ public class S3Service {
         } else {
             return originalFilename; // 확장자가 없을 경우 전체 이름 반환
         }
-    }
-    @Transactional
-    public void deleteFile(String fileName) {
-        amazonS3.deleteObject(bucketName, fileName);
     }
 }
