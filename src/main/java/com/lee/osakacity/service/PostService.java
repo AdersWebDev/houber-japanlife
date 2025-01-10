@@ -85,7 +85,7 @@ public class PostService {
                             cursorTime != null ? qPost.modifiedDate.lt(cursorTime) : null
                     )
                     .orderBy(qPost.modifiedDate.desc())
-                    .limit(limit / 2)
+                    .limit(limit)
                     .fetch());
             long id = pList.get(pList.size() - 1).getId();
             Long lastPostId = jpaQueryFactory
