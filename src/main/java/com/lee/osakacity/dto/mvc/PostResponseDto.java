@@ -2,11 +2,12 @@ package com.lee.osakacity.dto.mvc;
 
 import com.lee.osakacity.custom.Category;
 import com.lee.osakacity.infra.entity.Post;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
+@Setter
 public class PostResponseDto {
     private final Long id;
     private final Category category;

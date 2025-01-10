@@ -30,7 +30,7 @@ public class Post{
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<File> fileList;
 
     @Column(nullable = false)

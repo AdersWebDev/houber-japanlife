@@ -16,10 +16,10 @@
   <div th:replace="~{fragments/searchBar :: searchBar}"></div>
     <section class="detail-content">
 
-      <div id="indexing-control">
+      <div id="indexing-control" th:if="${category.toString() != 'japan_life'}">
         <img src="/asset/indexing-controller.png" alt="내부 목차 열기(open aside)">
       </div>
-      <aside id="indexing-modal">
+      <aside id="indexing-modal" th:if="${category.toString() != 'japan_life'}">
         <h3>Index</h3>
         <ul>
           <li th:each="item : ${tableOfContents}">
