@@ -87,16 +87,22 @@ public class PostService {
                     .orderBy(qPost.modifiedDate.desc())
                     .limit(limit)
                     .fetch());
-            long id = pList.get(pList.size() - 1).getId();
-            Long lastPostId = jpaQueryFactory
-                    .select(qPost.id)
-                    .from(qPost)
-                    .orderBy(qPost.id.desc())
-                    .limit(1)
-                    .fetchOne();
+
+            boolean isSnsLoading = false;
+            if ( !pList.isEmpty() ) {
+                Long id =  pList.get(pList.size() - 1).getId();
+                Long lastPostId = jpaQueryFactory
+                        .select(qPost.id)
+                        .from(qPost)
+                        .orderBy(qPost.id.desc())
+                        .limit(1)
+                        .fetchOne();
+                if ( !(id < lastPostId) ) isSnsLoading = true;
+            }
+
 
             List<SimpleResponse> sList = new ArrayList<>();
-            if ( !(id < lastPostId) ) {
+            if ( isSnsLoading ) {
                 sList.addAll(
                         jpaQueryFactory
                         .select(Projections.constructor(SimpleResponse.class,
