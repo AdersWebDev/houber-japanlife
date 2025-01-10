@@ -97,7 +97,12 @@ public class PostService {
                         .orderBy(qPost.id.desc())
                         .limit(1)
                         .fetchOne();
-                if ( !(id < lastPostId) ) isSnsLoading = true;
+
+                if ( !(id.equals(lastPostId)) ) {
+                    isSnsLoading = true;
+                }
+            } else {
+                isSnsLoading = true;
             }
 
 
