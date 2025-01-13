@@ -284,7 +284,9 @@ public class PostService {
                                 Expressions.constant("/detail/")
                         ))
                         .from(qPost)
-                        .where(qPost.category.eq(category).and(qPost.id.ne(id)))
+                        .where(qPost.isShow.isTrue().and(
+                                qPost.category.eq(category).and(qPost.id.ne(id))
+                        ))
                         .limit(15)
                         .orderBy(qPost.id.asc())
                         .fetch()
