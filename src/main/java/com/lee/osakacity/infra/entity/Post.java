@@ -54,6 +54,9 @@ public class Post{
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private boolean isShow;
+
     public void increaseView () {
         this.view++;
     }
