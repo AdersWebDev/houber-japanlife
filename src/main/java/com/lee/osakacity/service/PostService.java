@@ -61,10 +61,12 @@ public class PostService {
                     ))
                     .from(qPost)
                     .where(
-                            (cursorView != null && cursorId != null)
-                                    ? qPost.view.lt(cursorView)
-                                    .or(qPost.view.eq(cursorView).and(qPost.id.lt(cursorId)))
-                                    : null
+                            qPost.isShow.isTrue().and(
+                                            (cursorView != null && cursorId != null)
+                                                    ? qPost.view.lt(cursorView)
+                                                    .or(qPost.view.eq(cursorView).and(qPost.id.lt(cursorId)))
+                                                    : null
+                            )
                     )
                     .orderBy(qPost.view.desc(), qPost.id.desc())
                     .limit(limit)
@@ -82,7 +84,9 @@ public class PostService {
                             Expressions.constant("/detail/")))
                     .from(qPost)
                     .where(
-                            cursorTime != null ? qPost.modifiedDate.lt(cursorTime) : null
+                            qPost.isShow.isTrue().and(
+                                cursorTime != null ? qPost.modifiedDate.lt(cursorTime) : null
+                            )
                     )
                     .orderBy(qPost.modifiedDate.desc())
                     .limit(limit)
@@ -94,6 +98,7 @@ public class PostService {
                 Long lastPostId = jpaQueryFactory
                         .select(qPost.id)
                         .from(qPost)
+                        .where(qPost.isShow.isTrue())
                         .orderBy(qPost.id.desc())
                         .limit(1)
                         .fetchOne();
@@ -169,9 +174,11 @@ public class PostService {
                     ))
                     .from(qPost)
                     .where(
-                            cursorId != null
-                                    ? qPost.category.eq(category).and(qPost.id.lt(cursorId))
-                                    : qPost.category.eq(category)
+                            qPost.isShow.isTrue().and(
+                                cursorId != null
+                                        ? qPost.category.eq(category).and(qPost.id.lt(cursorId))
+                                        : qPost.category.eq(category)
+                            )
                     )
                     .orderBy(qPost.id.desc())
                     .limit(limit)
@@ -189,6 +196,7 @@ public class PostService {
                         Expressions.constant("/detail/")
                 ))
                 .from(qPost)
+                .where(qPost.isShow.isTrue())
                 .orderBy(Expressions.numberTemplate(Double.class, "function('RAND')").asc())
                 .limit(limit)
                 .fetch();
@@ -218,17 +226,17 @@ public class PostService {
                 )
                 .from(qPost)
                 .where(
-                        cursorTime == null
-                                ? qPost.title.contains(keyword)
-                                .or(qPost.keyword.contains(keyword))
-                                .or(qPost.content.contains(keyword))
-                                : qPost.createDate.before(cursorTime).and(
+                        qPost.isShow.isTrue().and(
+                                cursorTime == null
+                                        ? qPost.title.contains(keyword)
+                                        .or(qPost.keyword.contains(keyword))
+                                        .or(qPost.content.contains(keyword))
+                                        : qPost.createDate.before(cursorTime).and(
                                         qPost.title.contains(keyword)
                                                 .or(qPost.keyword.contains(keyword))
                                                 .or(qPost.content.contains(keyword))
+                                )
                         )
-
-
                 )
                 .orderBy(qPost.modifiedDate.desc())
                 .limit(limit)
@@ -247,13 +255,15 @@ public class PostService {
                         )
                         .from(qSnsContent)
                         .where(
-                                cursorTime == null
-                                        ? qSnsContent.title.contains(keyword).or(qSnsContent.description.contains(keyword))
-                                        : qSnsContent.publishTime.before(cursorTime).and(
-                                                qSnsContent.title.contains(keyword)
-                                                        .or(qSnsContent.description.contains(keyword)
-                                                        )
-                                                )
+                                qPost.isShow.isTrue().and(
+                                    cursorTime == null
+                                            ? qSnsContent.title.contains(keyword).or(qSnsContent.description.contains(keyword))
+                                            : qSnsContent.publishTime.before(cursorTime).and(
+                                                    qSnsContent.title.contains(keyword)
+                                                            .or(qSnsContent.description.contains(keyword)
+                                                            )
+                                                    )
+                                )
                         )
                         .orderBy(qSnsContent.publishTime.desc())
                         .limit(limit)
