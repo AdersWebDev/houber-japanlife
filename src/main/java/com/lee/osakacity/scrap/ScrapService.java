@@ -220,21 +220,38 @@ public class ScrapService {
     }
 
     private void seOgLinkSeparator(Element e, List<String> mainContent) {
-        Element a = e.selectFirst("a");
-        String title = e.getElementsByClass("se-oglink-title").text();
-        String description = e.getElementsByClass("se-oglink-summary").text();
-        String ogLinkBox =
-                "<div class=\"embed-box\">\n" +
-                    "<a href=\"" + a.attr("href")+ "\">" +
-                        "<img src=\"" + a.selectFirst("img").attr("src") +"\"" +
-                        " alt=\"short_cut_" + title + "\">" +
-                        "<div class=\"embed-box text-area\">" +
+        try {
+            Element a = e.selectFirst("a");
+            String title = e.getElementsByClass("se-oglink-title").text();
+            String description = e.getElementsByClass("se-oglink-summary").text();
+            String ogLinkBox =
+                    "<div class=\"embed-box\">\n" +
+                            "<a href=\"" + a.attr("href")+ "\">" +
+                            "<img src=\"" + a.selectFirst("img").attr("src") +"\"" +
+                            " alt=\"short_cut_" + title + "\">" +
+                            "<div class=\"embed-box text-area\">" +
                             "<p class=\"embed-box text-area text-title\">" + title + "</p>" +
                             "<p class=\"embed-box text-area text-description\">" + description +"</p>" +
-                        "</div>" +
-                    "</a>" +
-                "</div>";
-        mainContent.add(ogLinkBox);
+                            "</div>" +
+                            "</a>" +
+                            "</div>";
+            mainContent.add(ogLinkBox);
+        } catch (NullPointerException exception) {
+            Element a = e.selectFirst("a");
+            String title = e.getElementsByClass("se-oglink-title").text();
+            String description = e.getElementsByClass("se-oglink-summary").text();
+            String ogLinkBox =
+                    "<div class=\"embed-box\">\n" +
+                            "<a href=\"" + a.attr("href")+ "\">" +
+                            "<div class=\"embed-box text-area\">" +
+                            "<p class=\"embed-box text-area text-title\">" + title + "</p>" +
+                            "<p class=\"embed-box text-area text-description\">" + description +"</p>" +
+                            "</div>" +
+                            "</a>" +
+                            "</div>";
+            mainContent.add(ogLinkBox);
+        }
+
     }
     //a href처리
     private void seImageSeparator(Element e, List<String> mainContent, PostRequestDto dto) {
@@ -270,7 +287,7 @@ public class ScrapService {
             Elements imgTag = e.getElementsByTag("img");
             for (Element img : imgTag) {
                 ImgResponse localFie = this.convertImgSrcToMultipartFile(img.attr("src"));
-                mainContent.add("<img src=\"" + localFie.getUrl() + "\"alt=\"" + localFie.getAlt() + "\"" + ">");
+                mainContent.add("<img style=\"display: block; margin: 0 auto;\" src=\"" + localFie.getUrl() + "\"alt=\"" + localFie.getAlt() + "\"" + ">");
                 dto.getImgList().add(localFie.getId());
             }
         }
