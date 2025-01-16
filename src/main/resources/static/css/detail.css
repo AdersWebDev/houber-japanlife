@@ -38,6 +38,7 @@
     text-align: center;
     margin: 1.5rem auto;
 }
+
 .detail-content img {
     max-width: 100%;
     height: auto;
@@ -106,6 +107,168 @@
 .highlight {
     background-color: #354692;
 }
+
+hr.line1 {
+    width: 30%;
+    background-color: rgb(221, 221, 221);
+    margin: 3rem auto;
+
+}
+hr.line2 {
+    width: 100%;
+    margin: 3rem auto;
+    background-color: rgb(221, 221, 221);
+}
+hr.line3 {
+    height: 0.3rem;
+    width: 20%;
+    background-color: rgb(239, 239, 239);
+    margin: 3rem auto;
+}
+hr.line8 {
+    height: 5rem;
+    width: 1px;
+    background-color: rgb(239, 239, 239);
+    margin: 3rem auto;
+}
+div.blank{
+    height: 3rem;
+    width: 100%;
+    background: none;
+}
+/*-----------------------------------*/
+.quote-container.center {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 3rem auto;
+}
+.quote {
+    position: relative;
+    max-width: 60%;
+    flex-direction: column;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+.quote::before,
+.quote::after {
+    content: '❝'; /* Opening quotation mark */
+    font-size: 3.5rem;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.7;
+}
+.quote::before {
+    top: -4rem;
+    margin-bottom: 0;
+}
+.quote::after {
+    content: '❞'; /* Closing quotation mark */
+    margin-top: 0;
+}
+.quote p{
+    font-style: italic;
+    margin: 1rem;
+    padding: 0;
+}
+.quote-container.postit {
+    position: relative;
+    display: block;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    max-width: 40rem;
+    border: 3px solid #d3d3d3;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.quote-container.postit::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    border: 2rem solid #212121;
+    border-top-color: #f4f4f4;
+    border-left-color: #f4f4f4;
+    z-index: 2;
+}
+.quote-container.postit p {
+    margin: 1rem;
+    padding: 0;
+}
+.img-col {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem
+}
+.img-col .img-row {
+    display: flex;
+    flex-direction: row;
+    max-width: 50%;
+    gap: 0.5rem;
+}
+.img-col .img-col .img-row img{
+    object-fit: cover;
+    height: auto;
+}
+.embed-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 35rem;
+    height: auto;
+    margin: 3rem auto;
+    border: 1px solid #a5a5a5;
+    border-radius: 5px;
+    background-color: white;
+    gap: 0;
+}
+.embed-box a {
+    text-decoration: none;
+    color: white;
+}
+.embed-box .text-area {
+    display: block;
+    margin: 0;
+    padding: 1.5rem 2rem 1.3rem;
+    border: none;
+    box-shadow: none;
+    background-color: white;
+    color: black;
+    border-radius: 0;
+}
+.embed-box .text-area p{
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.embed-box .text-area .text-title {
+    font-size: 1.6rem;
+}
+.embed-box .text-area .text-description {
+    font-size: 1.2rem;
+    font-weight: 200;
+    color: #6a6a6a;
+}
+.detail-content .detail-table {
+    background-color: white;
+    color: black;
+}
+.detail-table, th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+.detail-table tbody tr td p {
+    margin: 0.5rem;
+}
+
 @media (min-width: 1024px) {
     .view-count-box img {
         max-width: 1.5rem;

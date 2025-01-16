@@ -344,6 +344,7 @@ public class PostService {
                 .description(dto.getDescription())
                 .keyword(dto.getKeyword())
                 .content(dto.getContent())
+                .isShow(false)
                 .build();
 
         postRepo.save(post);
