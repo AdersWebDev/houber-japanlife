@@ -255,15 +255,14 @@ public class PostService {
                         )
                         .from(qSnsContent)
                         .where(
-                                qPost.isShow.isTrue().and(
-                                    cursorTime == null
-                                            ? qSnsContent.title.contains(keyword).or(qSnsContent.description.contains(keyword))
-                                            : qSnsContent.publishTime.before(cursorTime).and(
-                                                    qSnsContent.title.contains(keyword)
-                                                            .or(qSnsContent.description.contains(keyword)
-                                                            )
-                                                    )
-                                )
+                                cursorTime == null
+                                        ? qSnsContent.title.contains(keyword).or(qSnsContent.description.contains(keyword))
+                                        : qSnsContent.publishTime.before(cursorTime).and(
+                                                qSnsContent.title.contains(keyword)
+                                                        .or(qSnsContent.description.contains(keyword)
+                                                        )
+                                                )
+
                         )
                         .orderBy(qSnsContent.publishTime.desc())
                         .limit(limit)
