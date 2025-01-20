@@ -100,4 +100,11 @@ public class S3Service {
             return originalFilename; // 확장자가 없을 경우 전체 이름 반환
         }
     }
+
+    @Transactional
+    public List<Long> deleteUnUseFile() {
+        List<File> unUseList = s3FileRepo.findAllByIsUsed(false);
+        this.deleteFileInjection(unUseList);
+        return unUseList.stream().map(File::getId).toList();
+    }
 }

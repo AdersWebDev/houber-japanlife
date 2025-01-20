@@ -27,12 +27,18 @@ function updateCursorFromLastItem() {
 async function fetchMoreContent() {
 
     try {
-        const apiUrl = `/post/list?category=${category}`
-            + (cursorView ? `&cursorView=${cursorView}` : '')
-            + (cursorId ? `&cursorId=${cursorId}` : '')
-            + (cursorTime ? `&cursorTime=${cursorTime}` : '');
+        // cursorTime 값이 "null" 문자열일 경우 null로 처리
+        const actualCursorTime = cursorTime === "null" ? null : cursorTime;
 
-        console.log(`Fetching data from: ${apiUrl}`);
+        // 쿼리 파라미터를 배열로 관리하여 null 값인 경우 제외
+        const queryParams = [
+            `category=${category}`,
+            cursorView ? `cursorView=${cursorView}` : null,
+            cursorId ? `cursorId=${cursorId}` : null,
+            actualCursorTime ? `cursorTime=${actualCursorTime}` : null // "null" 문자열도 제외
+        ].filter(Boolean); // null 값을 필터링
+
+        const apiUrl = `/post/list?${queryParams.join('&')}`;
 
         const response = await fetch(apiUrl);
         const data = await response.json();
