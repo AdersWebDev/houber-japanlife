@@ -109,7 +109,7 @@ public class SitemapService {
                 <priority>0.8</priority>
             </url>
             <url>
-                <loc>https://houber-japanlife.com/list?category=japan_study</loc>
+                <loc>https://houber-japanlife.com/list?category=japan_reivew</loc>
                 <lastmod>2025-01-08</lastmod>
                 <priority>0.8</priority>
             </url>
