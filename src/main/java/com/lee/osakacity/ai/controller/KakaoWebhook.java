@@ -1,13 +1,12 @@
-package com.lee.osakacity.controller;
+package com.lee.osakacity.ai.controller;
 
-import com.lee.osakacity.infra.entity.KakaoLog;
-import com.lee.osakacity.infra.repository.KakaoRepo;
+import com.lee.osakacity.ai.dto.PointFilter;
+import com.lee.osakacity.ai.infra.KakaoLog;
+import com.lee.osakacity.ai.infra.KakaoRepo;
+import com.lee.osakacity.ai.service.GptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoWebhook {
     private final KakaoRepo kakaoRepo;
+    private final GptService gptService;
 
     @PostMapping("/webhook")
     public ResponseEntity<String> kakaoWebhook(@RequestBody Map<String, Object> payload) {
@@ -55,5 +55,10 @@ public class KakaoWebhook {
         );
 
         return ResponseEntity.ok().body("OK");
+    }
+
+    @GetMapping("/district")
+    public PointFilter a (@RequestParam String message) {
+        return gptService.createSearchFilter(message);
     }
 }

@@ -1,4 +1,4 @@
-package com.lee.osakacity.infra.entity;
+package com.lee.osakacity.ai.infra;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
