@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -291,43 +292,53 @@ public class SearchService {
 
         // 이전 페이지가 있을 경우 추가
         if (result.getNumber() > 0) {
-            quickReplies.add(Map.of(
-                    "label", "이전 페이지",
-                    "action", "block",
-                    "blockId", "BLOCK_ID_이전 페이지",
-                    "extra", Map.of(                // 중첩 Map은 이렇게
-                            "page", String.valueOf(result.getNumber() - 1)  // 다음 페이지 넘기기
-                    )
-                    ));
+            Map<String, Object> previousQuickReply = new LinkedHashMap<>();
+            previousQuickReply.put("label", "이전 페이지");
+            previousQuickReply.put("action", "block");
+            previousQuickReply.put("blockId", "BLOCK_ID_이전 페이지");
+
+            Map<String, Object> previousExtra = new LinkedHashMap<>();
+            previousExtra.put("page", String.valueOf(result.getNumber() - 1));
+
+            previousQuickReply.put("extra", previousExtra);
+
+            quickReplies.add(previousQuickReply);
         }
 
-        // 다음 페이지가 있을 경우 추가
+// 다음 페이지 버튼
         if (result.hasNext()) {
-            quickReplies.add(Map.of(
-                    "label", "다음 페이지",
-                    "action", "block",
-                    "blockId", "BLOCK_ID_다음페이지",  // 이건 실제 카카오 빌더에서 만든 블록 ID
-                    "extra", Map.of(                // 중첩 Map은 이렇게
-                            "page", String.valueOf(result.getNumber() + 1)  // 다음 페이지 넘기기
-                    )
-            ));
-        }
+            Map<String, Object> nextQuickReply = new LinkedHashMap<>();
+            nextQuickReply.put("label", "다음 페이지");
+            nextQuickReply.put("action", "block");
+            nextQuickReply.put("blockId", "BLOCK_ID_다음페이지");
 
+            Map<String, Object> nextExtra = new LinkedHashMap<>();
+            nextExtra.put("page", String.valueOf(result.getNumber() + 1));
+
+            nextQuickReply.put("extra", nextExtra);
+
+            quickReplies.add(nextQuickReply);
+        }
         // 7. 최종 응답 생성 및 반환
-        return ResponseEntity.ok(
-                Map.of(
-                        "version", "2.0",
-                        "template", Map.of(
-                                "outputs", List.of(
-                                        Map.of("carousel", Map.of(
-                                                "type", "basicCard",
-                                                "items", items
-                                        ))
-                                ),
-                                "quickReplies", quickReplies
-                        )
-                )
-        );
+        Map<String, Object> carousel = new LinkedHashMap<>();
+        carousel.put("type", "basicCard");
+        carousel.put("items", items);
+
+// Outputs 생성
+        Map<String, Object> outputs = new LinkedHashMap<>();
+        outputs.put("carousel", carousel);
+
+// Template 생성
+        Map<String, Object> template = new LinkedHashMap<>();
+        template.put("outputs", List.of(outputs));
+        template.put("quickReplies", quickReplies);
+
+// 최종 응답
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("version", "2.0");
+        response.put("template", template);
+
+        return ResponseEntity.ok(response);
     }
 
 
@@ -416,20 +427,24 @@ public class SearchService {
 //        description.append("면적: ").append(room.getArea()).append("㎡").append("\n");
 //        description.append("구조: ").append(room.getFloorPlan().getTitle()).append("\n");
 
-        return Map.of(
-                "title", room.getRoomNum() + "호실",
-                "description", description.toString().trim(),
-                "thumbnail", Map.of(
-                        "imageUrl", room.getThumbnailImg()
-                ),
-                "buttons", List.of(
-                        Map.of(
-                                "action", "webLink",
-                                "label", "자세히 보기",
-                                "webLinkUrl", "https://your-site/detail/" + room.getRoomNum()
-                        )
-                )
-        );
+        Map<String, Object> card = new LinkedHashMap<>();
+        card.put("title", room.getRoomNum() + "호실");
+        card.put("description", description.toString().trim());
+
+        // Thumbnail Map 생성
+        Map<String, Object> thumbnail = new LinkedHashMap<>();
+        thumbnail.put("imageUrl", room.getThumbnailImg());
+        card.put("thumbnail", thumbnail);
+
+        // Button Map 생성
+        Map<String, Object> button = new LinkedHashMap<>();
+        button.put("action", "webLink");
+        button.put("label", "자세히 보기");
+        button.put("webLinkUrl", "https://your-site/detail/" + room.getRoomNum());
+
+        card.put("buttons", List.of(button));
+
+        return card;
     }
 
 
