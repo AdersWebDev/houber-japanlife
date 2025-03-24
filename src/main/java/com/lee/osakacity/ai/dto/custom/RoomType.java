@@ -24,7 +24,7 @@ public enum RoomType {
     K5("5K"),
     DK5("5DK"),
     LDK5("5LDK"),
-    OTHER("other");
+    OTHER("문의 필요");
 
     private final String title;
     public static RoomType of(String title) {
