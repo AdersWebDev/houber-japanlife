@@ -257,7 +257,26 @@ public class SearchService {
 
         // 3. 검색 조건 가져오기
         SearchWebHook sw = redisService.getSearchSession(userId);
-        BooleanExpression predicate = this.predicated(sw);
+
+        BooleanExpression predicate = this.predicated(
+                new SearchWebHook().builder()
+                        .location("오사카 난바")
+                        .transport("도보")
+                        .duration("30분")
+                        .radius("2.4km")
+                        .minLat(34.6504)
+                        .maxLat(34.6954)
+                        .minLon(135.4891)
+                        .maxLon(135.5361)
+                        .minArea(13.2F)
+                        .maxArea(22.2F)
+                        .freeInternet(false)
+                        .morePeople(false)
+                        .petsAllowed(false)
+                        .floorPlan(null)
+                        .deAllowedStructure(null)
+                        .build()
+        );
 
         // 4. 페이지네이션 검색 실행
         Page<SimpleRoom> result = queryExecute(predicate, page);
