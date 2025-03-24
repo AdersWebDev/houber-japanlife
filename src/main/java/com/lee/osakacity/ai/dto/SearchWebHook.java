@@ -9,13 +9,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PointFilter {
-
+public class SearchWebHook {
     private String location;
     private String transport;
     private String duration;
@@ -28,6 +26,7 @@ public class PointFilter {
 
     private List<RoomType> floorPlan;
     private float minArea;
+    private float maxArea;
     private int minRentFee;
     private int maxRentFee;
 
@@ -35,5 +34,5 @@ public class PointFilter {
     private boolean morePeople;
     private boolean petsAllowed;
 
-    private List<Structure> deAllowedStructure;
+    private List<Structure> deAllowedStructure; //미허용임
 }

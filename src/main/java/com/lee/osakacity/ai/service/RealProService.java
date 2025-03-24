@@ -1,12 +1,12 @@
 package com.lee.osakacity.ai.service;
 
-import com.lee.osakacity.ai.dto.RoomType;
-import com.lee.osakacity.ai.dto.Status;
-import com.lee.osakacity.ai.dto.Structure;
+import com.lee.osakacity.ai.dto.custom.RoomType;
+import com.lee.osakacity.ai.dto.custom.Status;
+import com.lee.osakacity.ai.dto.custom.Structure;
 import com.lee.osakacity.ai.infra.Building;
-import com.lee.osakacity.ai.infra.BuildingRepo;
+import com.lee.osakacity.ai.infra.repo.BuildingRepo;
 import com.lee.osakacity.ai.infra.Room;
-import com.lee.osakacity.ai.infra.RoomRepo;
+import com.lee.osakacity.ai.infra.repo.RoomRepo;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

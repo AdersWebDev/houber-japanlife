@@ -1,7 +1,8 @@
 package com.lee.osakacity.ai.service;
 
+import com.amazonaws.util.json.Jackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lee.osakacity.ai.dto.PointFilter;
+import com.lee.osakacity.ai.dto.SearchWebHook;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,8 +20,10 @@ public class GptService {
     @Value("${ai.key}")
     private String ACCESS_KEY;
 
+    private static final int MAX_REQUEST = 10;
+    private static final int SLEEP = 2000;
 
-    public PointFilter createSearchFilter(String userInput) {
+    public SearchWebHook createSearchFilter(String userInput, SearchWebHook sw) {
         String THREAD_URL = "https://api.openai.com/v1/threads";
         String MESSAGE_URL_TEMPLATE = "https://api.openai.com/v1/threads/%s/messages";
         String RUN_URL_TEMPLATE = "https://api.openai.com/v1/threads/%s/runs";
@@ -41,12 +44,24 @@ public class GptService {
             ResponseEntity<String> threadResponse = restTemplate1.postForEntity(THREAD_URL, threadRequest, String.class);
 
             String threadId = new JSONObject(threadResponse.getBody()).getString("id");
-
             // 2. 사용자 메시지 추가
             String messageUrl = String.format(MESSAGE_URL_TEMPLATE, threadId);
+            //2-1 프롬프트 생성
+            String prevConditionJson = Jackson.toJsonString(sw);
+            String prompt = String.format("""
+                기존 조건은 아래와 같습니다.
+                %s
+        
+                사용자가 새로운 조건을 입력했습니다:
+                "%s"
+        
+                기존 조건 중에서 사용자의 입력을 반영해 수정해야 할 부분만 바꾸고, 전체 조건을 JSON 형식으로 다시 보내주세요.
+        """, prevConditionJson, userInput);
+
+
             Map<String, Object> userMessagePayload = Map.of(
                     "role", "user",
-                    "content", userInput
+                    "content", prompt
             );
             HttpEntity<Map<String, Object>> messageRequest = new HttpEntity<>(userMessagePayload, headers);
             restTemplate1.postForEntity(messageUrl, messageRequest, String.class);
@@ -65,10 +80,9 @@ public class GptService {
             String runStatusUrl = String.format("https://api.openai.com/v1/threads/%s/runs/%s", threadId, runId);
 
             String status = "";
-            int maxRetries = 10;
             int retries = 0;
 
-            while (retries < maxRetries) {
+            while (retries < MAX_REQUEST) {
                 HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
                 ResponseEntity<String> runStatusResponse = restTemplate1.exchange(
                         runStatusUrl,
@@ -83,7 +97,7 @@ public class GptService {
                     break;
                 }
 
-                Thread.sleep(2000); // 2초 대기 후 재시도
+                Thread.sleep(SLEEP); // 0.5초 대기 후 재시도
                 retries++;
             }
 
@@ -113,7 +127,7 @@ public class GptService {
             // 6. JSON 응답 → EstateSearchFilter로 변환
             ObjectMapper objectMapper = new ObjectMapper();
 
-            return objectMapper.readValue(assistantResponse, PointFilter.class);
+            return objectMapper.readValue(assistantResponse, SearchWebHook.class);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.lee.osakacity.ai.dto;
+package com.lee.osakacity.ai.dto.custom;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

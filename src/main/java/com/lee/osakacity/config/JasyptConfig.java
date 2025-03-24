@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class JasyptConfig {
-
     @Value("${jasypt.encryptor.password}")
     private String PASSWORD;
 
@@ -19,11 +18,10 @@ public class JasyptConfig {
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword(PASSWORD);
         config.setPoolSize("1");
-        config.setAlgorithm("PBEWITHHMACSHA512ANDAES_256");
+        config.setAlgorithm("PBEWithMD5AndDES");
         config.setStringOutputType("base64");
         config.setKeyObtentionIterations("1000");
         config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
-        config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator"); // IV 설정 필수
         encryptor.setConfig(config);
         return encryptor;
     }

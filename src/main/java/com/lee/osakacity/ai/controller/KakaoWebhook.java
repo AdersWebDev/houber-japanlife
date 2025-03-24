@@ -1,15 +1,11 @@
 package com.lee.osakacity.ai.controller;
 
-import com.lee.osakacity.ai.dto.PointFilter;
-import com.lee.osakacity.ai.infra.KakaoLog;
-import com.lee.osakacity.ai.infra.KakaoRepo;
-import com.lee.osakacity.ai.service.GptService;
+import com.lee.osakacity.ai.infra.repo.KakaoRepo;
+import com.lee.osakacity.ai.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,48 +13,30 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoWebhook {
     private final KakaoRepo kakaoRepo;
-    private final GptService gptService;
+    private final SearchService searchService;
 
-    @PostMapping("/webhook")
-    public ResponseEntity<String> kakaoWebhook(@RequestBody Map<String, Object> payload) {
+//    @PostMapping("/webhook")
+//    public ResponseEntity<String> kakaoWebhook(@RequestBody Map<String, Object> payload) {
+//
+//        return SearchService.
+//    }
 
-        // 1. userRequest에서 유저 ID와 발화 추출
-        Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
-        Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
-
-        String userId = (String) user.get("id"); // 사용자 고유 ID
-        String utterance = (String) userRequest.get("utterance"); // 사용자가 입력한 텍스트
-
-        // 2. action에서 블록 이름 추출
-        Map<String, Object> action = (Map<String, Object>) payload.get("action");
-        String resBlockName = (String) action.get("name"); // 연결된 블록 이름
-
-        // 4. KakaoLog 엔티티로 빌더 패턴 사용해서 생성
-        KakaoLog kakaoLog = KakaoLog.builder()
-                .userId(userId)
-                .createDate(LocalDateTime.now())
-                .userReq(utterance)
-                .resBlockName(resBlockName)
-                .build();
-
-        // 5. 저장 (예시로 JpaRepository 이용)
-        kakaoRepo.save(kakaoLog);
-
-        // 6. 카카오에게 응답 (응답 JSON은 자유롭게 수정)
-        Map<String, Object> responseBody = Map.of(
-                "version", "2.0",
-                "template", Map.of(
-                        "outputs", List.of(
-                                Map.of("simpleText", Map.of("text", "요청이 정상 처리되었습니다!"))
-                        )
-                )
-        );
-
-        return ResponseEntity.ok().body("OK");
+    @PostMapping("/init")
+    public ResponseEntity<Map<String, Object>> init(@RequestBody Map<String, Object> payload) {
+        return searchService.userInit(payload);
     }
 
-    @GetMapping("/district")
-    public PointFilter a (@RequestParam String message) {
-        return gptService.createSearchFilter(message);
+    @PostMapping("/point")
+    public ResponseEntity<Map<String, Object>> filter (@RequestBody Map<String, Object> payload) {
+        return searchService.roomCounter(payload);
     }
+    @PostMapping("/list")
+    public ResponseEntity<Map<String, Object>> start (@RequestBody Map<String, Object> payload) {
+        return searchService.searchStart(payload);
+    }
+
+//    @PostMapping("/reset")
+//    public ResponseEntity<Map<String, Object>> reset (@RequestBody Map<String, Object> payload) {
+//        return searchService.reset(payload);
+//    }
 }

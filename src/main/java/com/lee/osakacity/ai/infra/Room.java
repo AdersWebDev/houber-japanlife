@@ -1,8 +1,8 @@
 package com.lee.osakacity.ai.infra;
 
-import com.lee.osakacity.ai.dto.RoomType;
-import com.lee.osakacity.ai.dto.Status;
-import com.lee.osakacity.ai.dto.Structure;
+import com.lee.osakacity.ai.dto.custom.RoomType;
+import com.lee.osakacity.ai.dto.custom.Status;
+import com.lee.osakacity.ai.dto.custom.Structure;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

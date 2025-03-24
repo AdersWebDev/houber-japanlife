@@ -14,9 +14,9 @@ spring:
     name: houber-city;
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(idl2geIwGDCdXZQsDOR9WOUp8RiBjhggnRqWpXrKIs9ZM+ARjC9vM/aBJQJ0GvaF61u4kH8zIOYKoEAUx6vVMSNyTJetNhhnD6C7sZMT03OCReNNvzEqvohDg2+SEbMJCakGIzKSuwx/hKJMcYN4X+CWj6XE3exgvKAW6SAeEMo=)
-    username: ENC(JqvCY/zpdKTqcQHx6iPmzBi2Rphyj5V0g9eK/fIE4n6L17jB2JVXx8Wp1h/xzFhU)
-    password: ENC(+zrkl6TI1fW39BV8k4KHlSpDor6887ZWk6NoArm0/iDMOnJjDy+//kdkS4AlbFtS)
+    url: ENC(cR1lVrscKe+ScuVh1R5uOFgIpbKdunx9L29qp9s+CHpjRJLiKEApu3sTU6HLDzXWHWYa8+pKB5mDXWXayo9B3zbak43OzpkD+fNNNXMkrRnob2ECm4Yg7HbUpGYnGQRDzBD83T62XkQ=)
+    username: ENC(bLOV1rhg9qGgt4R9n83J4fEcY6zmIMZe)
+    password: ENC(QqOaryyb5bffJFi2dMss5OdV+bY50SFY)
   jpa:
     hibernate:
       ddl-auto: update
@@ -28,18 +28,35 @@ spring:
         period: 0
       chain:
         cache: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      lettuce:
+        pool:
+          max-active: 100
+          max-idle: 30
+          min-idle: 5
+          max-wait: 5000
+      password: ENC(c1UTTrEa7dcw6s2hMFu5tTsKqzzmMjZXR85zgR89CwM=)
 
 aws:
   s3:
-    region: ENC(rDkJjm0BM8bNNMaf1wHGskFjVGimN8Lb+fNYPb+L6fKbkxY2u7/Dqc+86Xr71053)
-    accessKey: ENC(7f/Bi/xfIv3zGOfTpRSDRVC+NPfPAXyjWvPpww32euUZjmmzJJMCyWMDNtnatq2QQiG2155I+P2zTqBWk043aw==)
-    secretKey: ENC(3JceHfENUZXvNxWnhfFxm+mo2CYbg5j0vFfBrmhxusSwn+c0N9AOwONL2KzrLkAViY2h3/DnZZRxQWUfW6Ola4L0LPjqPdZkZeH1mq9qW0A=)
-    bucket-name: ENC(4/kbFdraMzV0CAEEWwFy11aiqpD/sVVDKFghvs4/hvMm/4/GaLE/mkNp1pzlnYZd)
+    region: ENC(GevVIOftUrRRRDmncI/QSGI8RoUasFBi)
+    accessKey: ENC(ePjaFE8nbgVjLaq49B4deEQxS8dGjmxWaZ/3mjTlQhU=)
+    secretKey: ENC(zFq4ytl1Q0b0rMTl8sgzgv4OOLfHKt4a7JA4FttvyZkKbpkdeP3tnwvFsb5cm3Xm+OV07x81Ba4=)
+    bucket-name: ENC(KRnbh8euVkW/ol0eoHd3SiKEwWwTXCKW)
 
 google:
   console:
-    key: ENC(T7L4tsu+rSlFNw9TZeEYMl7VADaMSw9Tygv0Nzr18P+ptugEKES7j7aYaII5cS6r/geK8c4/nCSSSPeJtAM0SZpeihqAlJxXjmlg8ESkM4U=)
+    key: ENC(L2qsqAGG9N3+QjIdRlMw587smurMAxkLYVQLgpicr2gt1p1+PT3AhQngmYAZ7miF)
 naver:
   client:
-    X-Naver-Client-Id: ENC(ybceS1JBvWY3QGOle5ZbqiGU13sVJS71xQym/vaRbK2a09ogrOkua1uNxqtpxmE8k/ema1p4+43KIY65r0Rwqw==)
-    X-Naver-Client-Secret: ENC(7d/cX3NE2CJjv0ObMHOgI13epA8ZZ7+fZoXJvLndoqZ2cenzlPFMKAHCPJqYVJD4)
+    X-Naver-Client-Id: ENC(t0Hzsyqe5wjzw56/oWmCjsqEKFbNxEnksZ917Tydmkg=)
+    X-Naver-Client-Secret: ENC(OEdF/bm1fM2/3vscbzEZ+Uu3iGHb75jT)
+realnetpro:
+  id: ENC(cvQaNwIRc0qjlF+wpatPEzGw5mDZTh6j)
+  pw: ENC(bsGZyCCDMXd1MCpRQHaDMhO6BzT6oBDi)
+
+ai:
+  key: ENC(bcQdPpw+SKU1lj9xlU78g5wyhMxAualZTpVks1H3ZQZ37dacwlgF+LOI0yjUHU5kLvLFlT4Abf3cWSi18u9docAcWwWo7HSaTdZ6c7VhKec5c69SB5ed1NYNG6IZpmEHHlM4Y9qx+4QzB6Hxg4hoqxG4ZBzqbenyUB6BRpHsPav1G8s6MAqPKPDK3xoERhzqqtJ28/B1RUJwoK0pMPxL8JRuHHu+Wy7rLNCHN26pUmw=)

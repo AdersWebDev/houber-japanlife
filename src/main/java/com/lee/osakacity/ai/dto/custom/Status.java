@@ -1,4 +1,4 @@
-package com.lee.osakacity.ai.dto;
+package com.lee.osakacity.ai.dto.custom;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ public enum Status {
     T5("審査中","다른 분이 신청 중"),//심사중
     T6("商談中","입주가 어려운 곳"),//상담중
     T7("新築","입주 가능한 신축 건물"),//신축
-    T8("建築中","아래의 건축 완료일을 참고하세요."),//건축중
+    T8("建築中","건축 중인 건물"),//건축중
     T9("不可","입주 불가");//불가
 
     private final String title;
