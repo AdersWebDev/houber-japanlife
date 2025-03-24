@@ -422,14 +422,14 @@ public class SearchService {
 //        } else if (room.getStatus().equals(Status.T8)) {
 //            description.append("상태 비고: ").append(room.getDateOfPreliminaryInspection()).append("\n");
 //        }
-        description.append("월세: ").append(room.getRentFee()).append("엔").append("\n");
-        description.append("관리비: ").append(room.getManagementFee()).append("엔").append("\n");
+        description.append("월세: ").append(room.getRentFee()).append("엔").append(" | ");
+        description.append("관리비: ").append(room.getManagementFee()).append("엔").append(" | ");
 //        description.append("면적: ").append(room.getArea()).append("㎡").append("\n");
 //        description.append("구조: ").append(room.getFloorPlan().getTitle()).append("\n");
 
         Map<String, Object> card = new LinkedHashMap<>();
         card.put("title", room.getRoomNum() + "호실");
-        card.put("description", description.toString().trim());
+        card.put("description", description.toString());
 
         // Thumbnail Map 생성
         Map<String, Object> thumbnail = new LinkedHashMap<>();
