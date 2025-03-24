@@ -20,7 +20,7 @@ public class RedisConfig {
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("127.0.0.1", 6379);
         config.setPassword(RedisPassword.of(redisPw));
-        return new LettuceConnectionFactory();
+        return new LettuceConnectionFactory(config);
     }
 
     @Bean
