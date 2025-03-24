@@ -415,7 +415,7 @@ public class SearchService {
         // 기본 description 내용 구성
         StringBuilder description = new StringBuilder();
 
-        description.append("상태: ").append(room.getStatus().getDescription()).append("\n");
+        description.append("상태: ").append(room.getStatus().getDescription()).append(" \n");
         // 상태가 특정 조건일 경우 입주일/사전 점검일 추가
 //        if (room.getStatus().equals(Status.T2)) {
 //            description.append("상태 비고: ").append(room.getDateOfMoveIn()).append("\n");
@@ -423,7 +423,7 @@ public class SearchService {
 //            description.append("상태 비고: ").append(room.getDateOfPreliminaryInspection()).append("\n");
 //        }
         description.append("월세: ").append(room.getRentFee()).append("엔").append(" | ");
-        description.append("관리비: ").append(room.getManagementFee()).append("엔").append(" | ");
+        description.append("관리비: ").append(room.getManagementFee()).append("엔");
 //        description.append("면적: ").append(room.getArea()).append("㎡").append("\n");
 //        description.append("구조: ").append(room.getFloorPlan().getTitle()).append("\n");
 
