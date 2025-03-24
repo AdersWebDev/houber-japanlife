@@ -422,8 +422,8 @@ public class SearchService {
 //        } else if (room.getStatus().equals(Status.T8)) {
 //            description.append("상태 비고: ").append(room.getDateOfPreliminaryInspection()).append("\n");
 //        }
-//        description.append("월세: ").append(room.getRentFee()).append("엔").append("\n");
-//        description.append("관리비: ").append(room.getManagementFee()).append("엔").append("\n");
+        description.append("월세: ").append(room.getRentFee()).append("엔").append("\n");
+        description.append("관리비: ").append(room.getManagementFee()).append("엔").append("\n");
 //        description.append("면적: ").append(room.getArea()).append("㎡").append("\n");
 //        description.append("구조: ").append(room.getFloorPlan().getTitle()).append("\n");
 
