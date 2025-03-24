@@ -406,22 +406,22 @@ public class SearchService {
 
         description.append("상태: ").append(room.getStatus().getDescription()).append("\n");
         // 상태가 특정 조건일 경우 입주일/사전 점검일 추가
-        if (room.getStatus().equals(Status.T2)) {
-            description.append("상태 비고: ").append(room.getDateOfMoveIn()).append("\n");
-        } else if (room.getStatus().equals(Status.T8)) {
-            description.append("상태 비고: ").append(room.getDateOfPreliminaryInspection()).append("\n");
-        }
-        description.append("월세: ").append(room.getRentFee()).append("엔").append("\n");
-        description.append("관리비: ").append(room.getManagementFee()).append("엔").append("\n");
-        description.append("면적: ").append(room.getArea()).append("㎡").append("\n");
-        description.append("구조: ").append(room.getFloorPlan().getTitle()).append("\n");
+//        if (room.getStatus().equals(Status.T2)) {
+//            description.append("상태 비고: ").append(room.getDateOfMoveIn()).append("\n");
+//        } else if (room.getStatus().equals(Status.T8)) {
+//            description.append("상태 비고: ").append(room.getDateOfPreliminaryInspection()).append("\n");
+//        }
+//        description.append("월세: ").append(room.getRentFee()).append("엔").append("\n");
+//        description.append("관리비: ").append(room.getManagementFee()).append("엔").append("\n");
+//        description.append("면적: ").append(room.getArea()).append("㎡").append("\n");
+//        description.append("구조: ").append(room.getFloorPlan().getTitle()).append("\n");
 
         return Map.of(
+                "title", room.getRoomNum() + "호실",
+                "description", description.toString().trim(),
                 "thumbnail", Map.of(
                         "imageUrl", room.getThumbnailImg()
                 ),
-                "title", room.getRoomNum() + "호실",
-                "description", description.toString().trim(),
                 "buttons", List.of(
                         Map.of(
                                 "action", "webLink",
