@@ -615,6 +615,7 @@ public class SearchService {
             if (imgUrl != null && !imgUrl.isBlank()) {
                 Map<String, Object> thumbnail = new LinkedHashMap<>();
                 thumbnail.put("imageUrl", imgUrl);
+                thumbnail.put("fixedRatio", true);
                 Map<String, Object> simpleImage = new LinkedHashMap<>();
                 simpleImage.put("thumbnail",thumbnail);
                 items.add(simpleImage);
