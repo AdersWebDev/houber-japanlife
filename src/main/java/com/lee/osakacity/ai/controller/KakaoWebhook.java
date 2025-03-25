@@ -15,11 +15,6 @@ public class KakaoWebhook {
     private final KakaoRepo kakaoRepo;
     private final SearchService searchService;
 
-//    @PostMapping("/webhook")
-//    public ResponseEntity<String> kakaoWebhook(@RequestBody Map<String, Object> payload) {
-//
-//        return SearchService.
-//    }
 
     @PostMapping("/init")
     public ResponseEntity<Map<String, Object>> init(@RequestBody Map<String, Object> payload) {
@@ -27,8 +22,8 @@ public class KakaoWebhook {
     }
 
     @PostMapping("/point")
-    public ResponseEntity<Map<String, Object>> filter (@RequestBody Map<String, Object> payload) {
-        return searchService.roomCounter(payload);
+    public ResponseEntity<Map<String,String>>  filter (@RequestBody Map<String, Object> payload) {
+        return searchService.callBack(payload);
     }
     @PostMapping("/list")
     public ResponseEntity<Map<String, Object>> start (@RequestBody Map<String, Object> payload) {

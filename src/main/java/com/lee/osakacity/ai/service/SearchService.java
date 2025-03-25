@@ -45,9 +45,6 @@ public class SearchService {
     QBuilding qBuilding = QBuilding.building;
     QRoom qRoom = QRoom.room;
 
-    public void searchPoint() {
-
-    }
 
     public ResponseEntity<Map<String, Object>> userInit(Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
@@ -124,130 +121,22 @@ public class SearchService {
 //                        )
 //                )
 //        );
-    public ResponseEntity<Map<String, Object>>  roomCounter(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<Map<String,String>>  callBack(@RequestBody Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
         String userId = (String) user.get("id"); // 사용자 고유 ID
         String utterance = (String) userRequest.get("utterance");
+        String callbackUrl = (String) userRequest.get("callbackUrl");
 
         SearchWebHook sw = redisService.getSearchSession(userId);
 
-        sw = gptService.createSearchFilter(utterance, sw);
-        redisService.saveSearchSession(userId, sw);
+        gptService.createSearchFilter(userId, callbackUrl, utterance, sw);
 
-        BooleanExpression predicate = this.predicated(sw);
-
-        long count =  jpaQueryFactory
-                .selectFrom(qRoom)
-                .where(predicate)
-                .fetchCount();
-
-        StringBuilder conditionText = new StringBuilder();
-
-        conditionText.append("현재 선택한 검색 조건입니다.\n\n");
-
-        conditionText.append("지역: ")
-                .append(sw.getLocation() != null ? sw.getLocation() : "지정되지 않음").append("\n");
-
-        conditionText.append("거리: ")
-                .append(sw.getDuration() != null ? sw.getDuration() : "지정되지 않음").append("\n");
-
-        conditionText.append("방 타입(K/DK/LDK) : ");
-        if (sw.getFloorPlan() == null || sw.getFloorPlan().isEmpty()) {
-            conditionText.append("선택 안함\n");
-        } else {
-            String excludedRoomType = sw.getFloorPlan().stream()
-                    .map(RoomType::getTitle)  // description 필드 꺼내기
-                    .collect(Collectors.joining(", "));
-
-            conditionText.append(excludedRoomType).append("\n");
-        }
-
-        // 면적 조건 멘트
-        if (sw.getMinArea() > 0 && sw.getMaxArea() > 0) {
-            conditionText.append("면적: ")
-                    .append(sw.getMinArea()).append("㎡ ~ ").append(sw.getMaxArea()).append("㎡");
-        } else if (sw.getMinArea() > 0) {
-            conditionText.append("면적: ").append(sw.getMinArea()).append("㎡ 이상");
-        } else if (sw.getMaxArea() > 0) {
-            conditionText.append("면적: ").append(sw.getMaxArea()).append("㎡ 이하");
-        } else {
-            conditionText.append("면적: 지정되지 않음");
-        }
-        conditionText.append("\n");
-
-// 월세 조건 멘트
-        if (sw.getMinRentFee() > 0 && sw.getMaxRentFee() > 0) {
-            conditionText.append("월세: ")
-                    .append(String.format("%,d", sw.getMinRentFee())).append("엔 ~ ")
-                    .append(String.format("%,d", sw.getMaxRentFee())).append("엔");
-        } else if (sw.getMinRentFee() > 0) {
-            conditionText.append("월세: 최소 ")
-                    .append(String.format("%,d", sw.getMinRentFee())).append("엔");
-        } else if (sw.getMaxRentFee() > 0) {
-            conditionText.append("월세: 최대 ")
-                    .append(String.format("%,d", sw.getMaxRentFee())).append("엔");
-        } else {
-            conditionText.append("월세: 지정되지 않음");
-        }
-        conditionText.append("\n");
-
-        conditionText.append("반려동물 동반: ")
-                .append(sw.isPetsAllowed() ? "필요" : "상관없음").append("\n");
-
-        conditionText.append("2인입주: ")
-                .append(sw.isMorePeople() ? "필요" : "상관없음").append("\n");
-
-        conditionText.append("제외할 건축 구조(철근/철골/목조): ");
-        if (sw.getDeAllowedStructure() == null || sw.getDeAllowedStructure().isEmpty()) {
-            conditionText.append("상관 없음\n");
-        } else {
-            String excludedStructures = sw.getDeAllowedStructure().stream()
-                    .map(Structure::getTitle)  // description 필드 꺼내기
-                    .collect(Collectors.joining(", "));
-
-            conditionText.append(excludedStructures).append(" 제외\n");
-        }
-
-        conditionText.append("\n총 ").append(count).append("개의 매물이 검색됩니다!");
-
-        // 5. simpleText로 출력
-        Map<String, Object> simpleText = Map.of(
-                "simpleText", Map.of(
-                        "text", conditionText.toString()
-                )
-        );
-
-        // 6. 버튼 두 개 세로 배치 (basicCard)
-        Map<String, Object> basicCard = Map.of(
-                "basicCard", Map.of(
-                        "title", "다음 작업을 선택해 주세요!",
-                        "buttons", List.of(
-                                Map.of(
-                                        "action", "message",
-                                        "label", "이 조건으로 검색하기",
-                                        "messageText", "검색 시작"
-                                ),
-                                Map.of(
-                                        "action", "message",
-                                        "label", "조건 초기화하기",
-                                        "messageText", "검색 조건 초기화"
-                                )
-                        )
-                )
-        );
-
-        // 7. 최종 응답 템플릿 구성
-        Map<String, Object> template = Map.of(
-                "outputs", List.of(simpleText, basicCard)
-        );
-
-        Map<String, Object> response = Map.of(
-                "version", "2.0",
-                "template", template
-        );
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                Map.of(
+                        "version", "2.0",
+                        "useCallback", "true"
+                ));
     }
 
     public ResponseEntity<Map<String, Object>> searchStart(@RequestBody Map<String, Object> payload) {
