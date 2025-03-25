@@ -386,6 +386,7 @@ public class SearchService {
 
         JPAQuery<SimpleRoom> query = jpaQueryFactory
                 .select(Projections.constructor(SimpleRoom.class,
+                        qRoom.id,
                         qRoom.thumbnail,
                         qRoom.roomNumber,
                         qRoom.status,
