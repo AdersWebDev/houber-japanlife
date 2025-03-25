@@ -240,21 +240,30 @@ public class SearchService {
         return ResponseEntity.ok(response);
     }
 
-    public ResponseEntity<Map<String, Object>> searchStart(Map<String, Object> payload) {
+    public ResponseEntity<Map<String, Object>> searchStart(@RequestBody Map<String, Object> payload) {
         // 1. 사용자 정보 가져오기
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
         String userId = (String) user.get("id"); // 사용자 고유 ID
 
         // 2. 파라미터에서 page 값 추출
+        int page = 0; // 기본값
         Map<String, Object> action = (Map<String, Object>) payload.get("action");
-        Map<String, Object> params = (Map<String, Object>) action.get("detailParams");
-
-        int page = 0; // 기본 페이지는 0
-
-        if (params != null && params.containsKey("page")) {
-            page = Integer.parseInt((String) params.get("page"));
+        if (action != null) {
+            Map<String, Object> extra = (Map<String, Object>) action.get("clientExtra");
+            if (extra != null && extra.get("page") != null) {
+                try {
+                    page = Integer.parseInt(extra.get("page").toString());
+                } catch (NumberFormatException e) {
+                    // 잘못된 숫자일 경우 그대로 기본값 유지
+                    System.err.println("page 파싱 실패: " + e.getMessage());
+                }
+            }
         }
+
+        System.out.println("사용자 ID: " + userId);
+        System.out.println("페이지 번호: " + page);
+
 
         // 3. 검색 조건 가져오기
         SearchWebHook sw = redisService.getSearchSession(userId);
@@ -295,7 +304,7 @@ public class SearchService {
             Map<String, Object> previousQuickReply = new LinkedHashMap<>();
             previousQuickReply.put("label", "이전 페이지");
             previousQuickReply.put("action", "block");
-            previousQuickReply.put("blockId", "BLOCK_ID_이전 페이지");
+            previousQuickReply.put("blockId", "67e167ad5676f43ad024b252");
 
             Map<String, Object> previousExtra = new LinkedHashMap<>();
             previousExtra.put("page", String.valueOf(result.getNumber() - 1));
@@ -310,7 +319,7 @@ public class SearchService {
             Map<String, Object> nextQuickReply = new LinkedHashMap<>();
             nextQuickReply.put("label", "다음 페이지");
             nextQuickReply.put("action", "block");
-            nextQuickReply.put("blockId", "BLOCK_ID_다음페이지");
+            nextQuickReply.put("blockId", "67e167ad5676f43ad024b252");
 
             Map<String, Object> nextExtra = new LinkedHashMap<>();
             nextExtra.put("page", String.valueOf(result.getNumber() + 1));
