@@ -525,9 +525,6 @@ public class SearchService {
         if (room.isMorePeople())
             itemList.add(Map.of("title","옵션","description","2인 입주 가능"));
 
-        String mapUrl = "https://maps.google.com/?q=" + room.getLat() + "," + room.getLon();
-        itemList.add(Map.of("title","지도로 위치보기", "description",mapUrl));
-
         List<Map<String, Object>> buttons = new ArrayList<>();
         Map<String, Object> morePictureButton = new LinkedHashMap<>();
         morePictureButton.put("action", "block");
@@ -545,6 +542,13 @@ public class SearchService {
         helpButton.put("action", "operator");
         helpButton.put("label", "상담원 연결하기");
         buttons.add(helpButton);
+
+        Map<String, Object> mapButton = new LinkedHashMap<>();
+        mapButton.put("action", "webLink");
+        mapButton.put("label", "구글 지도 보기");
+        String mapUrl = "https://maps.google.com/?q=" + room.getLat() + "," + room.getLon();
+        mapButton.put("webLinkUrl", mapUrl);
+        buttons.add(mapButton);
 
 // itemCard에 삽입
         Map<String, Object> itemCard = new LinkedHashMap<>();
