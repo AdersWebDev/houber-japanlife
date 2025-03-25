@@ -40,6 +40,10 @@ public class SearchService {
     QBuilding qBuilding = QBuilding.building;
     QRoom qRoom = QRoom.room;
 
+    public void searchPoint() {
+
+    }
+
     public ResponseEntity<Map<String, Object>> userInit(Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
@@ -269,25 +273,26 @@ public class SearchService {
         // 3. 검색 조건 가져오기
         SearchWebHook sw = redisService.getSearchSession(userId);
 
-        BooleanExpression predicate = this.predicated(
-                new SearchWebHook().builder()
-                        .location("오사카 난바")
-                        .transport("도보")
-                        .duration("30분")
-                        .radius("2.4km")
-                        .minLat(34.6504)
-                        .maxLat(34.6954)
-                        .minLon(135.4891)
-                        .maxLon(135.5361)
-                        .minArea(13.2F)
-                        .maxArea(22.2F)
-                        .freeInternet(false)
-                        .morePeople(false)
-                        .petsAllowed(false)
-                        .floorPlan(null)
-                        .deAllowedStructure(null)
-                        .build()
-        );
+        BooleanExpression predicate = this.predicated(sw);
+//        BooleanExpression predicate = this.predicated(
+//                new SearchWebHook().builder()
+//                        .location("오사카 난바")
+//                        .transport("도보")
+//                        .duration("30분")
+//                        .radius("2.4km")
+//                        .minLat(34.6504)
+//                        .maxLat(34.6954)
+//                        .minLon(135.4891)
+//                        .maxLon(135.5361)
+//                        .minArea(13.2F)
+//                        .maxArea(22.2F)
+//                        .freeInternet(false)
+//                        .morePeople(false)
+//                        .petsAllowed(false)
+//                        .floorPlan(null)
+//                        .deAllowedStructure(null)
+//                        .build()
+//        );
 
         // 4. 페이지네이션 검색 실행
         Page<SimpleRoom> result = queryExecute(predicate, page);
@@ -305,7 +310,7 @@ public class SearchService {
             Map<String, Object> previousQuickReply = new LinkedHashMap<>();
             previousQuickReply.put("label", "이전 페이지");
             previousQuickReply.put("action", "block");
-            previousQuickReply.put("blockId", "67e167ad5676f43ad024b252");
+            previousQuickReply.put("blockId", "67e154775676f43ad024afe8");
 
             Map<String, Object> previousExtra = new LinkedHashMap<>();
             previousExtra.put("page", String.valueOf(result.getNumber() - 1));
@@ -320,7 +325,7 @@ public class SearchService {
             Map<String, Object> nextQuickReply = new LinkedHashMap<>();
             nextQuickReply.put("label", "다음 페이지");
             nextQuickReply.put("action", "block");
-            nextQuickReply.put("blockId", "67e167ad5676f43ad024b252");
+            nextQuickReply.put("blockId", "67e154775676f43ad024afe8");
 
             Map<String, Object> nextExtra = new LinkedHashMap<>();
             nextExtra.put("page", String.valueOf(result.getNumber() + 1));
@@ -451,7 +456,7 @@ public class SearchService {
         Map<String, Object> button = new LinkedHashMap<>();
         button.put("action", "block");
         button.put("label", "자세히 보기");
-        button.put("blockId", "67e2053a4a44a50052a6a6fd");
+        button.put("blockId", "67e27dfcabcdb40ec9fae2a3");
 
         Map<String, Long> idParam = new HashMap<>();
         idParam.put("id", room.getId());
@@ -526,7 +531,7 @@ public class SearchService {
         Map<String, Object> morePictureButton = new LinkedHashMap<>();
         morePictureButton.put("action", "block");
         morePictureButton.put("label", "사진 더보기");
-        morePictureButton.put("blockId", "67e22026e740af7a5e24a6a7");
+        morePictureButton.put("blockId", "67e27e0b53748b3e0cb5b24f");
 
         Map<String, Long> idParam = new HashMap<>();
         idParam.put("id", room.getId());
