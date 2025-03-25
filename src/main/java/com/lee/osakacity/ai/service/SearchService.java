@@ -597,7 +597,7 @@ public class SearchService {
         }
         Room room = roomOpt.get();
 
-        List<Map<String, Object>> outputs = new ArrayList<>();
+
 
         // Room의 이미지 필드들을 리스트로 묶기
         List<String> images = new ArrayList<>();
@@ -608,6 +608,8 @@ public class SearchService {
                 room.getImg5(), room.getImg6(), room.getImg7(), room.getImg8()
         ).filter(Objects::nonNull).forEach(images::add);
 
+        List<Map<String, Object>> items = new ArrayList<>();
+
         // 비어있지 않은 이미지만 골라서 simpleImage 구성
         for (String imgUrl : images) {
             if (imgUrl != null && !imgUrl.isBlank()) {
@@ -615,18 +617,26 @@ public class SearchService {
                 thumbnail.put("imageUrl", imgUrl);
                 Map<String, Object> simpleImage = new LinkedHashMap<>();
                 simpleImage.put("thumbnail",thumbnail);
-                outputs.add(Map.of("basicCard", simpleImage));
+                items.add(simpleImage);
             }
         }
 
         // outputs가 비었으면 기본 메시지 제공
-        if (outputs.isEmpty()) {
-            outputs.add(Map.of("basicCard", Map.of(
-                    "thumbnail", Map.of(
-                            "imageUrl","https://houber-home.com"
-                    )
-            )));
-        }
+//        if (outputs.isEmpty()) {
+//            outputs.add(Map.of("basicCard", Map.of(
+//                    "thumbnail", Map.of(
+//                            "imageUrl","https://houber-home.com"
+//                    )
+//            )));
+//        }
+
+
+        Map<String, Object> carousel = new LinkedHashMap<>();
+        carousel.put("type", "basicCard");
+        carousel.put("items", items);
+
+        Map<String, Object> outputs = new LinkedHashMap<>();
+        outputs.put("carousel", carousel);
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("version", "2.0");
