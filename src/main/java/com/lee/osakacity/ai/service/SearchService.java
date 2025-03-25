@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -595,11 +596,13 @@ public class SearchService {
         List<Map<String, Object>> outputs = new ArrayList<>();
 
         // Room의 이미지 필드들을 리스트로 묶기
-        List<String> images = List.of(
-                room.getThumbnail(), room.getFloorPlanImg(),
+        List<String> images = new ArrayList<>();
+        Stream.of(
+                room.getThumbnail(),
+                room.getFloorPlanImg(),
                 room.getImg1(), room.getImg2(), room.getImg3(), room.getImg4(),
                 room.getImg5(), room.getImg6(), room.getImg7(), room.getImg8()
-        );
+        ).filter(Objects::nonNull).forEach(images::add);
 
         // 비어있지 않은 이미지만 골라서 simpleImage 구성
         for (String imgUrl : images) {
