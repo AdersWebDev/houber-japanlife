@@ -34,6 +34,14 @@ public class KakaoWebhook {
     public ResponseEntity<Map<String, Object>> start (@RequestBody Map<String, Object> payload) {
         return searchService.searchStart(payload);
     }
+    @PostMapping("/detail")
+    public ResponseEntity<Map<String,Object>> detail (@RequestBody Map<String, Object> payload) {
+        return searchService.detail(payload);
+    }
+    @PostMapping("/detail/photo")
+    public ResponseEntity<Map<String,Object>> detailPhoto (@RequestBody Map<String, Object> payload) {
+        return searchService.morePhoto(payload);
+    }
 
 //    @PostMapping("/reset")
 //    public ResponseEntity<Map<String, Object>> reset (@RequestBody Map<String, Object> payload) {

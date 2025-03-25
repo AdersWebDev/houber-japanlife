@@ -7,6 +7,8 @@ import com.lee.osakacity.ai.dto.custom.Status;
 import com.lee.osakacity.ai.dto.custom.Structure;
 import com.lee.osakacity.ai.infra.QBuilding;
 import com.lee.osakacity.ai.infra.QRoom;
+import com.lee.osakacity.ai.infra.Room;
+import com.lee.osakacity.ai.infra.repo.RoomRepo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -21,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +34,7 @@ public class SearchService {
     private final JPAQueryFactory jpaQueryFactory;
     private final RedisService redisService;
     private final GptService gptService;
+    private final RoomRepo roomRepo;
 
     QBuilding qBuilding = QBuilding.building;
     QRoom qRoom = QRoom.room;
@@ -438,14 +438,166 @@ public class SearchService {
 
         // Button Map 생성
         Map<String, Object> button = new LinkedHashMap<>();
-        button.put("action", "webLink");
+        button.put("action", "block");
         button.put("label", "자세히 보기");
-        button.put("webLinkUrl", "https://your-site/detail/" + room.getRoomNum());
+        button.put("blockId", "67e2053a4a44a50052a6a6fd");
+
+        Map<String, Long> idParam = new HashMap<>();
+        idParam.put("id", room.getId());
+        button.put("extra", idParam);
 
         card.put("buttons", List.of(button));
 
         return card;
     }
 
+
+    public ResponseEntity<Map<String, Object>> detail(Map<String, Object> payload) {
+        Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
+        Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
+
+        Map<String, Object> action =(Map<String, Object>) userRequest.get("action");
+        Map<String, Object> clientExtra =(Map<String, Object>) action.get("clientExtra");
+        Long id = (Long)clientExtra.get("id");
+
+        Optional<Room> roomOpt = roomRepo.findById(id);
+        if (roomOpt.isEmpty()) {
+            return errorCatcher(); // 바로 에러 응답 반환
+        }
+        Room room = roomOpt.get();
+
+        Map<String, Object> imageTitle = new LinkedHashMap<>();
+        imageTitle.put("title", room.getRoomNumber() + "호실 | " +room.getFloorPlan().getTitle());
+        imageTitle.put("description", room.getArea() + "㎡" + " | " + room.getStructure().getTitle());
+
+
+        Map<String, Object> thumbnail = new LinkedHashMap<>();
+        thumbnail.put("imageUrl", room.getFloorPlanImg());
+        thumbnail.put("width", 600);
+        thumbnail.put("height", 600);
+
+        Map<String, Object> profile = new LinkedHashMap<>();
+        profile.put("title", "하우버(Houber) 제공");
+        profile.put("imageUrl", "https://www.houber-japanlife.com/asset/favicon.png");
+
+        List<Map<String, String>> itemList = new ArrayList<>();
+        itemList.add(Map.of("title", "상태:","description",room.getStatus().getDescription()));
+        if (room.getStatus().equals(Status.T2) || room.getStatus().equals(Status.T3) || room.getStatus().equals(Status.T8)) {
+            itemList.add(Map.of("title", "입주 가능일", "description", room.getDateOfMoveIn() != null ? room.getDateOfMoveIn() : "상담 필요"));
+        }
+
+        itemList.add(Map.of("title", "월세", "description", room.getRentFee() + "엔"));
+        itemList.add(Map.of("title", "관리비", "description", room.getManagementFee() + "엔"));
+        itemList.add(Map.of("title", "시키킹", "description", room.getDeposit()));
+        itemList.add(Map.of("title", "레이킹", "description", room.getServiceFee()));
+        if (room.isFreeInternet())
+            itemList.add(Map.of("title", "옵션", "description", "인터넷 무료"));
+        if (room.isPetsAllowed())
+            itemList.add(Map.of("title","옵션","description","반려동물 동반(문의필요)"));
+        if (room.isMorePeople())
+            itemList.add(Map.of("title","옵션","description","2인 입주 가능"));
+
+        String mapUrl = "https://maps.google.com/?q=" + room.getLat() + "," + room.getLon();
+        itemList.add(Map.of("title","지도로 위치보기", "description",mapUrl));
+
+        List<Map<String, Object>> buttons = new ArrayList<>();
+        Map<String, Object> morePictureButton = new LinkedHashMap<>();
+        morePictureButton.put("action", "block");
+        morePictureButton.put("label", "사진 더보기");
+        morePictureButton.put("blockId", "67e22026e740af7a5e24a6a7");
+
+        Map<String, Long> idParam = new HashMap<>();
+        idParam.put("id", room.getId());
+        morePictureButton.put("extra", idParam);
+
+        buttons.add(morePictureButton);
+
+        // 상담원 연결 버튼
+        Map<String, Object> helpButton = new LinkedHashMap<>();
+        helpButton.put("action", "operator");
+        helpButton.put("label", "상담원 연결하기");
+        buttons.add(helpButton);
+
+// itemCard에 삽입
+        Map<String, Object> itemCard = new LinkedHashMap<>();
+        itemCard.put("imageTitle", imageTitle);
+        itemCard.put("title","");
+        itemCard.put("description","");
+        itemCard.put("thumbnail",thumbnail);
+        itemCard.put("profile",profile);
+        itemCard.put("itemList",itemList);
+        itemCard.put("itemListAlignment","right");
+        itemCard.put("buttons", buttons);
+        itemCard.put("buttonLayout", "vertical");
+
+        Map<String, Object> output = Map.of("itemCard", itemCard);
+        Map<String, Object> template = Map.of("outputs", List.of(output));
+        Map<String, Object> response = Map.of("version", "2.0", "template", template);
+        return ResponseEntity.ok(response);
+    }
+    public ResponseEntity<Map<String, Object>> morePhoto (Map<String, Object> payload) {
+        Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
+        Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
+
+        Map<String, Object> action =(Map<String, Object>) userRequest.get("action");
+        Map<String, Object> clientExtra =(Map<String, Object>) action.get("clientExtra");
+        Long id = (Long)clientExtra.get("id");
+
+        Optional<Room> roomOpt = roomRepo.findById(id);
+        if (roomOpt.isEmpty()) {
+            return errorCatcher(); // 바로 에러 응답 반환
+        }
+        Room room = roomOpt.get();
+
+        List<Map<String, Object>> outputs = new ArrayList<>();
+
+        // Room의 이미지 필드들을 리스트로 묶기
+        List<String> images = List.of(
+                room.getThumbnail(), room.getFloorPlanImg(),
+                room.getImg1(), room.getImg2(), room.getImg3(), room.getImg4(),
+                room.getImg5(), room.getImg6(), room.getImg7(), room.getImg8()
+        );
+
+        // 비어있지 않은 이미지만 골라서 simpleImage 구성
+        for (String imgUrl : images) {
+            if (imgUrl != null && !imgUrl.isBlank()) {
+                Map<String, Object> simpleImage = new LinkedHashMap<>();
+                simpleImage.put("imageUrl", imgUrl);
+                simpleImage.put("altText", room.getRoomNumber() + " 이미지");
+
+                outputs.add(Map.of("simpleImage", simpleImage));
+            }
+        }
+
+        // outputs가 비었으면 기본 메시지 제공
+        if (outputs.isEmpty()) {
+            outputs.add(Map.of("simpleText", Map.of(
+                    "text", "등록된 사진이 없습니다 😢"
+            )));
+        }
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("version", "2.0");
+        response.put("template", Map.of("outputs", outputs));
+
+        return ResponseEntity.ok(response);
+    }
+    public ResponseEntity<Map<String, Object>> errorCatcher() {
+        Map<String, Object> textCard = new LinkedHashMap<>();
+        textCard.put("title", "문제가 발생했어요 😢");
+        textCard.put("description", "더 나은 모습으로 다시 보여드릴게요.\n아래 버튼을 눌러 상담원과 연결해 주세요.");
+
+        Map<String, Object> button = new LinkedHashMap<>();
+        button.put("action", "operator");
+        button.put("label", "상담원 연결하기");
+
+        textCard.put("buttons", List.of(button));
+
+        Map<String, Object> output = Map.of("textCard", textCard);
+        Map<String, Object> template = Map.of("outputs", List.of(output));
+        Map<String, Object> response = Map.of("version", "2.0", "template", template);
+
+        return ResponseEntity.ok(response);
+    }
 
 }

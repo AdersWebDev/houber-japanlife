@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class SimpleRoom {
+    private Long id;
     private String thumbnailImg;
     private String roomNum;
     private Status status;
@@ -19,8 +20,9 @@ public class SimpleRoom {
     private float area;
     private int rentFee;
     private int managementFee;
-    public SimpleRoom(String thumbnailImg, String roomNum, Status status, String dateOfMoveIn, String dateOfPreliminaryInspection,
+    public SimpleRoom(Long id, String thumbnailImg, String roomNum, Status status, String dateOfMoveIn, String dateOfPreliminaryInspection,
                       RoomType floorPlan, float area, int rentFee, int managementFee) {
+        this.id = id;
         this.thumbnailImg = thumbnailImg;
         this.roomNum = roomNum;
         this.status = status;
