@@ -462,13 +462,30 @@ public class SearchService {
     }
 
 
-    public ResponseEntity<Map<String, Object>> detail(Map<String, Object> payload) {
+    public ResponseEntity<Map<String, Object>> detail(@RequestBody Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
 
-        Map<String, Object> action =(Map<String, Object>) userRequest.get("action");
-        Map<String, Object> clientExtra =(Map<String, Object>) action.get("clientExtra");
-        Long id = (Long)clientExtra.get("id");
+//        Map<String, Object> action =(Map<String, Object>) userRequest.get("action");
+//        Map<String, Object> clientExtra =(Map<String, Object>) action.get("clientExtra");
+//        Long id = (Long)clientExtra.get("id");
+        // 2. 파라미터에서 page 값 추출
+        Long id; // 기본값
+        Map<String, Object> action = (Map<String, Object>) payload.get("action");
+        if (action != null) {
+            Map<String, Object> extra = (Map<String, Object>) action.get("clientExtra");
+            if (extra != null && extra.get("id") != null) {
+                try {
+                    id = Long.parseLong(extra.get("id").toString());
+                } catch (NumberFormatException e) {
+                    return this.errorCatcher();
+                }
+            } else {
+                return this.errorCatcher();
+            }
+        } else {
+            return this.errorCatcher();
+        }
 
         Optional<Room> roomOpt = roomRepo.findById(id);
         if (roomOpt.isEmpty()) {
@@ -549,9 +566,25 @@ public class SearchService {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
 
-        Map<String, Object> action =(Map<String, Object>) userRequest.get("action");
-        Map<String, Object> clientExtra =(Map<String, Object>) action.get("clientExtra");
-        Long id = (Long)clientExtra.get("id");
+//        Map<String, Object> action =(Map<String, Object>) userRequest.get("action");
+//        Map<String, Object> clientExtra =(Map<String, Object>) action.get("clientExtra");
+//        Long id = (Long)clientExtra.get("id");
+        Long id; // 기본값
+        Map<String, Object> action = (Map<String, Object>) payload.get("action");
+        if (action != null) {
+            Map<String, Object> extra = (Map<String, Object>) action.get("clientExtra");
+            if (extra != null && extra.get("id") != null) {
+                try {
+                    id = Long.parseLong(extra.get("id").toString());
+                } catch (NumberFormatException e) {
+                    return this.errorCatcher();
+                }
+            } else {
+                return this.errorCatcher();
+            }
+        } else {
+            return this.errorCatcher();
+        }
 
         Optional<Room> roomOpt = roomRepo.findById(id);
         if (roomOpt.isEmpty()) {
