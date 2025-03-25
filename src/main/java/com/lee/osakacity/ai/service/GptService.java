@@ -4,6 +4,7 @@ import com.amazonaws.util.json.Jackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lee.osakacity.ai.dto.SearchWebHook;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GptService {
 
     @Value("${ai.key}")
@@ -24,6 +26,7 @@ public class GptService {
     private static final int SLEEP = 1000;
 
     public SearchWebHook createSearchFilter(String userInput, SearchWebHook sw) {
+        log.info(userInput);
         String THREAD_URL = "https://api.openai.com/v1/threads";
         String MESSAGE_URL_TEMPLATE = "https://api.openai.com/v1/threads/%s/messages";
         String RUN_URL_TEMPLATE = "https://api.openai.com/v1/threads/%s/runs";
