@@ -21,7 +21,7 @@ public class GptService {
     private String ACCESS_KEY;
 
     private static final int MAX_REQUEST = 10;
-    private static final int SLEEP = 200;
+    private static final int SLEEP = 1000;
 
     public SearchWebHook createSearchFilter(String userInput, SearchWebHook sw) {
         String THREAD_URL = "https://api.openai.com/v1/threads";
