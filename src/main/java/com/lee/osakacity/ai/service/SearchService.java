@@ -433,8 +433,8 @@ public class SearchService {
 //        } else if (room.getStatus().equals(Status.T8)) {
 //            description.append("상태 비고: ").append(room.getDateOfPreliminaryInspection()).append("\n");
 //        }
-        description.append("월세: ").append(room.getRentFee()).append("円").append(" | ");
-        description.append("관리비: ").append(room.getManagementFee()).append("円");
+        description.append("월세: ").append(room.getRentFee()).append("엔").append(" | ");
+        description.append("관리비: ").append(room.getManagementFee()).append("엔");
 //        description.append("면적: ").append(room.getArea()).append("㎡").append("\n");
 //        description.append("구조: ").append(room.getFloorPlan().getTitle()).append("\n");
 
@@ -511,8 +511,8 @@ public class SearchService {
             itemList.add(Map.of("title", "입주 가능일", "description", room.getDateOfMoveIn() != null ? room.getDateOfMoveIn() : "상담 필요"));
         }
 
-        itemList.add(Map.of("title", "월세", "description", room.getRentFee() + "엔"));
-        itemList.add(Map.of("title", "관리비", "description", room.getManagementFee() + "엔"));
+        itemList.add(Map.of("title", "월세", "description", room.getRentFee() + "円"));
+        itemList.add(Map.of("title", "관리비", "description", room.getManagementFee() + "円"));
         itemList.add(Map.of("title", "시키킹", "description", room.getDeposit()));
         itemList.add(Map.of("title", "레이킹", "description", room.getServiceFee()));
         if (room.isFreeInternet())
