@@ -635,8 +635,13 @@ public class SearchService {
         carousel.put("type", "basicCard");
         carousel.put("items", items);
 
-        Map<String, Object> outputs = new LinkedHashMap<>();
-        outputs.put("carousel", carousel);
+// "carousel": { ... } 형태로 감싸기
+        Map<String, Object> carouselOutput = new LinkedHashMap<>();
+        carouselOutput.put("carousel", carousel);
+
+// outputs 리스트에 추가
+        List<Map<String, Object>> outputs = new ArrayList<>();
+        outputs.add(carouselOutput);
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("version", "2.0");
