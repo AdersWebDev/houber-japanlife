@@ -611,18 +611,20 @@ public class SearchService {
         // 비어있지 않은 이미지만 골라서 simpleImage 구성
         for (String imgUrl : images) {
             if (imgUrl != null && !imgUrl.isBlank()) {
+                Map<String, Object> thumbnail = new LinkedHashMap<>();
+                thumbnail.put("imageUrl", imgUrl);
                 Map<String, Object> simpleImage = new LinkedHashMap<>();
-                simpleImage.put("imageUrl", imgUrl);
-                simpleImage.put("altText", room.getRoomNumber() + " 이미지");
-
-                outputs.add(Map.of("simpleImage", simpleImage));
+                simpleImage.put("thumbnail",thumbnail);
+                outputs.add(Map.of("basicCard", simpleImage));
             }
         }
 
         // outputs가 비었으면 기본 메시지 제공
         if (outputs.isEmpty()) {
-            outputs.add(Map.of("simpleText", Map.of(
-                    "text", "등록된 사진이 없습니다 😢"
+            outputs.add(Map.of("basicCard", Map.of(
+                    "thumbnail", Map.of(
+                            "imageUrl","https://houber-home.com"
+                    )
             )));
         }
 
