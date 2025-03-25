@@ -1,5 +1,8 @@
 package com.lee.osakacity.ai.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.lee.osakacity.ai.dto.SearchWebHook;
 import com.lee.osakacity.ai.dto.SimpleRoom;
 import com.lee.osakacity.ai.dto.custom.RoomType;
@@ -14,6 +17,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +34,7 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class SearchService {
 
     private final JPAQueryFactory jpaQueryFactory;
@@ -272,27 +277,17 @@ public class SearchService {
 
         // 3. 검색 조건 가져오기
         SearchWebHook sw = redisService.getSearchSession(userId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // Pretty Print
 
+        String json = null;
+        try {
+            json = objectMapper.writeValueAsString(sw);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        log.info("\n{}", json);
         BooleanExpression predicate = this.predicated(sw);
-//        BooleanExpression predicate = this.predicated(
-//                new SearchWebHook().builder()
-//                        .location("오사카 난바")
-//                        .transport("도보")
-//                        .duration("30분")
-//                        .radius("2.4km")
-//                        .minLat(34.6504)
-//                        .maxLat(34.6954)
-//                        .minLon(135.4891)
-//                        .maxLon(135.5361)
-//                        .minArea(13.2F)
-//                        .maxArea(22.2F)
-//                        .freeInternet(false)
-//                        .morePeople(false)
-//                        .petsAllowed(false)
-//                        .floorPlan(null)
-//                        .deAllowedStructure(null)
-//                        .build()
-//        );
 
         // 4. 페이지네이션 검색 실행
         Page<SimpleRoom> result = queryExecute(predicate, page);
