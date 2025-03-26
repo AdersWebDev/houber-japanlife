@@ -422,8 +422,22 @@ public class SearchService {
         itemCard.put("buttons", buttons);
         itemCard.put("buttonLayout", "vertical");
 
+        List<Map<String, Object>> quickReplies = new ArrayList<>();
+
+        Map<String, Object> nextQuickReply = new LinkedHashMap<>();
+        nextQuickReply.put("label", "목록으로 돌아가기");
+        nextQuickReply.put("action", "block");
+        nextQuickReply.put("blockId", "67e154775676f43ad024afe8");
+
+        Map<String, Object> listExtra = new LinkedHashMap<>();
+
+        nextQuickReply.put("extra", listExtra);
+
+        quickReplies.add(nextQuickReply);
+
         Map<String, Object> output = Map.of("itemCard", itemCard);
-        Map<String, Object> template = Map.of("outputs", List.of(output));
+        Map<String, Object> template = new HashMap<>(Map.of("outputs", List.of(output)));
+        template.put("quickReplies",quickReplies);
         Map<String, Object> response = Map.of("version", "2.0", "template", template);
         return ResponseEntity.ok(response);
     }
@@ -483,15 +497,6 @@ public class SearchService {
             }
         }
 
-        // outputs가 비었으면 기본 메시지 제공
-//        if (outputs.isEmpty()) {
-//            outputs.add(Map.of("basicCard", Map.of(
-//                    "thumbnail", Map.of(
-//                            "imageUrl","https://houber-home.com"
-//                    )
-//            )));
-//        }
-
 
         Map<String, Object> carousel = new LinkedHashMap<>();
         carousel.put("type", "basicCard");
@@ -505,10 +510,20 @@ public class SearchService {
         List<Map<String, Object>> outputs = new ArrayList<>();
         outputs.add(carouselOutput);
 
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("version", "2.0");
-        response.put("template", Map.of("outputs", outputs));
+        List<Map<String, Object>> quickReplies = new ArrayList<>();
 
+        Map<String, Object> nextQuickReply = new LinkedHashMap<>();
+        nextQuickReply.put("label", "목록으로 돌아가기");
+        nextQuickReply.put("action", "block");
+        nextQuickReply.put("blockId", "67e154775676f43ad024afe8");
+
+        quickReplies.add(nextQuickReply);
+
+        Map<String, Object> template = new LinkedHashMap<>();
+        template.put("outputs", List.of(outputs));
+        template.put("quickReplies", quickReplies);
+
+        Map<String, Object> response = Map.of("version", "2.0", "template", template);
         return ResponseEntity.ok(response);
     }
     @Transactional(readOnly = true)
