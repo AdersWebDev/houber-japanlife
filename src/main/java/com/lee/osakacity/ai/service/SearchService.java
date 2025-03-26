@@ -523,7 +523,10 @@ public class SearchService {
         template.put("outputs", List.of(outputs));
         template.put("quickReplies", quickReplies);
 
-        Map<String, Object> response = Map.of("version", "2.0", "template", template);
+        Map<String, Object> response = new LinkedHashMap<>();
+
+        response.put("version", "2.0");
+        response.put("template", template);
         return ResponseEntity.ok(response);
     }
     @Transactional(readOnly = true)
