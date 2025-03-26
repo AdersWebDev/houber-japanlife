@@ -31,7 +31,6 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Slf4j
 public class SearchService {
 
@@ -43,7 +42,7 @@ public class SearchService {
     QBuilding qBuilding = QBuilding.building;
     QRoom qRoom = QRoom.room;
 
-
+    @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> userInit(Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
@@ -89,36 +88,6 @@ public class SearchService {
         );
         return ResponseEntity.ok(response);
     }
-//    Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
-    //        Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
-//
-//        String userId = (String) user.get("id"); // 사용자 고유 ID
-//        String utterance = (String) userRequest.get("utterance"); // 사용자가 입력한 텍스트
-//
-//        // 2. action에서 블록 이름 추출
-//        Map<String, Object> action = (Map<String, Object>) payload.get("action");
-//        String resBlockName = (String) action.get("name"); // 연결된 블록 이름
-//
-//        // 4. KakaoLog 엔티티로 빌더 패턴 사용해서 생성
-//        KakaoLog kakaoLog = KakaoLog.builder()
-//                .userId(userId)
-//                .createDate(LocalDateTime.now())
-//                .userReq(utterance)
-//                .resBlockName(resBlockName)
-//                .build();
-//
-//        // 5. 저장 (예시로 JpaRepository 이용)
-//        kakaoRepo.save(kakaoLog);
-//
-//        // 6. 카카오에게 응답 (응답 JSON은 자유롭게 수정)
-//        Map<String, Object> responseBody = Map.of(
-//                "version", "2.0",
-//                "template", Map.of(
-//                        "outputs", List.of(
-//                                Map.of("simpleText", Map.of("text", "요청이 정상 처리되었습니다!"))
-//                        )
-//                )
-//        );
     public ResponseEntity<Map<String,Object>>  callBack(@RequestBody Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
@@ -138,7 +107,7 @@ public class SearchService {
                         "data" , Map.of("text" ,"생각하고 있는 중이에요\uD83D\uDE18 \\n15초 정도 소요될 거 같아요 기다려 주실래요?!")
                 ));
     }
-
+    @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> searchStart(@RequestBody Map<String, Object> payload) {
         // 1. 사용자 정보 가져오기
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
@@ -310,7 +279,7 @@ public class SearchService {
 
         return new PageImpl<>(content, pageable, total);
     }
-
+    @Transactional(readOnly = true)
     public Map<String, Object> createKakaoCard(SimpleRoom room) {
         // 기본 description 내용 구성
         StringBuilder description = new StringBuilder();
@@ -351,7 +320,7 @@ public class SearchService {
         return card;
     }
 
-
+    @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> detail(@RequestBody Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
@@ -453,6 +422,7 @@ public class SearchService {
         Map<String, Object> response = Map.of("version", "2.0", "template", template);
         return ResponseEntity.ok(response);
     }
+    @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> morePhoto (Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
@@ -536,6 +506,7 @@ public class SearchService {
 
         return ResponseEntity.ok(response);
     }
+    @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> errorCatcher() {
         Map<String, Object> textCard = new LinkedHashMap<>();
         textCard.put("title", "문제가 발생했어요 😢");
