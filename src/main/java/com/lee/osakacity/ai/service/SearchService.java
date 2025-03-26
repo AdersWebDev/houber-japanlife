@@ -371,19 +371,19 @@ public class SearchService {
         List<Map<String, String>> itemList = new ArrayList<>();
         itemList.add(Map.of("title", "상태:","description",room.getStatus().getDescription()));
         if (room.getStatus().equals(Status.T2) || room.getStatus().equals(Status.T3) || room.getStatus().equals(Status.T8)) {
-            itemList.add(Map.of("title", "입주 가능일", "description", room.getDateOfMoveIn() != null ? room.getDateOfMoveIn() : "상담 필요"));
+            itemList.add(Map.of("title", "입주 가능일:", "description", room.getDateOfMoveIn() != null ? room.getDateOfMoveIn() : "상담 필요"));
         }
 
-        itemList.add(Map.of("title", "월세", "description", room.getRentFee() + "円"));
-        itemList.add(Map.of("title", "관리비", "description", room.getManagementFee() + "円"));
-        itemList.add(Map.of("title", "시키킹", "description", room.getDeposit()));
-        itemList.add(Map.of("title", "레이킹", "description", room.getServiceFee()));
+        itemList.add(Map.of("title", "월세:", "description", room.getRentFee() + "円"));
+        itemList.add(Map.of("title", "관리비:", "description", room.getManagementFee() + "円"));
+        itemList.add(Map.of("title", "시키킹:", "description", room.getDeposit()));
+        itemList.add(Map.of("title", "레이킹:", "description", room.getServiceFee()));
         if (room.isFreeInternet())
-            itemList.add(Map.of("title", "옵션", "description", "인터넷 무료"));
+            itemList.add(Map.of("title", "옵션:", "description", "인터넷 무료"));
         if (room.isPetsAllowed())
-            itemList.add(Map.of("title","옵션","description","반려동물 동반(문의필요)"));
+            itemList.add(Map.of("title","옵션:","description","반려동물 동반(문의필요)"));
         if (room.isMorePeople())
-            itemList.add(Map.of("title","옵션","description","2인 입주 가능"));
+            itemList.add(Map.of("title","옵션:","description","2인 입주 가능"));
 
         List<Map<String, Object>> buttons = new ArrayList<>();
         Map<String, Object> morePictureButton = new LinkedHashMap<>();
