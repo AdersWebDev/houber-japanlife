@@ -172,7 +172,7 @@ public class GptService {
                                 Map.of(
                                         "action", "block",
                                         "label", "시작 하기",
-                                        "blockId", "67e154775676f43ad024afe8"
+                                        "blockId", "67d39ab8a6c9712a60f70b24"
                                 ),
                                 Map.of(
                                         "action", "block",
