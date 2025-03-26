@@ -42,6 +42,18 @@ public class SearchService {
     QBuilding qBuilding = QBuilding.building;
     QRoom qRoom = QRoom.room;
 
+    private void classLogger(Object obj) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // Pretty Print
+
+        String json = null;
+        try {
+            json = objectMapper.writeValueAsString(obj);
+            log.info("\n{}", json);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> userInit(Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
@@ -94,7 +106,11 @@ public class SearchService {
         String userId = (String) user.get("id"); // 사용자 고유 ID
         String utterance = (String) userRequest.get("utterance");
         String callbackUrl = (String) userRequest.get("callbackUrl");
-        log.info("Callback URL: [{}]", userRequest.get("callbackUrl"));
+
+
+        this.classLogger(payload);
+
+
         SearchWebHook sw = redisService.getSearchSession(userId);
 
         gptService.createSearchFilter(userId, utterance, callbackUrl, sw);
@@ -135,16 +151,8 @@ public class SearchService {
 
         // 3. 검색 조건 가져오기
         SearchWebHook sw = redisService.getSearchSession(userId);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT); // Pretty Print
+        this.classLogger(sw);
 
-        String json = null;
-        try {
-            json = objectMapper.writeValueAsString(sw);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        log.info("\n{}", json);
         BooleanExpression predicate = this.predicated(sw);
 
         // 4. 페이지네이션 검색 실행
