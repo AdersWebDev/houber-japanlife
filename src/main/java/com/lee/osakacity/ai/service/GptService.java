@@ -17,7 +17,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -114,7 +113,7 @@ public class GptService {
                 Thread.sleep(SLEEP); // 0.5초 대기 후 재시도
                 retries++;
             }
-
+            log.info("Gpt 콜 빠져나옴");
             if (!"completed".equals(status)) {
                 throw new RuntimeException("GPT Assistant 응답 시간 초과");
             }
@@ -218,6 +217,7 @@ public class GptService {
 
         } catch (Exception e) {
             System.err.println("POST 요청 중 오류: " + e.getMessage());
+
         }
     }
     private BooleanExpression predicated(SearchWebHook sw) {

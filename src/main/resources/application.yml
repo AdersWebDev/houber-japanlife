@@ -41,6 +41,8 @@ spring:
       password: ENC(c1UTTrEa7dcw6s2hMFu5tTsKqzzmMjZXR85zgR89CwM=)
 
 aws:
+  anthropic:
+
   s3:
     region: ENC(GevVIOftUrRRRDmncI/QSGI8RoUasFBi)
     accessKey: ENC(ePjaFE8nbgVjLaq49B4deEQxS8dGjmxWaZ/3mjTlQhU=)

@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.lee.osakacity.ai.dto.SearchWebHook;
 import com.lee.osakacity.ai.dto.SimpleRoom;
-import com.lee.osakacity.ai.dto.custom.RoomType;
 import com.lee.osakacity.ai.dto.custom.Status;
-import com.lee.osakacity.ai.dto.custom.Structure;
 import com.lee.osakacity.ai.infra.QBuilding;
 import com.lee.osakacity.ai.infra.QRoom;
 import com.lee.osakacity.ai.infra.Room;
@@ -121,7 +119,7 @@ public class SearchService {
 //                        )
 //                )
 //        );
-    public ResponseEntity<Map<String,String>>  callBack(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<Map<String,Object>>  callBack(@RequestBody Map<String, Object> payload) {
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
         String userId = (String) user.get("id"); // 사용자 고유 ID
@@ -132,10 +130,12 @@ public class SearchService {
 
         gptService.createSearchFilter(userId, callbackUrl, utterance, sw);
 
+        log.info("callback 먼저 보냄");
         return ResponseEntity.ok(
                 Map.of(
                         "version", "2.0",
-                        "useCallback", "true"
+                        "useCallback", "true",
+                        "data" , Map.of("text" ,"생각하고 있는 중이에요\uD83D\uDE18 \\n15초 정도 소요될 거 같아요 기다려 주실래요?!")
                 ));
     }
 

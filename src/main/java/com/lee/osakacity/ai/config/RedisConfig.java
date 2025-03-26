@@ -14,15 +14,18 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
     @Value("${spring.data.redis.password}")
-    private String redisPw;
+    private String redis;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("127.0.0.1", 6379);
-        config.setPassword(RedisPassword.of(redisPw));
-        return new LettuceConnectionFactory(config);
+        return new LettuceConnectionFactory();
     }
-
+//    @Bean
+//    public RedisConnectionFactory redisConnectionFactory() {
+//        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("127.0.0.1", 6379);
+//        config.setPassword(RedisPassword.of(redisPw));
+//        return new LettuceConnectionFactory(config);
+//    }
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
