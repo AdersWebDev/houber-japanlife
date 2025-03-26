@@ -36,7 +36,7 @@ public class GptService {
     QRoom qRoom = QRoom.room;
     private static final int MAX_REQUEST = 10;
     private static final int SLEEP = 1500;
-//    @Async
+    @Async
     public void createSearchFilter(String userId, Params params, String callbackUrl) {
         log.info(params.toString());
         String THREAD_URL = "https://api.openai.com/v1/threads";

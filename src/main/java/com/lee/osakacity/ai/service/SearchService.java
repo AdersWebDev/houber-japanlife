@@ -130,7 +130,7 @@ public class SearchService {
         // 1. 사용자 정보 가져오기
         Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
         Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
-        String userId = (String) user.get("id"); // 사용자 고유 ID
+        String userId = (String) user.get("id");
 
         // 2. 파라미터에서 page 값 추출
         int page = 0; // 기본값
