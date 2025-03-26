@@ -166,12 +166,6 @@ public class GptService {
 
         conditionText.append("\n총 ").append(count).append("개의 매물이 검색됩니다!");
 
-//        // 5. simpleText로 출력
-//        Map<String, Object> simpleText = Map.of(
-//                "simpleText", Map.of(
-//                        "text", conditionText.toString()
-//                )
-//        );
 
         // 6. 버튼 두 개 세로 배치 (basicCard)
         Map<String, Object> textCard = Map.of(
@@ -194,7 +188,7 @@ public class GptService {
 
         // 7. 최종 응답 템플릿 구성
         Map<String, Object> template = Map.of(
-                "outputs", List.of("textCard", textCard)
+                "outputs", List.of(textCard)
         );
 
         Map<String, Object> response = Map.of(
