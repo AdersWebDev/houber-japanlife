@@ -94,7 +94,7 @@ public class SearchService {
         String userId = (String) user.get("id"); // 사용자 고유 ID
         String utterance = (String) userRequest.get("utterance");
         String callbackUrl = (String) userRequest.get("callbackUrl");
-
+        log.info("Callback URL: [{}]", userRequest.get("callbackUrl"));
         SearchWebHook sw = redisService.getSearchSession(userId);
 
         gptService.createSearchFilter(userId, callbackUrl, utterance, sw);
@@ -103,7 +103,7 @@ public class SearchService {
         return ResponseEntity.ok(
                 Map.of(
                         "version", "2.0",
-                        "useCallback", "true",
+                        "useCallback", true,
                         "data" , Map.of("text" ,"생각하고 있는 중이에요\uD83D\uDE18 \\n15초 정도 소요될 거 같아요 기다려 주실래요?!")
                 ));
     }
