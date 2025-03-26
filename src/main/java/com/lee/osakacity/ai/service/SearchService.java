@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.lee.osakacity.ai.dto.SearchWebHook;
 import com.lee.osakacity.ai.dto.SimpleRoom;
 import com.lee.osakacity.ai.dto.custom.Status;
+import com.lee.osakacity.ai.dto.kakao.KakaoBotRequestDto;
+import com.lee.osakacity.ai.dto.kakao.component.Action;
+import com.lee.osakacity.ai.dto.kakao.component.Params;
 import com.lee.osakacity.ai.infra.QBuilding;
 import com.lee.osakacity.ai.infra.QRoom;
 import com.lee.osakacity.ai.infra.Room;
@@ -54,66 +57,65 @@ public class SearchService {
             throw new RuntimeException(e);
         }
     }
-    @Transactional(readOnly = true)
-    public ResponseEntity<Map<String, Object>> userInit(Map<String, Object> payload) {
-        Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
-        Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
-        String userId = (String) user.get("id"); // 사용자 고유 ID
-        String utterance = (String) userRequest.get("utterance");
+//    @Transactional(readOnly = true)
+//    public ResponseEntity<Map<String, Object>> userInit(Map<String, Object> payload) {
+//        Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
+//        Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
+//        String userId = (String) user.get("id"); // 사용자 고유 ID
+//        String utterance = (String) userRequest.get("utterance");
+//
+//        // 초기 SearchWebHook 생성 (기본값으로 초기화)
+//        SearchWebHook searchWebHook = SearchWebHook.builder()
+//                .location(null)
+//                .transport(null)
+//                .duration(null)
+//                .radius(null)
+//                .minLat(null)
+//                .maxLat(null)
+//                .minLon(null)
+//                .maxLon(null)
+//                .floorPlan(new ArrayList<>())
+//                .minArea(0f)
+//                .minRentFee(0)
+//                .maxRentFee(0)
+//                .freeInternet(false)
+//                .morePeople(false)
+//                .petsAllowed(false)
+//                .deAllowedStructure(new ArrayList<>())
+//                .build();
+//
+//        // Redis에 저장
+//        redisService.saveSearchSession(userId, searchWebHook);
+//
+//        Map<String, Object> simpleText = Map.of(
+//                "simpleText", Map.of(
+//                        "text", "찾으실 건물의 범위를 알려주세요! ex) 오사카 난바 전철 30분거리"
+//                )
+//        );
+//
+//        Map<String, Object> template = Map.of(
+//                "outputs", List.of(simpleText)
+//        );
+//
+//        Map<String, Object> response = Map.of(
+//                "version", "2.0",
+//                "template", template
+//        );
+//        return ResponseEntity.ok(response);
+//    }
+    public ResponseEntity<Map<String,Object>>  callBack(@RequestBody KakaoBotRequestDto dto) {
 
-        // 초기 SearchWebHook 생성 (기본값으로 초기화)
-        SearchWebHook searchWebHook = SearchWebHook.builder()
-                .location(null)
-                .transport(null)
-                .duration(null)
-                .radius(null)
-                .minLat(null)
-                .maxLat(null)
-                .minLon(null)
-                .maxLon(null)
-                .floorPlan(new ArrayList<>())
-                .minArea(0f)
-                .minRentFee(0)
-                .maxRentFee(0)
-                .freeInternet(false)
-                .morePeople(false)
-                .petsAllowed(false)
-                .deAllowedStructure(new ArrayList<>())
-                .build();
+       Params params = dto.getAction().getParams();
 
-        // Redis에 저장
-        redisService.saveSearchSession(userId, searchWebHook);
-
-        Map<String, Object> simpleText = Map.of(
-                "simpleText", Map.of(
-                        "text", "찾으실 건물의 범위를 알려주세요! ex) 오사카 난바 전철 30분거리"
-                )
-        );
-
-        Map<String, Object> template = Map.of(
-                "outputs", List.of(simpleText)
-        );
-
-        Map<String, Object> response = Map.of(
-                "version", "2.0",
-                "template", template
-        );
-        return ResponseEntity.ok(response);
-    }
-    public ResponseEntity<Map<String,Object>>  callBack(@RequestBody Map<String, Object> payload) {
-        Map<String, Object> userRequest = (Map<String, Object>) payload.get("userRequest");
-        Map<String, Object> user = (Map<String, Object>) userRequest.get("user");
-        String userId = (String) user.get("id"); // 사용자 고유 ID
-        String utterance = (String) userRequest.get("utterance");
-        String callbackUrl = (String) userRequest.get("callbackUrl");
-
-
-        this.classLogger(payload);
+        this.classLogger(params);
 
 
-        SearchWebHook sw = redisService.getSearchSession(userId);
+        redisService.getSearchSession(dto.getUserRequest().getUser().getId());
 
-        gptService.createSearchFilter(userId, utterance, callbackUrl, sw);
+        gptService.createSearchFilter(
+                dto.getUserRequest().getUser().getId(),
+                params,
+                dto.getUserRequest().getCallbackUrl());
 
         log.info("callback 먼저 보냄");
         return ResponseEntity.ok(
@@ -227,20 +229,23 @@ public class SearchService {
             predicate = predicate.and(qRoom.lat.between(sw.getMinLat(),sw.getMaxLat())
                     .and(qRoom.lon.between(sw.getMinLon(), sw.getMaxLon())));
         }
-        if (sw.getFloorPlan() != null && !sw.getFloorPlan().isEmpty())
-            predicate = predicate.and(qRoom.floorPlan.in(sw.getFloorPlan()));
 
-        if (sw.getMinArea() != 0)
-            predicate = predicate.and(qRoom.area.goe(sw.getMinArea()));
+        if (sw.getArea() != 0) {
+            float area = sw.getArea();
+            float minArea = Math.max(0, area - 6);
+            float maxArea = area < 6 ? area + 9 :
+                    area > 35 ? area + 9 : area + 6;
 
-        if (sw.getMaxArea() != 0)
-            predicate = predicate.and(qRoom.area.loe(sw.getMaxArea()));
+            predicate = predicate.and(qRoom.area.between(minArea, maxArea));
+        }
 
-        if (sw.getMinRentFee() != 0)
-            predicate = predicate.and(qRoom.rentFee.goe(sw.getMaxRentFee()));
+        if (sw.getRentFee() != 0) {
+            int fee = sw.getRentFee();
+            int minFee = fee < 40000 ? 0 : fee - 10000;
+            int maxFee = fee > 100000 ? fee + 20000 : fee + 10000;
 
-        if (sw.getMaxRentFee() != 0)
-            predicate = predicate.and(qRoom.rentFee.loe(sw.getMaxRentFee()));
+            predicate = predicate.and(qRoom.rentFee.between(minFee, maxFee));
+        }
 
         if (sw.isFreeInternet())
             predicate = predicate.and(qRoom.freeInternet.isTrue());
@@ -251,8 +256,6 @@ public class SearchService {
         if (sw.isPetsAllowed())
             predicate = predicate.and(qRoom.petsAllowed.isTrue());
 
-        if (sw.getDeAllowedStructure() != null && !sw.getDeAllowedStructure().isEmpty())
-            predicate = predicate.and(qRoom.structure.notIn(sw.getDeAllowedStructure()));
 
         return predicate;
     }
@@ -293,16 +296,10 @@ public class SearchService {
         StringBuilder description = new StringBuilder();
 
         description.append("상태: ").append(room.getStatus().getDescription()).append(" | ").append("타입: ").append(room.getFloorPlan().getTitle()).append(" \n");
-        // 상태가 특정 조건일 경우 입주일/사전 점검일 추가
-//        if (room.getStatus().equals(Status.T2)) {
-//            description.append("상태 비고: ").append(room.getDateOfMoveIn()).append("\n");
-//        } else if (room.getStatus().equals(Status.T8)) {
-//            description.append("상태 비고: ").append(room.getDateOfPreliminaryInspection()).append("\n");
-//        }
+
         description.append("월세: ").append(room.getRentFee()).append("엔").append(" | ");
         description.append("관리비: ").append(room.getManagementFee()).append("엔");
-//        description.append("면적: ").append(room.getArea()).append("㎡").append("\n");
-//        description.append("구조: ").append(room.getFloorPlan().getTitle()).append("\n");
+
 
         Map<String, Object> card = new LinkedHashMap<>();
         card.put("title", room.getRoomNum() + "호실");

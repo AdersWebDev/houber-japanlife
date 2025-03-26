@@ -4,6 +4,7 @@ import com.amazonaws.util.json.Jackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lee.osakacity.ai.dto.SearchWebHook;
 import com.lee.osakacity.ai.dto.custom.Status;
+import com.lee.osakacity.ai.dto.kakao.component.Params;
 import com.lee.osakacity.ai.infra.QRoom;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -34,10 +35,10 @@ public class GptService {
     private final JPAQueryFactory jpaQueryFactory;
     QRoom qRoom = QRoom.room;
     private static final int MAX_REQUEST = 10;
-    private static final int SLEEP = 1000;
-    @Async
-    public void createSearchFilter(String userId, String userInput, String callbackUrl, SearchWebHook sw) {
-        log.info(userInput);
+    private static final int SLEEP = 1500;
+//    @Async
+    public void createSearchFilter(String userId, Params params, String callbackUrl) {
+        log.info(params.toString());
         String THREAD_URL = "https://api.openai.com/v1/threads";
         String MESSAGE_URL_TEMPLATE = "https://api.openai.com/v1/threads/%s/messages";
         String RUN_URL_TEMPLATE = "https://api.openai.com/v1/threads/%s/runs";
@@ -50,28 +51,24 @@ public class GptService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("OpenAI-Beta", "assistants=v2");
 
-        RestTemplate restTemplate1 = new RestTemplate();
-        SearchWebHook newSw = new SearchWebHook();
-
+        RestTemplate restTemplate = new RestTemplate();
+        SearchWebHook newSw;
         try {
             // 1. Thread 생성
             HttpEntity<String> threadRequest = new HttpEntity<>("{}", headers);
-            ResponseEntity<String> threadResponse = restTemplate1.postForEntity(THREAD_URL, threadRequest, String.class);
+            ResponseEntity<String> threadResponse = restTemplate.postForEntity(THREAD_URL, threadRequest, String.class);
 
             String threadId = new JSONObject(threadResponse.getBody()).getString("id");
             // 2. 사용자 메시지 추가
             String messageUrl = String.format(MESSAGE_URL_TEMPLATE, threadId);
             //2-1 프롬프트 생성
-            String prevConditionJson = Jackson.toJsonString(sw);
-            String prompt = String.format("""
-                            기존 조건은 아래와 같습니다.
-                            %s
-                    
-                            사용자가 새로운 조건을 입력했습니다:
+            String prevConditionJson = Jackson.toJsonString(params);
+            String prompt = String.format("""                  
+                            사용자가 조건을 입력했습니다:
                             "%s"
                     
-                            기존 조건 중에서 사용자의 입력을 반영해 수정해야 할 부분만 바꾸고, 전체 조건을 정확한 JSON 형식으로 다시 보내주세요.
-                    """, prevConditionJson, userInput);
+                            사용자의 입력을 반영해,현재 문자열인 조건들을 반환 양식에 맞추어 정확한 JSON 형식으로 반환하세요.
+                    """, prevConditionJson);
 
 
             Map<String, Object> userMessagePayload = Map.of(
@@ -79,7 +76,7 @@ public class GptService {
                     "content", prompt
             );
             HttpEntity<Map<String, Object>> messageRequest = new HttpEntity<>(userMessagePayload, headers);
-            restTemplate1.postForEntity(messageUrl, messageRequest, String.class);
+            restTemplate.postForEntity(messageUrl, messageRequest, String.class);
 
             // 3. Run 실행
             String runUrl = String.format(RUN_URL_TEMPLATE, threadId);
@@ -87,7 +84,7 @@ public class GptService {
                     "assistant_id", ASSISTANT_ID
             );
             HttpEntity<Map<String, Object>> runRequest = new HttpEntity<>(runPayload, headers);
-            ResponseEntity<String> runResponse = restTemplate1.postForEntity(runUrl, runRequest, String.class);
+            ResponseEntity<String> runResponse = restTemplate.postForEntity(runUrl, runRequest, String.class);
 
             String runId = new JSONObject(runResponse.getBody()).getString("id");
 
@@ -99,7 +96,7 @@ public class GptService {
 
             while (retries < MAX_REQUEST) {
                 HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
-                ResponseEntity<String> runStatusResponse = restTemplate1.exchange(
+                ResponseEntity<String> runStatusResponse = restTemplate.exchange(
                         runStatusUrl,
                         HttpMethod.GET,
                         httpEntity,
@@ -123,7 +120,7 @@ public class GptService {
             // 5. 결과 메시지 조회
             String getMessageUrl = String.format(GET_MESSAGES_URL_TEMPLATE, threadId);
             HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
-            ResponseEntity<String> messagesResponse = restTemplate1.exchange(
+            ResponseEntity<String> messagesResponse = restTemplate.exchange(
                     getMessageUrl,
                     HttpMethod.GET,
                     httpEntity,
@@ -225,20 +222,23 @@ public class GptService {
             predicate = predicate.and(qRoom.lat.between(sw.getMinLat(),sw.getMaxLat())
                     .and(qRoom.lon.between(sw.getMinLon(), sw.getMaxLon())));
         }
-        if (sw.getFloorPlan() != null && !sw.getFloorPlan().isEmpty())
-            predicate = predicate.and(qRoom.floorPlan.in(sw.getFloorPlan()));
 
-        if (sw.getMinArea() != 0)
-            predicate = predicate.and(qRoom.area.goe(sw.getMinArea()));
+        if (sw.getArea() != 0) {
+            float area = sw.getArea();
+            float minArea = Math.max(0, area - 6);
+            float maxArea = area < 6 ? area + 9 :
+                    area > 35 ? area + 9 : area + 6;
 
-        if (sw.getMaxArea() != 0)
-            predicate = predicate.and(qRoom.area.loe(sw.getMaxArea()));
+            predicate = predicate.and(qRoom.area.between(minArea, maxArea));
+        }
 
-        if (sw.getMinRentFee() != 0)
-            predicate = predicate.and(qRoom.rentFee.goe(sw.getMaxRentFee()));
+        if (sw.getRentFee() != 0) {
+            int fee = sw.getRentFee();
+            int minFee = fee < 40000 ? 0 : fee - 10000;
+            int maxFee = fee > 100000 ? fee + 20000 : fee + 10000;
 
-        if (sw.getMaxRentFee() != 0)
-            predicate = predicate.and(qRoom.rentFee.loe(sw.getMaxRentFee()));
+            predicate = predicate.and(qRoom.rentFee.between(minFee, maxFee));
+        }
 
         if (sw.isFreeInternet())
             predicate = predicate.and(qRoom.freeInternet.isTrue());
@@ -249,8 +249,6 @@ public class GptService {
         if (sw.isPetsAllowed())
             predicate = predicate.and(qRoom.petsAllowed.isTrue());
 
-        if (sw.getDeAllowedStructure() != null && !sw.getDeAllowedStructure().isEmpty())
-            predicate = predicate.and(qRoom.structure.notIn(sw.getDeAllowedStructure()));
 
         return predicate;
     }

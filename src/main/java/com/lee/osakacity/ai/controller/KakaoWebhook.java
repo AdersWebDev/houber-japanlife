@@ -1,5 +1,6 @@
 package com.lee.osakacity.ai.controller;
 
+import com.lee.osakacity.ai.dto.kakao.KakaoBotRequestDto;
 import com.lee.osakacity.ai.infra.repo.KakaoRepo;
 import com.lee.osakacity.ai.service.SearchService;
 import lombok.RequiredArgsConstructor;
@@ -12,18 +13,17 @@ import java.util.Map;
 @RequestMapping("/api/kakao")
 @RequiredArgsConstructor
 public class KakaoWebhook {
-    private final KakaoRepo kakaoRepo;
     private final SearchService searchService;
 
-
-    @PostMapping("/init")
-    public ResponseEntity<Map<String, Object>> init(@RequestBody Map<String, Object> payload) {
-        return searchService.userInit(payload);
-    }
+//
+//    @PostMapping("/init")
+//    public ResponseEntity<Map<String, Object>> init(@RequestBody Map<String, Object> payload) {
+//        return searchService.userInit(payload);
+//    }
 
     @PostMapping("/point")
-    public ResponseEntity<Map<String,Object>>  filter (@RequestBody Map<String, Object> payload) {
-        return searchService.callBack(payload);
+    public ResponseEntity<Map<String,Object>>  filter (@RequestBody KakaoBotRequestDto dto) {
+        return searchService.callBack(dto);
     }
     @PostMapping("/list")
     public ResponseEntity<Map<String, Object>> start (@RequestBody Map<String, Object> payload) {
