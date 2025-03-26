@@ -162,7 +162,7 @@ public class GptService {
         if (count == 0) {
             textCard = Map.of(
                     "textCard", Map.of(
-                            "title", "선택하신 조건에 해당하는 매물이 없어요!",
+                            "title", "\uD83D\uDE22 조건에 맞는 매물이 없어요ㅠㅠ",
                             "buttons", List.of(
                                     Map.of(
                                             "action", "block",
