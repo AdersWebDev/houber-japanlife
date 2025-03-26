@@ -17,6 +17,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
@@ -201,23 +203,23 @@ public class GptService {
         );
 
         try {
-            // 1. JSON 헤더 설정
+            // 꼭 URI 객체로 명시적으로 생성해서 넘기기!
+            URI uri = new URI(callbackUrl);
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            // 3. HttpEntity로 래핑
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(response, headers);
             RestTemplate restTemplate = new RestTemplate();
-            // 4. POST 요청 보내기
-            ResponseEntity<String> response2 = restTemplate.postForEntity(callbackUrl, entity, String.class);
 
-            // 5. 응답 출력
-            System.out.println("응답 코드: " + response2.getStatusCode());
-            System.out.println("응답 바디: " + response2.getBody());
+            ResponseEntity<String> result = restTemplate.postForEntity(uri, entity, String.class);
+            log.info("응답 코드: {}", result.getStatusCode());
+            log.info("응답 바디: {}", result.getBody());
 
+        } catch (URISyntaxException e) {
+            log.error("URI 문법 오류: {}", e.getMessage());
         } catch (Exception e) {
-            System.err.println("POST 요청 중 오류: " + e.getMessage());
-
+            log.error("POST 요청 실패: {}", e.getMessage());
         }
     }
     private BooleanExpression predicated(SearchWebHook sw) {
