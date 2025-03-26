@@ -216,8 +216,8 @@ public class GptService {
     private BooleanExpression predicated(SearchWebHook sw) {
         BooleanExpression predicate = qRoom.status.notIn(Status.T9, Status.T6);
 
-        if (sw.getMinLat() != null && sw.getMaxLat() != null
-                && sw.getMinLon() != null && sw.getMaxLon() != null) {
+        if (sw.getMinLat() != 0 && sw.getMaxLat() != 0
+                && sw.getMinLon() != 0 && sw.getMaxLon() != 0) {
 
             predicate = predicate.and(qRoom.lat.between(sw.getMinLat(),sw.getMaxLat())
                     .and(qRoom.lon.between(sw.getMinLon(), sw.getMaxLon())));
