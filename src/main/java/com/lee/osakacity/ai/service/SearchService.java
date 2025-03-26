@@ -122,7 +122,7 @@ public class SearchService {
                 Map.of(
                         "version", "2.0",
                         "useCallback", true,
-                        "data" , Map.of("text" ,"실시간 일본 현지 매물을 검색하고 있어요\uD83D\uDE18 \n 10초 정도만 기다려주세요!")
+                        "data" , Map.of("text" ,"실시간 일본 현지 매물을 검색하고 있어요\uD83D\uDE18 \n 5초 정도만 기다려주세요!")
                 ));
     }
     @Transactional(readOnly = true)

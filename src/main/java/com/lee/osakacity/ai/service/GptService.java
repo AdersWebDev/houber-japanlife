@@ -158,30 +158,60 @@ public class GptService {
                 .where(predicate)
                 .fetchCount();
 
-        StringBuilder conditionText = new StringBuilder();
+        Map<String, Object> textCard;
+        if (count == 0) {
+            textCard = Map.of(
+                    "textCard", Map.of(
+                            "title", "선택하신 조건에 해당하는 매물이 없어요!",
+                            "buttons", List.of(
+                                    Map.of(
+                                            "action", "block",
+                                            "label", "조건을 다시 설정할게요",
+                                            "blockId", "67e255c75676f43ad024f402"
+                                    )
+                            )
+                    )
+            );
+        } else {
+            textCard = Map.of(
+                    "textCard", Map.of(
+                            "title", count +"개의 집을 보여드릴 준비가 되었어요!",
+                            "buttons", List.of(
+                                    Map.of(
+                                            "action", "block",
+                                            "label", "시작 하기",
+                                            "blockId", "67e154775676f43ad024afe8"
+                                    ),
+                                    Map.of(
+                                            "action", "block",
+                                            "label", "조건을 다시 설정할게요",
+                                            "blockId", "67e255c75676f43ad024f402"
+                                    )
+                            )
+                    )
+            );
+        }
 
-
-        conditionText.append("\n총 ").append(count).append("개의 매물이 검색됩니다!");
 
 
         // 6. 버튼 두 개 세로 배치 (basicCard)
-        Map<String, Object> textCard = Map.of(
-                "textCard", Map.of(
-                        "title", count +"개의 집을 보여드릴 준비가 되었어요!",
-                        "buttons", List.of(
-                                Map.of(
-                                        "action", "block",
-                                        "label", "시작 하기",
-                                        "blockId", "67e154775676f43ad024afe8"
-                                ),
-                                Map.of(
-                                        "action", "block",
-                                        "label", "조건을 다시 설정할래요!",
-                                        "blockId", "67e255c75676f43ad024f402"
-                                )
-                        )
-                )
-        );
+//        Map<String, Object> textCard = Map.of(
+//                "textCard", Map.of(
+//                        "title", count +"개의 집을 보여드릴 준비가 되었어요!",
+//                        "buttons", List.of(
+//                                Map.of(
+//                                        "action", "block",
+//                                        "label", "시작 하기",
+//                                        "blockId", "67e154775676f43ad024afe8"
+//                                ),
+//                                Map.of(
+//                                        "action", "block",
+//                                        "label", "조건을 다시 설정할래요!",
+//                                        "blockId", "67e255c75676f43ad024f402"
+//                                )
+//                        )
+//                )
+//        );
 
         // 7. 최종 응답 템플릿 구성
         Map<String, Object> template = Map.of(
