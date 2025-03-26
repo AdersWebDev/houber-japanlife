@@ -97,7 +97,7 @@ public class SearchService {
         log.info("Callback URL: [{}]", userRequest.get("callbackUrl"));
         SearchWebHook sw = redisService.getSearchSession(userId);
 
-        gptService.createSearchFilter(userId, callbackUrl, utterance, sw);
+        gptService.createSearchFilter(userId, utterance, callbackUrl, sw);
 
         log.info("callback 먼저 보냄");
         return ResponseEntity.ok(
