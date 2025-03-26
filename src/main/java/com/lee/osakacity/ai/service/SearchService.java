@@ -223,8 +223,8 @@ public class SearchService {
     private BooleanExpression predicated(SearchWebHook sw) {
         BooleanExpression predicate = qRoom.status.notIn(Status.T9, Status.T6);
 
-        if (sw.getMinLat() != null && sw.getMaxLat() != null
-                && sw.getMinLon() != null && sw.getMaxLon() != null) {
+        if (sw.getMinLat() != 0 && sw.getMaxLat() != 0
+                && sw.getMinLon() != 0 && sw.getMaxLon() != 0) {
 
             predicate = predicate.and(qRoom.lat.between(sw.getMinLat(),sw.getMaxLat())
                     .and(qRoom.lon.between(sw.getMinLon(), sw.getMaxLon())));
@@ -233,7 +233,7 @@ public class SearchService {
         if (sw.getArea() != 0) {
             float area = sw.getArea();
             float minArea = Math.max(0, area - 6);
-            float maxArea = area < 6 ? area + 9 :
+            float maxArea = area < 6 ? area + 10 :
                     area > 35 ? area + 9 : area + 6;
 
             predicate = predicate.and(qRoom.area.between(minArea, maxArea));

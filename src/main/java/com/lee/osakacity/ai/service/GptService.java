@@ -172,7 +172,7 @@ public class GptService {
                                 Map.of(
                                         "action", "block",
                                         "label", "시작 하기",
-                                        "blockId", "67d39ab8a6c9712a60f70b24"
+                                        "blockId", "67e154775676f43ad024afe8"
                                 ),
                                 Map.of(
                                         "action", "block",
@@ -226,7 +226,7 @@ public class GptService {
         if (sw.getArea() != 0) {
             float area = sw.getArea();
             float minArea = Math.max(0, area - 6);
-            float maxArea = area < 6 ? area + 9 :
+            float maxArea = area < 12 ? area + 10 :
                     area > 35 ? area + 9 : area + 6;
 
             predicate = predicate.and(qRoom.area.between(minArea, maxArea));
