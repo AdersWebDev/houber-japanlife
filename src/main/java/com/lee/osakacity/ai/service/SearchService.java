@@ -150,9 +150,12 @@ public class SearchService {
         System.out.println("사용자 ID: " + userId);
         System.out.println("페이지 번호: " + page);
 
-
         // 3. 검색 조건 가져오기
         SearchWebHook sw = redisService.getSearchSession(userId);
+
+        if (sw == null) {
+            return ResponseEntity.ok(this.filterNullException());
+        }
         this.classLogger(sw);
 
         BooleanExpression predicate = this.predicated(sw);
@@ -167,6 +170,13 @@ public class SearchService {
 
         // 6. 이전/다음 페이지 quickReplies 생성
         List<Map<String, Object>> quickReplies = new ArrayList<>();
+
+        Map<String, Object> reSearchQuickReply = new LinkedHashMap<>();
+        reSearchQuickReply.put("label", "다시 검색하기");
+        reSearchQuickReply.put("action", "block");
+        reSearchQuickReply.put("blockId", "67e255c75676f43ad024f402");
+
+        quickReplies.add(reSearchQuickReply);
 
         // 이전 페이지가 있을 경우 추가
         if (result.getNumber() > 0) {
@@ -219,6 +229,42 @@ public class SearchService {
         return ResponseEntity.ok(response);
     }
 
+    private Map<String, Object> filterNullException() {
+
+        Map<String, Object> response = new LinkedHashMap<>();
+
+        response.put("version", "2.0");
+
+        Map<String, Object> textCard = new LinkedHashMap<>();
+        textCard.put("title", "다시 돌아오셔셔 반가워요!");
+        textCard.put("description", "무엇을 도와드릴까요?");
+
+        List<Map<String, Object>> buttons = new ArrayList<>();
+
+        buttons.add(Map.of(
+                "action", "block",
+                "label", "검색 시작",
+                "blockId", "67e255c75676f43ad024f402"
+        ));
+        buttons.add(Map.of(
+                "action", "block",
+                "label", "상담원 연결하기",
+                "blockId", "67da3ef20e01a1241f21c5e5"
+        ));
+        buttons.add(Map.of(
+                "action", "block",
+                "label", "메뉴 가기",
+                "blockId", "67d3e10e19ec670b29b21802"
+        ));
+
+        textCard.put("buttons", buttons);
+
+        Map<String, Object> outputsItem = Map.of("textCard", textCard);
+
+        response.put("template", Map.of("outputs", List.of(outputsItem)));
+        return response;
+
+    }
 
     private BooleanExpression predicated(SearchWebHook sw) {
         BooleanExpression predicate = qRoom.status.notIn(Status.T9, Status.T6);
@@ -423,15 +469,16 @@ public class SearchService {
         itemCard.put("buttonLayout", "vertical");
 
         List<Map<String, Object>> quickReplies = new ArrayList<>();
+        Map<String, Object> reSearchQuickReply = new LinkedHashMap<>();
+        reSearchQuickReply.put("label", "다시 검색하기");
+        reSearchQuickReply.put("action", "block");
+        reSearchQuickReply.put("blockId", "67e255c75676f43ad024f402");
+
 
         Map<String, Object> nextQuickReply = new LinkedHashMap<>();
         nextQuickReply.put("label", "목록으로 돌아가기");
         nextQuickReply.put("action", "block");
         nextQuickReply.put("blockId", "67e154775676f43ad024afe8");
-
-        Map<String, Object> listExtra = new LinkedHashMap<>();
-
-        nextQuickReply.put("extra", listExtra);
 
         quickReplies.add(nextQuickReply);
 
@@ -502,14 +549,31 @@ public class SearchService {
         carousel.put("type", "basicCard");
         carousel.put("items", items);
 
-// "carousel": { ... } 형태로 감싸기
-//        Map<String, Object> carouselOutput = new LinkedHashMap<>();
-//        carouselOutput.put("carousel", carousel);
-
 // outputs 리스트에 추가
         Map<String, Object> outputs = new HashMap<>();
         outputs.put("carousel", carousel);
 
+//        List<Map<String, Object>> quickReplies = new ArrayList<>();
+//
+//        Map<String, Object> nextQuickReply = new LinkedHashMap<>();
+//        nextQuickReply.put("label", "목록으로 돌아가기");
+//        nextQuickReply.put("action", "block");
+//        nextQuickReply.put("blockId", "67e154775676f43ad024afe8");
+//
+//        quickReplies.add(nextQuickReply);
+
+        Map<String, Object> template = new LinkedHashMap<>();
+        template.put("outputs", List.of(outputs));
+        template.put("quickReplies", this.basicReplies());
+
+        Map<String, Object> response = new LinkedHashMap<>();
+
+        response.put("version", "2.0");
+        response.put("template", template);
+        return ResponseEntity.ok(response);
+    }
+
+    private List<Map<String, Object>> basicReplies() {
         List<Map<String, Object>> quickReplies = new ArrayList<>();
 
         Map<String, Object> nextQuickReply = new LinkedHashMap<>();
@@ -518,16 +582,7 @@ public class SearchService {
         nextQuickReply.put("blockId", "67e154775676f43ad024afe8");
 
         quickReplies.add(nextQuickReply);
-
-        Map<String, Object> template = new LinkedHashMap<>();
-        template.put("outputs", List.of(outputs));
-        template.put("quickReplies", quickReplies);
-
-        Map<String, Object> response = new LinkedHashMap<>();
-
-        response.put("version", "2.0");
-        response.put("template", template);
-        return ResponseEntity.ok(response);
+        return quickReplies;
     }
     @Transactional(readOnly = true)
     public ResponseEntity<Map<String, Object>> errorCatcher() {

@@ -18,7 +18,7 @@ public class RedisService {
     public void saveSearchSession(String userKey, SearchWebHook searchWebHook) {
         String redisKey = PREFIX + userKey;
         redisTemplate.opsForValue().set(redisKey, searchWebHook);
-        redisTemplate.expire(redisKey, Duration.ofHours(3));
+        redisTemplate.expire(redisKey, Duration.ofDays(2));
     }
 
     // 조회
@@ -29,8 +29,7 @@ public class RedisService {
         if (data instanceof SearchWebHook) {
             return (SearchWebHook) data;
         } else {
-            this.saveSearchSession(userKey, new SearchWebHook());
-            return new SearchWebHook();
+            return null;
         }
     }
 
