@@ -456,6 +456,17 @@ public class PostService {
         return null;
     }
 
-
+//    @Transactional
+//    public void tempsns(long id, MultipartFile file) {
+//        SnsContent s = snsContentRepo.findById(id).orElseThrow();
+//        ImgResponse i = s3Service.uploadFile(file);
+//        s.updateThumbnail(i.getUrl());
+//    }
+//    @Transactional
+//    public void tempsns(long id, MultipartFile file) {
+//        Post s = postRepo.findById(id).orElseThrow();
+//        ImgResponse i = s3Service.uploadFile(file);
+//        s.
+//    }
 
 }

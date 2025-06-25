@@ -30,15 +30,16 @@
       </div>
     </div>
 
+
     <div style="display: block; height: 4rem"></div>
 
     <div class="content-title">
-      <h3>입주자면 무조건 받을 수 있는 혜택</h3>
-      <p><a href="/list?category=event">더보기</a></p>
+      <h3>워킹 홀리데이</h3>
+      <p><a href="/list?category=working_holiday">더보기</a></p>
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${event}" class="item">
+        <div th:each="item : ${working_holiday}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
                  th:alt = "${item.title}">
@@ -46,11 +47,27 @@
         </div>
       </div>
     </div>
+<!--    <div style="display: block; height: 4rem"></div>-->
+
+<!--    <div class="content-title">-->
+<!--      <h3>입주자면 무조건 받을 수 있는 혜택</h3>-->
+<!--      <p><a href="/list?category=event">더보기</a></p>-->
+<!--    </div>-->
+<!--    <div class="slider-container">-->
+<!--      <div class="slider">-->
+<!--        <div th:each="item : ${event}" class="item">-->
+<!--          <a th:href="${item.link}">-->
+<!--            <img th:src = "${item.thumbnailUrl}"-->
+<!--                 th:alt = "${item.title}">-->
+<!--          </a>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <div style="display: block; height: 4rem"></div>
 
     <div class="content-title">
-      <h3>일본 부동산 정보</h3>
+      <h3>한국과 다른 일본 부동산, 필수 체크!</h3>
       <p><a href="/list?category=japan_property">더보기</a></p>
     </div>
     <div class="slider-container">
@@ -64,27 +81,12 @@
       </div>
     </div>
 
-    <div style="display: block; height: 4rem"></div>
 
-    <div class="content-title">
-      <h3>워킹홀리데이</h3>
-      <p><a href="/list?category=working_holiday">더보기</a></p>
-    </div>
-    <div class="slider-container">
-      <div class="slider">
-        <div th:each="item : ${working_holiday}" class="item">
-          <a th:href="${item.link}">
-            <img th:src = "${item.thumbnailUrl}"
-                 th:alt = "${item.title}">
-          </a>
-        </div>
-      </div>
-    </div>
 
     <div style="display: block; height: 4rem"></div>
 
     <div class="content-title">
-      <h3>생활 정보</h3>
+      <h3>일본에서 살아보니 알게 된 진짜 정보</h3>
       <p><a href="/list?category=japan_life">더보기</a></p>
     </div>
     <div class="slider-container">

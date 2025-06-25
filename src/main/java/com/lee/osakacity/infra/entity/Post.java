@@ -60,4 +60,8 @@ public class Post{
     public void increaseView () {
         this.view++;
     }
+
+    public void updateThumbnail(String url) {
+        this.thumbnailUrl = url;
+    }
 }

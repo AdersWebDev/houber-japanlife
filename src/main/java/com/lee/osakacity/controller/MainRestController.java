@@ -9,6 +9,7 @@ import com.lee.osakacity.service.SitemapService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,4 +57,10 @@ public class MainRestController {
     public String rssFeed() {
         return sitemapService.makeRss();
     }
+//
+//
+//    @PatchMapping("/usns")
+//    public void updatesns (long id, MultipartFile file) {
+//        postService.tempsns(id, file);
+//    }
 }
