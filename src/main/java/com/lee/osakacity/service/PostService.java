@@ -5,9 +5,11 @@ import com.lee.osakacity.custom.Category;
 import com.lee.osakacity.dto.mvc.PostResponseDto;
 import com.lee.osakacity.dto.mvc.SearchResponseDto;
 import com.lee.osakacity.dto.mvc.SimpleResponse;
+import com.lee.osakacity.dto.restful.ImgResponse;
 import com.lee.osakacity.dto.restful.PostRequestDto;
 import com.lee.osakacity.infra.entity.*;
 import com.lee.osakacity.infra.repository.PostRepo;
+import com.lee.osakacity.infra.repository.SnsContentRepo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ import java.util.stream.Stream;
 public class PostService {
     private final PostRepo postRepo;
     private final JPAQueryFactory jpaQueryFactory;
+    private final SnsContentRepo snsContentRepo;
     @Value("${jasypt.encryptor.password}")
     private String KEY;
     private final S3Service s3Service;
@@ -48,7 +52,82 @@ public class PostService {
         postRepo.delete(post);
     }
     public List<SimpleResponse> getList (Category category, int limit ,Long cursorId, Integer cursorView, LocalDateTime cursorTime) {
+        if (category.equals(Category.japan_review)) {
+            List<SimpleResponse> pList = new ArrayList<>(jpaQueryFactory
+                    .select(Projections.constructor(SimpleResponse.class,
+                            qPost.id,
+                            qPost.view,
+                            qPost.title,
+                            qPost.thumbnailUrl,
+                            qPost.modifiedDate,
+                            Expressions.constant("/detail/")))
+                    .from(qPost)
+                    .where(
+                            qPost.isShow.isTrue().and(
+                                    qPost.category.eq(Category.japan_review).and(
+                                            cursorTime != null ? qPost.modifiedDate.lt(cursorTime) : null
+                                    )
+                            )
+                    )
+                    .orderBy(qPost.modifiedDate.desc())
+                    .limit(limit)
+                    .fetch());
 
+            boolean isSnsLoading = false;
+            if ( !pList.isEmpty() ) {
+                Long id =  pList.get(pList.size() - 1).getId();
+                Long lastPostId = jpaQueryFactory
+                        .select(qPost.id)
+                        .from(qPost)
+                        .where(qPost.isShow.isTrue())
+                        .orderBy(qPost.id.desc())
+                        .limit(1)
+                        .fetchOne();
+
+                if ( !(id.equals(lastPostId)) ) {
+                    isSnsLoading = true;
+                }
+            } else {
+                isSnsLoading = true;
+            }
+
+
+            List<SimpleResponse> sList = new ArrayList<>();
+            if ( isSnsLoading ) {
+                sList.addAll(
+                        jpaQueryFactory
+                                .select(Projections.constructor(SimpleResponse.class,
+                                        qSnsContent.id,
+                                        qSnsContent.view,
+                                        qSnsContent.title,
+                                        qSnsContent.thumbnailUrl,
+                                        qSnsContent.publishTime,
+                                        Expressions.constant("/detail/sns-content/")))
+                                .from(qSnsContent)
+                                .where(
+                                        cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
+                                )
+                                .orderBy(qSnsContent.publishTime.desc())
+                                .limit(limit)
+                                .fetch());
+            }
+            // 📌 SnsContent 데이터 가져오기 (limit + extraFetch)
+
+
+            // 📌 두 리스트 병합
+            List<SimpleResponse> combinedList = new ArrayList<>();
+            combinedList.addAll(pList);
+            combinedList.addAll(sList);
+
+            // 📌 뷰 기준으로 정렬
+            combinedList.sort(Comparator.comparing(SimpleResponse::getCursorTime, Comparator.reverseOrder()));
+
+            // 📌 최종적으로 limit 만큼만 반환
+            return combinedList.stream()
+                    .limit(limit)
+                    .collect(Collectors.toList());
+
+        }
         return jpaQueryFactory
                 .select(Projections.constructor(SimpleResponse.class,
                         qPost.id,
