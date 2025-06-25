@@ -49,142 +49,165 @@ public class PostService {
     }
     public List<SimpleResponse> getList (Category category, int limit ,Long cursorId, Integer cursorView, LocalDateTime cursorTime) {
 
-        if (category.equals(Category.hot_post)) {
-            // Post 데이터 가져오기
-            return jpaQueryFactory
-                    .select(Projections.constructor(SimpleResponse.class,
-                            qPost.id,
-                            qPost.view,
-                            qPost.title,
-                            qPost.thumbnailUrl,
-                            Expressions.constant("/detail/")
-                    ))
-                    .from(qPost)
-                    .where(
-                            qPost.isShow.isTrue().and(
-                                            (cursorView != null && cursorId != null)
-                                                    ? qPost.view.lt(cursorView)
-                                                    .or(qPost.view.eq(cursorView).and(qPost.id.lt(cursorId)))
-                                                    : null
-                            )
-                    )
-                    .orderBy(qPost.view.desc(), qPost.id.desc())
-                    .limit(limit)
-                    .fetch();
-
-        } else if (category.equals(Category.all)) {
-
-            List<SimpleResponse> pList = new ArrayList<>(jpaQueryFactory
-                    .select(Projections.constructor(SimpleResponse.class,
-                            qPost.id,
-                            qPost.view,
-                            qPost.title,
-                            qPost.thumbnailUrl,
-                            qPost.modifiedDate,
-                            Expressions.constant("/detail/")))
-                    .from(qPost)
-                    .where(
-                            qPost.isShow.isTrue().and(
-                                cursorTime != null ? qPost.modifiedDate.lt(cursorTime) : null
-                            )
-                    )
-                    .orderBy(qPost.modifiedDate.desc())
-                    .limit(limit)
-                    .fetch());
-
-            boolean isSnsLoading = false;
-            if ( !pList.isEmpty() ) {
-                Long id =  pList.get(pList.size() - 1).getId();
-                Long lastPostId = jpaQueryFactory
-                        .select(qPost.id)
-                        .from(qPost)
-                        .where(qPost.isShow.isTrue())
-                        .orderBy(qPost.id.desc())
-                        .limit(1)
-                        .fetchOne();
-
-                if ( !(id.equals(lastPostId)) ) {
-                    isSnsLoading = true;
-                }
-            } else {
-                isSnsLoading = true;
-            }
-
-
-            List<SimpleResponse> sList = new ArrayList<>();
-            if ( isSnsLoading ) {
-                sList.addAll(
-                        jpaQueryFactory
-                        .select(Projections.constructor(SimpleResponse.class,
-                                qSnsContent.id,
-                                qSnsContent.view,
-                                qSnsContent.title,
-                                qSnsContent.thumbnailUrl,
-                                qSnsContent.publishTime,
-                                Expressions.constant("/detail/sns-content/")))
-                        .from(qSnsContent)
-                        .where(
-                                cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
-                        )
-                        .orderBy(qSnsContent.publishTime.desc())
-                        .limit(limit)
-                        .fetch());
-            }
-            // 📌 SnsContent 데이터 가져오기 (limit + extraFetch)
-
-
-            // 📌 두 리스트 병합
-            List<SimpleResponse> combinedList = new ArrayList<>();
-            combinedList.addAll(pList);
-            combinedList.addAll(sList);
-
-            // 📌 뷰 기준으로 정렬
-            combinedList.sort(Comparator.comparing(SimpleResponse::getCursorTime, Comparator.reverseOrder()));
-
-            // 📌 최종적으로 limit 만큼만 반환
-            return combinedList.stream()
-                    .limit(limit)
-                    .collect(Collectors.toList());
-
-        } else if (category.equals(Category.houber_sns)) {
-            return jpaQueryFactory
-                    .select(Projections.constructor(SimpleResponse.class,
-                            qSnsContent.id,
-                            qSnsContent.view,
-                            qSnsContent.title,
-                            qSnsContent.thumbnailUrl,
-                            qSnsContent.publishTime,
-                            Expressions.constant("/detail/sns-content/")))
-                    .from(qSnsContent)
-                    .where(
-                            cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
-                    )
-                    .orderBy(qSnsContent.publishTime.desc())
-                    .limit(limit)
-                    .fetch();
-
-        } else {
-            return jpaQueryFactory
-                    .select(Projections.constructor(SimpleResponse.class,
-                            qPost.id,
-                            qPost.view,
-                            qPost.title,
-                            qPost.thumbnailUrl,
-                            Expressions.constant("/detail/")
-                    ))
-                    .from(qPost)
-                    .where(
-                            qPost.isShow.isTrue().and(
+        return jpaQueryFactory
+                .select(Projections.constructor(SimpleResponse.class,
+                        qPost.id,
+                        qPost.view,
+                        qPost.title,
+                        qPost.thumbnailUrl,
+                        Expressions.constant("/detail/")
+                ))
+                .from(qPost)
+                .where(
+                        qPost.isShow.isTrue().and(
                                 cursorId != null
                                         ? qPost.category.eq(category).and(qPost.id.lt(cursorId))
                                         : qPost.category.eq(category)
-                            )
-                    )
-                    .orderBy(qPost.id.desc())
-                    .limit(limit)
-                    .fetch();
+                        )
+                )
+                .orderBy(qPost.id.desc(), qPost.view.desc())
+                .limit(limit)
+                .fetch();
 
-        }
+//        if (category.equals(Category.japan_life)) {
+//            // Post 데이터 가져오기
+//            return jpaQueryFactory
+//                    .select(Projections.constructor(SimpleResponse.class,
+//                            qPost.id,
+//                            qPost.view,
+//                            qPost.title,
+//                            qPost.thumbnailUrl,
+//                            Expressions.constant("/detail/")
+//                    ))
+//                    .from(qPost)
+//                    .where(
+//                            qPost.isShow.isTrue().and(
+//                                    qPost.category.in(Category.japan_review)
+//                            )
+////                            qPost.isShow.isTrue().and(
+////                                            (cursorView != null && cursorId != null)
+////                                                    ? qPost.view.lt(cursorView)
+////                                                    .or(qPost.view.eq(cursorView).and(qPost.id.lt(cursorId)))
+////                                                    : null
+////                            )
+//                    )
+//                    .orderBy(qPost.id.desc(), qPost.view.desc())
+//                    .limit(limit)
+//                    .fetch();
+//
+//        } else if (category.equals(Category.all)) {
+//
+//            List<SimpleResponse> pList = new ArrayList<>(jpaQueryFactory
+//                    .select(Projections.constructor(SimpleResponse.class,
+//                            qPost.id,
+//                            qPost.view,
+//                            qPost.title,
+//                            qPost.thumbnailUrl,
+//                            qPost.modifiedDate,
+//                            Expressions.constant("/detail/")))
+//                    .from(qPost)
+//                    .where(
+//                            qPost.isShow.isTrue().and(
+//                                cursorTime != null ? qPost.modifiedDate.lt(cursorTime) : null
+//                            )
+//                    )
+//                    .orderBy(qPost.modifiedDate.desc())
+//                    .limit(limit)
+//                    .fetch());
+//
+//            boolean isSnsLoading = false;
+//            if ( !pList.isEmpty() ) {
+//                Long id =  pList.get(pList.size() - 1).getId();
+//                Long lastPostId = jpaQueryFactory
+//                        .select(qPost.id)
+//                        .from(qPost)
+//                        .where(qPost.isShow.isTrue())
+//                        .orderBy(qPost.id.desc())
+//                        .limit(1)
+//                        .fetchOne();
+//
+//                if ( !(id.equals(lastPostId)) ) {
+//                    isSnsLoading = true;
+//                }
+//            } else {
+//                isSnsLoading = true;
+//            }
+//
+//
+//            List<SimpleResponse> sList = new ArrayList<>();
+//            if ( isSnsLoading ) {
+//                sList.addAll(
+//                        jpaQueryFactory
+//                        .select(Projections.constructor(SimpleResponse.class,
+//                                qSnsContent.id,
+//                                qSnsContent.view,
+//                                qSnsContent.title,
+//                                qSnsContent.thumbnailUrl,
+//                                qSnsContent.publishTime,
+//                                Expressions.constant("/detail/sns-content/")))
+//                        .from(qSnsContent)
+//                        .where(
+//                                cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
+//                        )
+//                        .orderBy(qSnsContent.publishTime.desc())
+//                        .limit(limit)
+//                        .fetch());
+//            }
+//            // 📌 SnsContent 데이터 가져오기 (limit + extraFetch)
+//
+//
+//            // 📌 두 리스트 병합
+//            List<SimpleResponse> combinedList = new ArrayList<>();
+//            combinedList.addAll(pList);
+//            combinedList.addAll(sList);
+//
+//            // 📌 뷰 기준으로 정렬
+//            combinedList.sort(Comparator.comparing(SimpleResponse::getCursorTime, Comparator.reverseOrder()));
+//
+//            // 📌 최종적으로 limit 만큼만 반환
+//            return combinedList.stream()
+//                    .limit(limit)
+//                    .collect(Collectors.toList());
+//
+//        } else if (category.equals(Category.houber_sns)) {
+//            return jpaQueryFactory
+//                    .select(Projections.constructor(SimpleResponse.class,
+//                            qSnsContent.id,
+//                            qSnsContent.view,
+//                            qSnsContent.title,
+//                            qSnsContent.thumbnailUrl,
+//                            qSnsContent.publishTime,
+//                            Expressions.constant("/detail/sns-content/")))
+//                    .from(qSnsContent)
+//                    .where(
+//                            cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
+//                    )
+//                    .orderBy(qSnsContent.publishTime.desc())
+//                    .limit(limit)
+//                    .fetch();
+//
+//        } else {
+//            return jpaQueryFactory
+//                    .select(Projections.constructor(SimpleResponse.class,
+//                            qPost.id,
+//                            qPost.view,
+//                            qPost.title,
+//                            qPost.thumbnailUrl,
+//                            Expressions.constant("/detail/")
+//                    ))
+//                    .from(qPost)
+//                    .where(
+//                            qPost.isShow.isTrue().and(
+//                                cursorId != null
+//                                        ? qPost.category.eq(category).and(qPost.id.lt(cursorId))
+//                                        : qPost.category.eq(category)
+//                            )
+//                    )
+//                    .orderBy(qPost.id.desc())
+//                    .limit(limit)
+//                    .fetch();
+//
+//        }
     }
     public List<SimpleResponse> getGuideOnly(int limit) {
         return jpaQueryFactory

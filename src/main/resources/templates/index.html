@@ -17,11 +17,11 @@
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>
     <div class="content-title">
       <h3>하우버 입주자 스토리</h3>
-      <p><a href="/list?category=hot_post">더보기</a></p>
+      <p><a href="/list?category=japan_review">더보기</a></p>
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${hot_post}" class="item">
+        <div th:each="item : ${japan_review}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
                  th:alt = "${item.title}">
@@ -29,15 +29,16 @@
         </div>
       </div>
     </div>
+
     <div style="display: block; height: 4rem"></div>
 
     <div class="content-title">
-      <h3>오사카 부동산 혜택</h3>
-      <p><a href="/list?category=hot_post">더보기</a></p>
+      <h3>입주자면 무조건 받을 수 있는 혜택</h3>
+      <p><a href="/list?category=event">더보기</a></p>
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${hot_post}" class="item">
+        <div th:each="item : ${event}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
                  th:alt = "${item.title}">
@@ -50,11 +51,28 @@
 
     <div class="content-title">
       <h3>일본 부동산 정보</h3>
-      <p><a href="/list?category=hot_post">더보기</a></p>
+      <p><a href="/list?category=japan_property">더보기</a></p>
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${hot_post}" class="item">
+        <div th:each="item : ${japan_property}" class="item">
+          <a th:href="${item.link}">
+            <img th:src = "${item.thumbnailUrl}"
+                 th:alt = "${item.title}">
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: block; height: 4rem"></div>
+
+    <div class="content-title">
+      <h3>워킹홀리데이</h3>
+      <p><a href="/list?category=working_holiday">더보기</a></p>
+    </div>
+    <div class="slider-container">
+      <div class="slider">
+        <div th:each="item : ${working_holiday}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
                  th:alt = "${item.title}">
@@ -67,11 +85,11 @@
 
     <div class="content-title">
       <h3>생활 정보</h3>
-      <p><a href="/list?category=hot_post">더보기</a></p>
+      <p><a href="/list?category=japan_life">더보기</a></p>
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${hot_post}" class="item">
+        <div th:each="item : ${japan_life}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
                  th:alt = "${item.title}">
@@ -80,7 +98,7 @@
       </div>
     </div>
 
-    <div style="display: block; height: 4rem"></div>
+    <div style="display: block; height: 10rem"></div>
 <!--    <div class="dots-container"></div>-->
 <!--    <div class="content-title">-->
 <!--      <h3>다양한 가이드를 확인해보세요</h3>-->

@@ -16,10 +16,10 @@
   <div th:replace="~{fragments/searchBar :: searchBar}"></div>
     <section class="detail-content">
 
-      <div id="indexing-control" th:if="${category.toString() != 'japan_life'}">
+      <div id="indexing-control" th:if="${!(tableOfContents.size() < 1)}">
         <img src="/asset/indexing-controller.png" alt="내부 목차 열기(open aside)">
       </div>
-      <aside id="indexing-modal" th:if="${category.toString() != 'japan_life'}">
+      <aside id="indexing-modal" th:if="${!(tableOfContents.size() < 1)}">
         <h3>Index</h3>
         <ul>
           <li th:each="item : ${tableOfContents}">
@@ -47,7 +47,7 @@
         </div>
         <th:block th:utext="${mainContent}"></th:block>
       </div>
-
+      <div id="contact-us"></div>
       <div th:if="${not #lists.isEmpty(moreContents)}" class="slider-container">
         <h2>이어지는 가이드를 보여드릴게요!</h2>
         <div class="slider">
@@ -67,6 +67,14 @@
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </section>
 </body>
+<style>
+  #contact-us {
+    display: block;
+    width: 100%;
+    height: 14rem;
+    background: url("/asset/detail-banner.png") center / cover;
+  }
+</style>
 <script src="/js/main.js"></script>
 <script src="/js/navControl.js"></script>
 <script src="/js/detailControl.js"></script>

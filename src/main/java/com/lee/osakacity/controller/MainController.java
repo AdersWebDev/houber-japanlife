@@ -32,8 +32,11 @@ public class MainController {
         model.addAttribute("keywords", "houber, 하우버, japan-life, 일본, 일본 워홀, 워킹홀리데이, 일본 워킹홀리데이");
         model.addAttribute("siteUrl", "https://houber-japanlife.com");
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
-        model.addAttribute("hot_post",postService.getList(Category.hot_post, 10, null, null, null));
-        model.addAttribute("all_guide",postService.getGuideOnly(8));
+        model.addAttribute("japan_review",postService.getList(Category.japan_review, 10, null, null, null));
+        model.addAttribute("event",postService.getList(Category.event, 10, null, null, null));
+        model.addAttribute("japan_property",postService.getList(Category.japan_property, 10, null, null, null));
+        model.addAttribute("working_holiday",postService.getList(Category.working_holiday, 10, null, null, null));
+        model.addAttribute("japan_life",postService.getList(Category.japan_life, 10, null, null, null));
 
         return "index";
     }
