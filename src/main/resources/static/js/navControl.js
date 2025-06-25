@@ -9,14 +9,22 @@ function updateCategoryPosition() {
     if (window.innerWidth >= 1024) {
         // 데스크탑 화면에서는 위치 설정
         categoryModal.style.left = `${contentRect.right + 10}px`;
-        goTop.style.left = `${contentRect.right + 2}px`;
-        indexModal.style.left = `${contentRect.left - 190}px`;
+        const categoryRect =categoryModal.getBoundingClientRect();
+        const floatingRect = floatingDiv.getBoundingClientRect();
+        floatingDiv.style.right = '';
+        floatingDiv.style.left = `${categoryRect.right - floatingRect.width}px`;
+        if (indexModal)
+            indexModal.style.left = `${contentRect.left - 190}px`;
+        consultingBox.style.scale = `1`;
     } else {
         // 모바일 화면에서는 위치 초기화
         categoryModal.style.left = '';
-        goTop.style.left = `${contentRect.right + 2}px`;
-        indexModal.style.left = '';
-
+        floatingDiv.style.bottom = `${70  + 30}px`;
+        floatingDiv.style.left = '';
+        floatingDiv.style.right = `${14}px`;
+        if (indexModal)
+            indexModal.style.left = '';
+        consultingBox.style.scale = `0.9`;
     }
 }
 

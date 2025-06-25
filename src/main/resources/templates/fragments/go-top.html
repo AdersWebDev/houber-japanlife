@@ -1,6 +1,33 @@
-<div th:fragment="go-top" id="go-top">
-  <svg viewBox="0 0 300 300">
-    <polygon points="150,0 300,300 0,300" />
-  </svg>
-  <span>TOP</span>
+<div id="floating-div" th:fragment="go-top" style="display: flex; flex-direction: column; position: fixed; bottom: 130px; gap: 20px;  z-index: 100;">
+  <div id="go-top" style="display: flex; justify-content: flex-end; cursor: pointer">
+    <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="50" height="50" rx="25" fill="#212121"/>
+      <rect x="0.5" y="0.5" width="49" height="49" rx="24.5" stroke="white" stroke-opacity="0.2"/>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M14.2443 28.618C13.5852 28.1086 13.5852 27.2827 14.2443 26.7734L23.8068 19.382C24.4658 18.8727 25.5343 18.8727 26.1933 19.382L35.7557 26.7734C36.4148 27.2827 36.4148 28.1086 35.7557 28.618C35.0967 29.1273 34.0284 29.1273 33.3694 28.618L25 22.149L16.6307 28.618C15.9717 29.1273 14.9033 29.1273 14.2443 28.618Z" fill="white"/>
+    </svg>
+  </div>
+  <script>
+    const goTop = document.getElementById('go-top');
+    goTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // 부드러운 스크롤
+      });
+    });
+  </script>
+  <div id="consulting-box" onclick="window.open('http://pf.kakao.com/_qTEPj', '_blank')" style="scale: 1; padding: 14px 26px; border-radius: 40px; border: 1px solid #4D4D4D; display: flex; justify-content: center; align-items: center; background-color: #212121; gap: 8px; cursor: pointer;">
+      <p style="margin: 0; font-weight: bold; font-size: 1.8rem">문의하기</p>
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="15.525" cy="16.1246" r="15.525" fill="#FAE100"/>
+      <g clip-path="url(#clip0_1944_491)">
+        <path d="M15.315 6.7998C10.1712 6.7998 6 10.7176 6 15.549C6 19.118 7.47271 20.8229 9.48856 22.3753L9.49715 22.3796V26.5678C9.49715 26.7662 9.72042 26.8796 9.87499 26.7597L13.4065 24.0954L13.4838 24.1281C14.0763 24.2393 14.6881 24.2982 15.315 24.2982C20.4588 24.2982 24.63 20.3804 24.63 15.5468C24.63 10.7133 20.4609 6.7998 15.315 6.7998ZM12.1935 17.7663C13.1059 17.7663 13.8874 17.2103 14.1235 16.3535H15.4739C15.1433 18.0039 13.8788 19.0853 12.1935 19.0853C10.2357 19.0853 8.68351 17.6028 8.68351 15.5381C8.68351 13.4734 10.2357 11.9909 12.1935 11.9909C13.896 11.9909 15.169 13.0941 15.4825 14.7728H14.1364C13.9325 13.8593 13.1231 13.2903 12.1935 13.2903C10.8775 13.2903 10.0017 14.2431 10.0017 15.5359C10.0017 16.8288 10.9978 17.7641 12.1935 17.7641M21.0921 18.9501H19.8534V16.1137C19.8534 15.4618 19.4798 15.1108 18.9045 15.1108C18.2626 15.1108 17.8482 15.5098 17.8482 16.3186V18.9501H16.6095V12.0149H17.8482V14.6246C18.1445 14.1667 18.6254 13.9422 19.278 13.9422C19.8061 13.9422 20.2376 14.1166 20.5725 14.4785C20.9182 14.8383 21.0921 15.3266 21.0921 15.9589V18.9501Z" fill="#020303"/>
+      </g>
+      <defs>
+        <clipPath id="clip0_1944_491">
+          <rect width="18.63" height="20.01" fill="white" transform="translate(6 6.7998)"/>
+        </clipPath>
+      </defs>
+    </svg>
+  </div>
 </div>
+

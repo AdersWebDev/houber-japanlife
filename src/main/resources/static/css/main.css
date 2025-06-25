@@ -44,28 +44,29 @@ img {
     background: #323232; /* 핸들의 색상 */
     border: 3px solid rgba(240, 240, 240, 0); /* 핸들의 외곽선, 트랙 배경과 동일한 색상 */
 }
-#go-top {
-    display: flex;
-    position: fixed;
-    top: 64rem;
-    left: 76%;
-    width: 3rem;
-    height: 5rem;
-    z-index: 5;
-    flex-direction: column;
-    cursor: pointer;
-}
-#go-top svg{
-    width: 100%;
-    height: auto;
-    display: block;
-    fill: #525252;
-}
-#go-top span {
-    font-size: 1.5rem;
-    color: #d3d3d3;
-    margin: 0 auto;
-}
+
+/*#go-top {*/
+/*    display: flex;*/
+/*    position: fixed;*/
+/*    top: 64rem;*/
+/*    left: 76%;*/
+/*    width: 3rem;*/
+/*    height: 5rem;*/
+/*    z-index: 5;*/
+/*    flex-direction: column;*/
+/*    cursor: pointer;*/
+/*}*/
+/*#go-top svg{*/
+/*    width: 100%;*/
+/*    height: auto;*/
+/*    display: block;*/
+/*    fill: #525252;*/
+/*}*/
+/*#go-top span {*/
+/*    font-size: 1.5rem;*/
+/*    color: #d3d3d3;*/
+/*    margin: 0 auto;*/
+/*}*/
 /*default - mobile 375*/
 h1 {
     font-size: 2rem;

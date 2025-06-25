@@ -11,11 +11,28 @@
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 <nav th:replace="~{fragments/category :: category}"></nav>
+<div th:replace="~{fragments/go-top :: go-top}"></div>
 <section class="content">
   <div style="margin: 0 auto; width: 100%; height: auto">
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>
     <div class="content-title">
-      <h3>가장 인기있는 게시글을 한눈에</h3>
+      <h3>하우버 입주자 스토리</h3>
+      <p><a href="/list?category=hot_post">더보기</a></p>
+    </div>
+    <div class="slider-container">
+      <div class="slider">
+        <div th:each="item : ${hot_post}" class="item">
+          <a th:href="${item.link}">
+            <img th:src = "${item.thumbnailUrl}"
+                 th:alt = "${item.title}">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div style="display: block; height: 4rem"></div>
+
+    <div class="content-title">
+      <h3>오사카 부동산 혜택</h3>
       <p><a href="/list?category=hot_post">더보기</a></p>
     </div>
     <div class="slider-container">
@@ -29,25 +46,60 @@
       </div>
     </div>
 
-    <div class="dots-container"></div>
-    <div class="content-title">
-      <h3>다양한 가이드를 확인해보세요</h3>
-      <p><a href="/list?category=all">더보기</a></p>
-    </div>
+    <div style="display: block; height: 4rem"></div>
 
-    <div class="items">
-      <div class="grid-items">
-        <div th:each="item : ${all_guide}" class="grid-item">
+    <div class="content-title">
+      <h3>일본 부동산 정보</h3>
+      <p><a href="/list?category=hot_post">더보기</a></p>
+    </div>
+    <div class="slider-container">
+      <div class="slider">
+        <div th:each="item : ${hot_post}" class="item">
           <a th:href="${item.link}">
-            <div class="image-wrapper">
-              <img th:src="${item.thumbnailUrl}"
-                   th:alt="item.title">
-              <div class="title" th:text="${item.title}"></div>
-            </div>
+            <img th:src = "${item.thumbnailUrl}"
+                 th:alt = "${item.title}">
           </a>
         </div>
       </div>
     </div>
+
+    <div style="display: block; height: 4rem"></div>
+
+    <div class="content-title">
+      <h3>생활 정보</h3>
+      <p><a href="/list?category=hot_post">더보기</a></p>
+    </div>
+    <div class="slider-container">
+      <div class="slider">
+        <div th:each="item : ${hot_post}" class="item">
+          <a th:href="${item.link}">
+            <img th:src = "${item.thumbnailUrl}"
+                 th:alt = "${item.title}">
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: block; height: 4rem"></div>
+<!--    <div class="dots-container"></div>-->
+<!--    <div class="content-title">-->
+<!--      <h3>다양한 가이드를 확인해보세요</h3>-->
+<!--      <p><a href="/list?category=all">더보기</a></p>-->
+<!--    </div>-->
+
+<!--    <div class="items">-->
+<!--      <div class="grid-items">-->
+<!--        <div th:each="item : ${all_guide}" class="grid-item">-->
+<!--          <a th:href="${item.link}">-->
+<!--            <div class="image-wrapper">-->
+<!--              <img th:src="${item.thumbnailUrl}"-->
+<!--                   th:alt="item.title">-->
+<!--              <div class="title" th:text="${item.title}"></div>-->
+<!--            </div>-->
+<!--          </a>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
   </div>
 </section>

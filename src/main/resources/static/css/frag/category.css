@@ -3,7 +3,7 @@
     position: fixed;
     width: 16rem;
     height: 30rem;
-    top: 10rem;
+    top: 7rem;
     margin-left: 1rem;
     z-index: 10;
     background-color: #323232;
@@ -16,14 +16,14 @@
     display: block;
 }
 #category-box ul{
-    position: absolute;
     left: 0;
     top: 0;
     width: 14rem;
-    height: 27.4rem;
-    padding: 0;
+    height: auto;
+    padding: 0 0 1rem 0;
     margin: 0 0 0 1rem;
     list-style: none;
+    border-bottom: 1px solid #474747;
 }
 #category-box .nav-title {
     font-size: 1.8rem;
@@ -34,19 +34,20 @@
     padding: 0.7rem 0;
 }
 .shortcut-box {
-    position: absolute;
     display: flex;
     width: 16rem;
-    height: 3rem;
+    height: 4.8rem;
     left: 0;
-    top: 25.5rem;
-    justify-content: center;
+    bottom: 0;
+    justify-content: left;
     align-items: center;
     gap: 10px;
+    margin-left: 1rem;
+    box-sizing: border-box;
 }
 .shortcut-box a img {
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     padding: 0.5rem 0;
     transition: transform 0.3s ease;
 }
@@ -58,8 +59,8 @@
         display: block;
         position: fixed;
         width: 16rem;
-        height: 30rem;
-        top: 24.2rem;
+        height: auto;
+        top: 21.2rem;
         left: 76%;
     }
 }
