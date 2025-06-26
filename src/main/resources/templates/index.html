@@ -18,7 +18,7 @@
       <svg width="13" height="16" viewBox="0 0 13 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M6.49789 14.5002C9.33044 14.5002 11.4971 12.5195 11.4971 10.0002C11.4971 8.50962 10.7947 7.78789 9.55693 6.55469C8.53872 5.54027 7.27583 4.26651 6.74902 2.14577C6.46086 2.37517 6.17936 2.66049 5.9531 2.99494C5.46604 3.71487 5.24058 4.63312 5.83879 5.82951C6.31231 6.77654 6.50841 8.11311 5.56066 9.06086C4.99612 9.6254 4.03042 10.0227 2.98238 9.58359C2.51163 9.38637 2.12204 9.0574 1.79773 8.6455C1.61652 9.02512 1.50001 9.48852 1.5 10.0002C1.49994 12.53 3.6636 14.5002 6.49789 14.5002ZM8.01433 0.5C7.99819 0.22433 7.77398 0.00236348 7.50695 0.0727205C5.79801 0.522994 2.7625 3.03111 4.49715 6.50034C4.84142 7.18887 4.78164 7.71856 4.5 8.0002C4.03859 8.46162 3.15137 8.49723 2.4261 6.72404C2.31949 6.46341 2.02626 6.31697 1.78436 6.46111C0.682776 7.11753 3.46795e-05 8.5357 1.7298e-09 10.0002C-8.31534e-05 13.5123 2.99789 16.0002 6.49789 16.0002C9.99788 16.0002 12.9971 13.5002 12.9971 10.0002C12.9971 7.86299 11.8699 6.74081 10.6862 5.56239C9.45553 4.33713 8.16373 3.05106 8.01433 0.5Z" fill="#FF6868"/>
       </svg>
-      <p>현재 하우버에서 <b style="font-size: 1.8rem">16</b>명이 <b>상담 받고 계세요</b></p>
+      <p>현재 하우버에서 <b style="font-size: 1.8rem" th:text="${aders_count + 10}"></b>명이 <b>상담 받고 계세요</b></p>
     </div>
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>
     <div class="content-title">
@@ -36,6 +36,33 @@
       </div>
     </div>
 
+    <div style="display: block; height: 4rem"></div>
+
+    <div class="content-title">
+      <h3>안 챙기면 아까운 입주 혜택 확인하기</h3>
+    </div>
+    <div class="slider-container">
+      <div class="slider">
+        <div class="item" style="max-width: 23rem">
+          <a href="https://blog.naver.com/houber/223887379183" target="_blank">
+            <img src="/asset/event_thumbnail_blog_counsel_review_gift.png"
+                 alt="event_thumbnail_blog_counsel_review_gift">
+          </a>
+        </div>
+        <div class="item" style="max-width: 23rem">
+          <a href="https://blog.naver.com/houber/223867587363" target="_blank">
+            <img src="/asset/event_thumbnail_blog_home_review.png"
+                 alt="event_thumbnail_blog_home_review.png">
+          </a>
+        </div>
+        <div class="item" style="max-width: 23rem">
+          <a href="https://blog.naver.com/houber/223867856019" target="_blank">
+            <img src="/asset/event_thumbnail_interview.png"
+                 alt="event_thumbnail_interview.png">
+          </a>
+        </div>
+      </div>
+    </div>
 
     <div style="display: block; height: 4rem"></div>
 

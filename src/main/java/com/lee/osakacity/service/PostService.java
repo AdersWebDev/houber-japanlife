@@ -16,8 +16,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -36,8 +40,11 @@ public class PostService {
     private final SnsContentRepo snsContentRepo;
     @Value("${jasypt.encryptor.password}")
     private String KEY;
+    @Value("${aders.accessKey}")
+    private String ACCESS_KEY;
     private final S3Service s3Service;
 
+    private final RestTemplate restTemplate = new RestTemplate();
     QPost qPost = QPost.post;
     QFile qFile = QFile.file;
     QSnsContent qSnsContent = QSnsContent.snsContent;
@@ -126,6 +133,8 @@ public class PostService {
             return combinedList.stream()
                     .limit(limit)
                     .collect(Collectors.toList());
+
+        } else if (category.equals(Category.event)) {
 
         }
         return jpaQueryFactory
@@ -456,12 +465,36 @@ public class PostService {
         return null;
     }
 
-//    @Transactional
-//    public void tempsns(long id, MultipartFile file) {
-//        SnsContent s = snsContentRepo.findById(id).orElseThrow();
-//        ImgResponse i = s3Service.uploadFile(file);
-//        s.updateThumbnail(i.getUrl());
-//    }
+    @Transactional
+    public void tempsns(long id, MultipartFile file) {
+        SnsContent s = snsContentRepo.findById(id).orElseThrow();
+        ImgResponse i = s3Service.uploadFile(file);
+        s.updateThumbnail(i.getUrl());
+    }
+
+    public long countRequest() {
+        String url = "https://aderspro.com/aders/japanlife/count"; // 실제 URL로 바꾸세요
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        headers.set("Authorization", "Bearer " + ACCESS_KEY); // 혹은 "X-API-KEY", "Api-Key" 등
+
+        try {
+            ResponseEntity<Long> response = restTemplate.exchange(
+                    url,
+                    org.springframework.http.HttpMethod.GET,
+                    entity,
+                    Long.class
+            );
+            Long count = response.getBody();
+            if (count == null) {
+                return 57;
+            }
+            return count;
+            // 받아온 count 값으로 필요한 로직 처리
+        } catch (Exception e) {
+            return 57;
+        }
+    }
 //    @Transactional
 //    public void tempsns(long id, MultipartFile file) {
 //        Post s = postRepo.findById(id).orElseThrow();

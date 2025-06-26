@@ -57,10 +57,10 @@ public class MainRestController {
     public String rssFeed() {
         return sitemapService.makeRss();
     }
-//
-//
-//    @PatchMapping("/usns")
-//    public void updatesns (long id, MultipartFile file) {
-//        postService.tempsns(id, file);
-//    }
+
+
+    @PatchMapping("/usns")
+    public void updatesns (long id, MultipartFile file) {
+        postService.tempsns(id, file);
+    }
 }
