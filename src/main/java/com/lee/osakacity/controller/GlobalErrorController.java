@@ -31,6 +31,7 @@ public class GlobalErrorController implements ErrorController {
                 model.addAttribute("siteUrl", "https://houber-japanlife.com");
                 model.addAttribute("thumbnail", "https://houber-japanlife.com/asset/logo.png");
                 model.addAttribute("all_guide", postService.getGuideOnly(8));
+                model.addAttribute("new_value",postService.checkUpdate());
                 return "error/500";
             } else {
                 return setHtml(model);
@@ -46,6 +47,7 @@ public class GlobalErrorController implements ErrorController {
         model.addAttribute("siteUrl", "https://houber-japanlife.com");
         model.addAttribute("thumbnail", "https://houber-japanlife.com/asset/logo.png");
         model.addAttribute("all_guide", postService.getGuideOnly(8));
+        model.addAttribute("new_value",postService.checkUpdate());
         return "error/404";
     }
 }

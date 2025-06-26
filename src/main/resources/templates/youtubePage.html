@@ -9,7 +9,7 @@
     )}"></head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
-<nav th:replace="~{fragments/category :: category}"></nav>
+<nav th:replace="~{fragments/category :: category(new_value=${new_value})}"></nav>
 <div th:replace="~{fragments/go-top :: go-top}"></div>
 <section class="content">
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>

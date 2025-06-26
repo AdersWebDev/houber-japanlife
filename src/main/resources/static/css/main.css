@@ -93,6 +93,13 @@ p,u,strike {
     font-size: 0.9rem;
 
 }
+.update-dot {
+    width: 1.4rem;
+    height: 1.4rem;
+    background: center center no-repeat url('/asset/new_icon.svg');
+    background-size: contain;
+    display: inline-block;
+}
 @media (min-width: 1023px) {
 
     h1 {

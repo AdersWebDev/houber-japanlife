@@ -24,10 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -494,6 +493,39 @@ public class PostService {
         } catch (Exception e) {
             return 57;
         }
+    }
+
+    public Map<Integer, Boolean> checkUpdate() {
+        // 관심 있는 카테고리 매핑
+        Map<Integer, Category> categoryMap = Map.of(
+                0, Category.japan_review,
+                1, Category.japan_property,
+                2, Category.working_holiday,
+                3, Category.japan_life
+        );
+
+        // 7일 전 기준
+        LocalDateTime sevenDaysAgo = LocalDate.now().minusDays(7).atStartOfDay();
+
+        // 해당 기간 내 업데이트된 게시글 카테고리들 조회 (중복 제거)
+        List<Category> updatedCategories = jpaQueryFactory
+                .select(qPost.category)
+                .distinct()
+                .from(qPost)
+                .where(
+                        qPost.modifiedDate.goe(sevenDaysAgo),
+                        qPost.category.in(categoryMap.values())
+                )
+                .fetch();
+
+        // 결과 매핑
+        Set<Category> updatedCategorySet = new HashSet<>(updatedCategories);
+
+        return categoryMap.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> updatedCategorySet.contains(entry.getValue())
+                ));
     }
 //    @Transactional
 //    public void tempsns(long id, MultipartFile file) {

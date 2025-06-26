@@ -38,6 +38,7 @@ public class MainController {
         model.addAttribute("japan_property",postService.getList(Category.japan_property, 10, null, null, null));
         model.addAttribute("working_holiday",postService.getList(Category.working_holiday, 10, null, null, null));
         model.addAttribute("japan_life",postService.getList(Category.japan_life, 10, null, null, null));
+        model.addAttribute("new_value",postService.checkUpdate());
 
         return "index";
     }
@@ -53,6 +54,7 @@ public class MainController {
         model.addAttribute("mainContent",postService.getList(category, 20, null, null, null));
         model.addAttribute("content_h1",category.getTitle());
         model.addAttribute("content_p",category.getDescription());
+        model.addAttribute("new_value",postService.checkUpdate());
 
         return "listPage";
     }
@@ -67,6 +69,7 @@ public class MainController {
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
         model.addAttribute("search_keyword",keyword);
         model.addAttribute("searched_list",postService.search(keyword, 20, null));
+        model.addAttribute("new_value",postService.checkUpdate());
 
         return "searchPage";
     }
@@ -83,6 +86,7 @@ public class MainController {
         model.addAttribute("h1",dto.getTitle());
         model.addAttribute("category", dto.getCategory());
         model.addAttribute("view",dto.getView());
+        model.addAttribute("new_value",postService.checkUpdate());
 
         List<Map<String, String>> toc = new ArrayList<>();
 
@@ -122,6 +126,7 @@ public class MainController {
         model.addAttribute("keywords", dto.getKeyword());
         model.addAttribute("siteUrl", "https://houber-japanlife.com/detail/sns-content/"+id);
         model.addAttribute("thumbnail", dto.getThumbnailUrl());
+        model.addAttribute("new_value",postService.checkUpdate());
 
         model.addAttribute("url", "https://www.youtube.com/embed/"
                 +dto.getContent()
