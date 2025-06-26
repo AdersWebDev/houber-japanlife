@@ -6,7 +6,7 @@
     background-color: #5d5d5d;
     border-radius: 25px;
     padding: 0 20px;
-    margin: 3.7rem 0;
+    margin: 1.4rem 0 3rem;
 }
 .search-bar form {
     flex: 1;
@@ -33,12 +33,6 @@
 
 .search-bar form input:focus {
     outline: none;
-}
-
-@media (min-width: 760px) {
-    .search-bar {
-        margin: 3.7rem 0;
-    }
 }
 @media (min-width: 768px) {
     .search-bar {
