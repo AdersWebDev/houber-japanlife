@@ -29,6 +29,7 @@
                 V-log / Japanese / Contents</p>
             <a href="https://www.youtube.com/@Houber_Official"><img src="/asset/shortcutYoutube.png" alt="유튜브 채널 바로가기(houber youtube shortcut)"></a>
         </div>
+        <div id="contact-us" onclick="window.open('http://pf.kakao.com/_qTEPj', '_blank')"></div>
         <h2>관련 콘텐츠 더보기</h2>
         <div class="slider">
             <div th:each="item : ${moreContents}" class="item">
@@ -46,6 +47,15 @@
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
+<style>
+    #contact-us {
+        display: block;
+        width: 100%;
+        height: 14rem;
+        background: url("/asset/detail-banner.png") center / cover;
+        cursor: pointer;
+    }
+</style>
 <script src="/js/main.js"></script>
 <script src="/js/detailControl.js"></script>
 <script src="/js/navControl.js"></script>
