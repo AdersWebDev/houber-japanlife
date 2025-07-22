@@ -94,6 +94,8 @@ footer .xs {
     display: flex;
     gap: 1.5rem; /* 아이콘 간 간격 */
     margin-bottom: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .footer-right img {
