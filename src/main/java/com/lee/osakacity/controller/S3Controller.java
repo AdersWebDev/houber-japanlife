@@ -12,11 +12,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/file")
 public class S3Controller {
+
     private final S3Service s3Service;
+
     @PostMapping()
     public ImgResponse uploadFile(@ModelAttribute MultipartFile file) {
         return s3Service.uploadFile(file);
     }
+
     @DeleteMapping()
     public List<Long> deleteUnUseFile() {
         return s3Service.deleteUnUseFile();
