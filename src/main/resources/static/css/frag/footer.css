@@ -9,6 +9,7 @@ footer {
     justify-content: center;
     align-items: center;
     background-color: #212121;
+    padding-bottom: env(safe-area-inset-bottom, 0);
 }
 .m-footer-left {
     width: 13rem;
@@ -42,6 +43,13 @@ footer {
     align-items: flex-start;
     gap: 10px;
     display: inline-flex;
+}
+.m-footer-right a {
+    min-width: 4.4rem;
+    min-height: 4.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 .m-footer-right img {
     width: 3rem;

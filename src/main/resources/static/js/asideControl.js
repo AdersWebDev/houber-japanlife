@@ -1,23 +1,24 @@
-indexController.addEventListener('click', function () {
-    if (indexController.classList.contains('active')) {
+/** 상세 페이지 목차(인덱싱) 열기/닫기 및 스크롤 연동 (목차 있을 때만 동작) */
+if (indexController && indexModal) {
+    indexController.addEventListener('click', function () {
+        if (indexController.classList.contains('active')) {
+            indexModal.classList.remove('active');
+            indexModal.classList.add('closing');
+            indexController.classList.remove('active');
+            indexController.style.left = '3%';
+            indexModal.addEventListener('transitionend', () => {
+                indexModal.classList.remove('closing');
+            }, { once: true });
+        } else {
+            indexModal.classList.add('active');
+            indexController.classList.add('active');
+            indexController.style.left = `${(window.innerWidth * 0.05)+172}px`;
+        }
+    });
+}
 
-        indexModal.classList.remove('active');
-
-        indexModal.classList.add('closing');
-        indexController.classList.remove('active');
-        indexController.style.left = '3%';
-        indexModal.addEventListener('transitionend', () => {
-            indexModal.classList.remove('closing');
-        }, { once: true });
-
-    } else {
-        indexModal.classList.add('active');
-        indexController.classList.add('active');
-
-        indexController.style.left = `${(window.innerWidth * 0.05)+172}px`;
-    }
-})
 document.addEventListener('DOMContentLoaded', () => {
+    if (!indexController || !indexModal) return;
     const headers = document.querySelectorAll('#detail-content h2, #detail-content h3');
     const indexItems = document.querySelectorAll('#indexing-modal li');
 
