@@ -82,8 +82,28 @@
 .dot.active {
     background-color: #ccc;
 }
+/* 모바일: 이벤트 섹션 포함 모든 .item 동일 비율(14rem) */
+@media (max-width: 767px) {
+    .slider-container .item {
+        min-width: 14rem;
+        max-width: 14rem;
+    }
+}
+
 @media (min-width: 430px) {
     .slider-container {
         margin: 0 auto;
+    }
+}
+
+/* 데스크톱: 이벤트 섹션만 23rem */
+@media (min-width: 768px) {
+    .slider-container .item {
+        min-width: 22rem;
+        max-width: 22rem;
+    }
+    .slider-container .item.item--event {
+        min-width: 26rem;
+        max-width: 26rem;
     }
 }

@@ -1,6 +1,7 @@
-<div th:fragment="searchBar" class="search-bar">
+<div th:fragment="searchBar" class="search-bar" role="search">
     <img src="/asset/searchIcon.png" alt="하우버에서 컨텐츠 검색(search content)">
     <form th:action="@{/search}" method="get">
-        <input type="text" name="keyword" placeholder="" required>
+        <label for="search-keyword" class="visually-hidden">검색 키워드</label>
+        <input id="search-keyword" type="text" name="keyword" placeholder="키워드로 검색" aria-label="검색 키워드 입력" required>
     </form>
 </div>

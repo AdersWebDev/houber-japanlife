@@ -10,12 +10,16 @@
     )}"></head>
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
-<nav th:replace="~{fragments/category :: category(new_value=${new_value})}"></nav>
+<div th:replace="~{fragments/go-top :: go-top}"></div>
 <section class="content">
+  <div class="page-layout">
+    <div class="layout-main">
   <div style="margin: 0 auto; width: 100%; height: auto">
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>
 
     <img class="error" src="/asset/404.png" alt="not_found_page">
+    <p class="xs" style="text-align: center; margin: 1rem 0;">페이지를 찾을 수 없습니다.</p>
+    <p style="text-align: center; margin: 0 0 1.5rem;"><a href="/">홈으로 가기</a></p>
     <div class="content-title">
       <h3>이런 가이드는 어때요?</h3>
       <p><a href="/list?category=all">더보기</a></p>
@@ -35,10 +39,14 @@
     </div>
 
   </div>
+    </div>
+    <div class="layout-nav-wrapper" id="category-nav-wrapper">
+      <nav id="category-box" th:replace="~{fragments/category :: category(new_value=${new_value})}"></nav>
+    </div>
+  </div>
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 <script src="/js/main.js"></script>
-<script src="/js/detailControl.js"></script>
 <script src="/js/navControl.js"></script>
 </html>

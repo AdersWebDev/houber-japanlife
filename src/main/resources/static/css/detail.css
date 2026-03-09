@@ -4,6 +4,21 @@
     max-width: 100%;
     margin-bottom: 15rem;
 }
+
+#contact-us {
+    display: block;
+    width: 100%;
+    min-height: 8rem;
+    height: 8rem;
+    background: url("/asset/detail-banner.png") center / cover;
+    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    #contact-us {
+        height: 14rem;
+    }
+}
 /*****************************/
 
 .detail-content .detail-thumbnail {

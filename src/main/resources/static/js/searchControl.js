@@ -1,4 +1,5 @@
-let keyword = document.querySelector('.searched-list').dataset.keyword || null;
+/** 검색 결과 페이지 무한 스크롤 */
+let keyword = document.querySelector('.searched-list') && document.querySelector('.searched-list').dataset.keyword || null;
 let isLoading = false; // 중복 호출 방지
 let cursorTime = null;
 const searchContainer = document.querySelector('.searched-list');
@@ -21,8 +22,6 @@ async function fetchMoreContent() {
             + `&cursorTime=`
             + cursorTime;
 
-        console.log(`Fetching data from: ${apiUrl}`);
-
         const response = await fetch(apiUrl);
         const data = await response.json();
 
@@ -32,7 +31,7 @@ async function fetchMoreContent() {
             data.forEach(item => {
                 content += `
                 <div class="searched-box">
-                    <a href="${item.link}" style="color: #fff; text-decoration: none">
+                    <a href="${item.link}">
                         <div data-time="${item.dateTime}">
                             <h3>${item.title}</h3>
                             <p>${item.description}</p>
@@ -42,9 +41,9 @@ async function fetchMoreContent() {
                             </div>
                         </div>
                     </a>
-                    <a href="${item.link}" style="color: #fff; text-decoration: none" >
+                    <a href="${item.link}">
                         <div class="searched-box-thumbnail">
-                            <img src=${item.thumbnailUrl} alt="${item.title}">
+                            <img src="${item.thumbnailUrl}" alt="${item.title}">
                         </div>
                     </a>
                 </div>
