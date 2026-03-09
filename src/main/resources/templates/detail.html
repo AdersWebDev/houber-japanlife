@@ -48,7 +48,7 @@
         </div>
         <th:block th:utext="${mainContent}"></th:block>
       </div>
-      <div id="contact-us" onclick="window.open('http://pf.kakao.com/_qTEPj', '_blank')"></div>
+      <div id="contact-us"></div>
       <div th:if="${not #lists.isEmpty(moreContents)}" class="slider-container">
         <h2>이어지는 가이드를 보여드릴게요!</h2>
         <div class="slider">
@@ -77,5 +77,16 @@
 <script src="/js/navControl.js"></script>
 <script src="/js/asideControl.js"></script>
 <script src="/js/slideItem.js"></script>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
+<script>
+    Kakao.init("e0e6b63939a221ec31468e72d5817697");
+
+    document.getElementById("contact-us").addEventListener("click", function (e) {
+        e.preventDefault();
+        Kakao.Channel.chat({
+            channelPublicId: "_qTEPj", // pf.kakao.com/_qTEPj 의 그 값
+        });
+    });
+</script>
 </html>
 
