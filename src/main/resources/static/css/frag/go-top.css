@@ -66,7 +66,7 @@
 @media (min-width: 1024px) {
     #floating-div {
         bottom: 2rem;
-        right: max(1rem, calc((100vw - 74rem) / 2 + 1rem));
+        right: max(1rem, calc((100vw - 74rem) / 3 + 1rem));
         gap: 1.5rem;
     }
 

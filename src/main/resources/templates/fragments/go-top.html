@@ -12,7 +12,7 @@
       if (goTop) goTop.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
     })();
   </script>
-  <div id="consulting-box" role="button" tabindex="0" aria-label="카카오톡 문의하기" onclick="window.open('http://pf.kakao.com/_qTEPj', '_blank')">
+  <div id="consulting-box" role="button" tabindex="0" aria-label="카카오톡 문의하기">
     <p>문의하기</p>
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="15.525" cy="16.1246" r="15.525" fill="#FAE100"/>
@@ -26,4 +26,18 @@
       </defs>
     </svg>
   </div>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
+    <script>
+        Kakao.init("b5f9e670d18de4b38a18fe19332655df");
+
+        document.getElementById("consulting-box").addEventListener("click", function (e) {
+            e.preventDefault();
+            Kakao.Channel.chat({
+                channelPublicId: "_qTEPj", // pf.kakao.com/_qTEPj 의 그 값
+            });
+        });
+    </script>
+
+
+
 </aside>

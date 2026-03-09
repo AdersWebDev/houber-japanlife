@@ -8,11 +8,11 @@
     thumbnail=${thumbnail}
     )}"></head>
 <body>
-<header th:replace="~{fragments/header :: header}"></header>
 <div th:replace="~{fragments/go-top :: go-top}"></div>
 <section class="content">
   <div class="page-layout">
     <div class="layout-main">
+        <header th:replace="~{fragments/header :: header}"></header>
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>
     <div class="youtube-box">
         <iframe th:class="${class}"

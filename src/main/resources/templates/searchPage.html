@@ -8,11 +8,12 @@
     thumbnail=${thumbnail}
     )}"></head>
 <body>
-<header th:replace="~{fragments/header :: header}"></header>
+
 <div th:replace="~{fragments/go-top :: go-top}"></div>
 <section class="content">
   <div class="page-layout">
     <div class="layout-main">
+        <header th:replace="~{fragments/header :: header}"></header>
     <div style="margin: 0 auto; width: 100%; height: auto">
         <div th:replace="~{fragments/searchBar :: searchBar}"></div>
         <h1 th:text="'[ ' + ${search_keyword} + ' ]의 검색결과'" style="margin: 1.2rem"></h1>
