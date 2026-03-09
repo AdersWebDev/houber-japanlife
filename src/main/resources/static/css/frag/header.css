@@ -12,11 +12,13 @@ header {
     display: inline-flex
 }
 .logo {
-    /*bottom: 1rem;*/
-    /*left: 50%;*/
-    /*transform: translateX(-50%);*/
-    width: 8.3rem;
+    width: 13rem;
     height: auto;
+}
+@media (max-width: 768px) {
+    .logo {
+        width: 10rem;
+    }
 }
 #category {
     position: absolute;
@@ -30,10 +32,6 @@ header {
     object-position: center;
 }
 @media (min-width: 1024px) {
-    /*header {*/
-    /*    position: absolute;*/
-    /*    top: 0;*/
-    /*}*/
     #category {
         display: none;
     }
