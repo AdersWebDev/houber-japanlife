@@ -225,9 +225,11 @@ classDiagram
 
 ## 빌드 및 실행 (참고)
 
-- **빌드**: `./gradlew build` (Windows: `gradlew.bat build`)
+- **빌드**: `./gradlew clean bootJar` (Windows: `gradlew.bat clean bootJar`) → `build/libs/osaka-city-0.0.1-SNAPSHOT.jar`
+  - `./gradlew build`는 기본 테스트가 Jasypt 비밀번호·DB·Redis를 요구해서 실패합니다.
 - **실행**: `./gradlew bootRun`
 - **의존 환경**: MySQL, Redis, AWS S3 및 `application.yml`의 암호화 키(Jasypt)가 런타임에 필요합니다.
+- **배포**: [DEPLOY.md](DEPLOY.md) 참고
 
 ---
 

@@ -1,0 +1,34 @@
+# 코드를 push하면 서버에 올릴 파일(실행형 JAR + 배포 스크립트)을 만들어
+# Actions 실행 결과의 Artifacts(deploy-files)에 올립니다. 배포 방법은 DEPLOY.md 참고.
+# 테스트는 Jasypt 비밀번호와 DB가 필요해서 실행하지 않고 bootJar만 만듭니다.
+name: Build JAR
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Build
+        run: bash gradlew clean bootJar --no-daemon
+
+      - name: Collect deploy files
+        run: |
+          mkdir -p dist
+          cp build/libs/osaka-city-0.0.1-SNAPSHOT.jar scripts/deploy-jar.sh dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deploy-files
+          path: dist/
+          retention-days: 30
