@@ -58,83 +58,9 @@ public class PostService {
         postRepo.delete(post);
     }
     public List<SimpleResponse> getList (Category category, int limit ,Long cursorId, Integer cursorView, LocalDateTime cursorTime) {
+        // 📌 입주후기 & 맨션정보는 입주후기를 먼저 보여준다 (이어 불러오기는 getReviewList의 offset 사용)
         if (category.equals(Category.japan_review)) {
-            List<SimpleResponse> pList = new ArrayList<>(jpaQueryFactory
-                    .select(Projections.constructor(SimpleResponse.class,
-                            qPost.id,
-                            qPost.view,
-                            qPost.title,
-                            qPost.thumbnailUrl,
-                            qPost.modifiedDate,
-                            Expressions.constant("/detail/")))
-                    .from(qPost)
-                    .where(
-                            qPost.isShow.isTrue().and(
-                                    qPost.category.eq(Category.japan_review).and(
-                                            cursorTime != null ? qPost.modifiedDate.lt(cursorTime) : null
-                                    )
-                            )
-                    )
-                    .orderBy(qPost.modifiedDate.desc())
-                    .limit(limit)
-                    .fetch());
-
-            boolean isSnsLoading = false;
-            if ( !pList.isEmpty() ) {
-                Long id =  pList.get(pList.size() - 1).getId();
-                Long lastPostId = jpaQueryFactory
-                        .select(qPost.id)
-                        .from(qPost)
-                        .where(qPost.isShow.isTrue())
-                        .orderBy(qPost.id.desc())
-                        .limit(1)
-                        .fetchOne();
-
-                if ( !(id.equals(lastPostId)) ) {
-                    isSnsLoading = true;
-                }
-            } else {
-                isSnsLoading = true;
-            }
-
-
-            List<SimpleResponse> sList = new ArrayList<>();
-            if ( isSnsLoading ) {
-                sList.addAll(
-                        jpaQueryFactory
-                                .select(Projections.constructor(SimpleResponse.class,
-                                        qSnsContent.id,
-                                        qSnsContent.view,
-                                        qSnsContent.title,
-                                        qSnsContent.thumbnailUrl,
-                                        qSnsContent.publishTime,
-                                        Expressions.constant("/detail/sns-content/")))
-                                .from(qSnsContent)
-                                .where(
-                                        cursorTime != null ? qSnsContent.publishTime.lt(cursorTime) : null
-                                )
-                                .orderBy(qSnsContent.publishTime.desc())
-                                .limit(limit)
-                                .fetch());
-            }
-            // 📌 SnsContent 데이터 가져오기 (limit + extraFetch)
-
-
-            // 📌 두 리스트 병합
-            List<SimpleResponse> combinedList = new ArrayList<>();
-            combinedList.addAll(pList);
-            combinedList.addAll(sList);
-
-            // 📌 뷰 기준으로 정렬
-            combinedList.sort(Comparator.comparing(SimpleResponse::getCursorTime, Comparator.reverseOrder()));
-
-            // 📌 최종적으로 limit 만큼만 반환
-            return combinedList.stream()
-                    .limit(limit)
-                    .collect(Collectors.toList());
-
-        } else if (category.equals(Category.event)) {
-
+            return getReviewList(0, limit);
         }
         return jpaQueryFactory
                 .select(Projections.constructor(SimpleResponse.class,
@@ -297,12 +223,12 @@ public class PostService {
 //        }
     }
     /**
-     * 메인 페이지 '하우버 입주자 스토리 & 맨션정보' 영역
-     * 입주후기 글을 최신순으로 먼저 보여주고, 제목이 같은 글은 가장 최근 것 하나만 보여준다.
-     * 입주후기가 limit보다 적으면 남는 칸을 맨션 영상으로 채운다.
-     * (더보기 목록과 무한 스크롤은 기존 getList를 그대로 사용)
+     * '하우버 입주자 스토리 & 맨션정보' 목록 (메인 페이지, 더보기 목록, 더보기 이어 불러오기)
+     * 입주후기 글을 최신순으로 먼저 보여주고, 그다음 맨션 영상을 최신순으로 보여준다.
+     * 같은 글이 여러 번 올라가 제목이 같으면 가장 최근 것 하나만 보여준다.
+     * 입주후기 → 맨션 영상 순서라 날짜 커서 대신 offset(이미 보여준 개수)으로 이어서 불러온다.
      */
-    public List<SimpleResponse> getMainReviewList(int limit) {
+    public List<SimpleResponse> getReviewList(int offset, int limit) {
         List<SimpleResponse> posts = jpaQueryFactory
                 .select(Projections.constructor(SimpleResponse.class,
                         qPost.id,
@@ -317,14 +243,18 @@ public class PostService {
                 .fetch();
 
         // 📌 같은 글이 여러 번 올라간 경우 가장 최근 것 하나만
-        List<SimpleResponse> result = new ArrayList<>();
+        List<SimpleResponse> reviews = new ArrayList<>();
         Set<String> titles = new HashSet<>();
         for (SimpleResponse post : posts) {
-            if (result.size() >= limit) break;
-            if (titles.add(post.getTitle())) result.add(post);
+            if (titles.add(post.getTitle())) reviews.add(post);
         }
 
-        // 📌 남는 칸은 맨션 영상으로 채우기
+        // 📌 입주후기 중 이번에 보여줄 부분
+        int from = Math.min(Math.max(offset, 0), reviews.size());
+        int to = Math.min(from + limit, reviews.size());
+        List<SimpleResponse> result = new ArrayList<>(reviews.subList(from, to));
+
+        // 📌 입주후기 다음은 맨션 영상
         if (result.size() < limit) {
             result.addAll(jpaQueryFactory
                     .select(Projections.constructor(SimpleResponse.class,
@@ -335,7 +265,8 @@ public class PostService {
                             qSnsContent.publishTime,
                             Expressions.constant("/detail/sns-content/")))
                     .from(qSnsContent)
-                    .orderBy(qSnsContent.publishTime.desc())
+                    .orderBy(qSnsContent.publishTime.desc(), qSnsContent.id.desc())
+                    .offset(Math.max(offset - reviews.size(), 0))
                     .limit(limit - result.size())
                     .fetch());
         }
