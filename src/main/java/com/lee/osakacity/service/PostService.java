@@ -296,6 +296,51 @@ public class PostService {
 //
 //        }
     }
+    /**
+     * 메인 페이지 '하우버 입주자 스토리 & 맨션정보' 영역
+     * 입주후기 글을 최신순으로 먼저 보여주고, 제목이 같은 글은 가장 최근 것 하나만 보여준다.
+     * 입주후기가 limit보다 적으면 남는 칸을 맨션 영상으로 채운다.
+     * (더보기 목록과 무한 스크롤은 기존 getList를 그대로 사용)
+     */
+    public List<SimpleResponse> getMainReviewList(int limit) {
+        List<SimpleResponse> posts = jpaQueryFactory
+                .select(Projections.constructor(SimpleResponse.class,
+                        qPost.id,
+                        qPost.view,
+                        qPost.title,
+                        qPost.thumbnailUrl,
+                        qPost.modifiedDate,
+                        Expressions.constant("/detail/")))
+                .from(qPost)
+                .where(qPost.isShow.isTrue().and(qPost.category.eq(Category.japan_review)))
+                .orderBy(qPost.modifiedDate.desc(), qPost.id.desc())
+                .fetch();
+
+        // 📌 같은 글이 여러 번 올라간 경우 가장 최근 것 하나만
+        List<SimpleResponse> result = new ArrayList<>();
+        Set<String> titles = new HashSet<>();
+        for (SimpleResponse post : posts) {
+            if (result.size() >= limit) break;
+            if (titles.add(post.getTitle())) result.add(post);
+        }
+
+        // 📌 남는 칸은 맨션 영상으로 채우기
+        if (result.size() < limit) {
+            result.addAll(jpaQueryFactory
+                    .select(Projections.constructor(SimpleResponse.class,
+                            qSnsContent.id,
+                            qSnsContent.view,
+                            qSnsContent.title,
+                            qSnsContent.thumbnailUrl,
+                            qSnsContent.publishTime,
+                            Expressions.constant("/detail/sns-content/")))
+                    .from(qSnsContent)
+                    .orderBy(qSnsContent.publishTime.desc())
+                    .limit(limit - result.size())
+                    .fetch());
+        }
+        return result;
+    }
     public List<SimpleResponse> getGuideOnly(int limit) {
         return jpaQueryFactory
                 .select(Projections.constructor(SimpleResponse.class,

@@ -25,23 +25,6 @@
     </div>
     <div th:replace="~{fragments/searchBar :: searchBar}"></div>
     <div class="content-title">
-      <h3>하우버 입주자 스토리 & 맨션정보</h3>
-      <p><a href="/list?category=japan_review">더보기</a></p>
-    </div>
-    <div class="slider-container">
-      <div class="slider">
-        <div th:each="item : ${japan_review}" class="item">
-          <a th:href="${item.link}">
-            <img th:src = "${item.thumbnailUrl}"
-                 th:alt = "${item.title}">
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="content-spacer"></div>
-
-    <div class="content-title">
       <h3>안 챙기면 아까운 입주 혜택 확인하기</h3>
     </div>
     <div class="slider-container">
@@ -76,6 +59,23 @@
 <!--                       alt="event_renewal_houber">-->
 <!--              </a>-->
 <!--          </div>-->
+      </div>
+    </div>
+
+    <div class="content-spacer"></div>
+
+    <div class="content-title">
+      <h3>하우버 입주자 스토리 & 맨션정보</h3>
+      <p><a href="/list?category=japan_review">더보기</a></p>
+    </div>
+    <div class="slider-container">
+      <div class="slider">
+        <div th:each="item : ${japan_review}" class="item">
+          <a th:href="${item.link}">
+            <img th:src = "${item.thumbnailUrl}"
+                 th:alt = "${item.title}">
+          </a>
+        </div>
       </div>
     </div>
 
