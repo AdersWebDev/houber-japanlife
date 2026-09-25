@@ -32,7 +32,8 @@ async function fetchMoreContent() {
             `category=${category}`,
             cursorView ? `cursorView=${cursorView}` : null,
             cursorId ? `cursorId=${cursorId}` : null,
-            actualCursorTime ? `cursorTime=${actualCursorTime}` : null
+            actualCursorTime ? `cursorTime=${actualCursorTime}` : null,
+            `offset=${contentContainer.querySelectorAll('.grid-item').length}` // 이미 불러온 개수 (입주후기 & 맨션정보에서 사용)
         ].filter(Boolean);
 
         const apiUrl = `/post/list?${queryParams.join('&')}`;
@@ -82,13 +83,14 @@ function handleScroll() {
     if (!contentContainer || !loadingIndicator) return;
     if (scrollTimeout) return;
     if (isLoading) return;
-    isLoading = true;
-    loadingIndicator.style.display = 'block';
     scrollTimeout = setTimeout(() => {
+        scrollTimeout = null;
+        // 바닥 근처일 때만 로딩 상태로 바꾼다 (바닥이 아닐 때 로딩 상태가 풀리지 않아 더 불러오지 못하던 문제 수정)
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+            isLoading = true;
+            loadingIndicator.style.display = 'block';
             fetchMoreContent();
         }
-        scrollTimeout = null;
     }, 300);
 }
 

@@ -25,8 +25,14 @@ public class MainRestController {
     public List<SimpleResponse> listPage(@RequestParam Category category,
                                          @RequestParam(required = false) Long cursorId,
                                          @RequestParam(required = false) Integer cursorView,
-                                         @RequestParam(required = false) LocalDateTime cursorTime) {
-
+                                         @RequestParam(required = false) LocalDateTime cursorTime,
+                                         @RequestParam(required = false) Integer offset) {
+        // 입주후기 & 맨션정보는 날짜 커서 대신 offset(이미 불러온 개수)으로 이어서 불러온다
+        if (category.equals(Category.japan_review)) {
+            // offset 없이 커서만 온 요청은 배포 전에 열어 둔 페이지: 같은 글이 또 붙지 않게 더 주지 않음
+            if (offset == null && (cursorId != null || cursorTime != null)) return List.of();
+            return postService.getReviewList(offset == null ? 0 : offset, 20);
+        }
        return postService.getList(category,20, cursorId, cursorView, cursorTime);
 
     }
