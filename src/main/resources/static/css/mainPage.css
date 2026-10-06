@@ -100,3 +100,15 @@
         margin: 0 auto;
     }
 }
+/* 메인 로고 아래 이벤트 배너 (2026-10-06 시안 그대로)
+   바꾼 점 하나: 글꼴 목록에 사이트 글꼴 'Pretendard-Regular'를 추가. Pretendard가 설치되지 않은 기기에서도 시안과 같은 글꼴로 보이게 함 */
+.hb-event,.hb-event:visited,.hb-event:hover{color:#fff;text-decoration:none}.hb-event *{text-decoration:none}
+.hb-event{display:block;text-align:center;max-width:560px;margin:18px auto 0;padding:12px 14px 13px;border:1px solid #4a4a4a;border-radius:14px;
+  background:linear-gradient(180deg,#2e2e2e 0%,#262626 100%);color:#fff;text-decoration:none;word-break:keep-all;font-family:'Pretendard','Pretendard-Regular','Apple SD Gothic Neo','Noto Sans KR',sans-serif;}
+.hb-event__top{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.hb-event__badge{flex:none;background:#ff3b30;color:#fff;font-size:12px;font-weight:700;line-height:1;padding:5px 8px;border-radius:6px;letter-spacing:-0.2px}
+.hb-event__title{font-size:17px;font-weight:800;letter-spacing:-0.4px;line-height:1.35}
+.hb-event__title b{color:#ffd60a}
+.hb-event__sub{margin-top:6px;font-size:12.5px;line-height:1.5;color:#cfcfcf;letter-spacing:-0.2px}
+.hb-event__cta{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:#FEE500;color:#191919;font-size:13px;font-weight:700;padding:8px 12px;border-radius:999px}
+@media (min-width:768px){.hb-event{padding:14px 18px}.hb-event__title{font-size:19px}.hb-event__sub{font-size:13.5px}}

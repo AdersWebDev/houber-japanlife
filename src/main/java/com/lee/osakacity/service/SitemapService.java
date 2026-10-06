@@ -92,45 +92,31 @@ public class SitemapService {
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         xml.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
 
+        // 📌 고정 페이지: 카테고리 목록은 Category에 있는 이름만 (없는 이름은 400 오류)
+        //    내용이 글 목록에 따라 바뀌어 정확한 날짜가 없으므로 lastmod는 넣지 않음 (글·영상은 아래에서 실제 날짜로 넣음)
         xml.append("""
             <url>
                 <loc>https://houber-japanlife.com/</loc>
-                <lastmod>2025-01-08</lastmod>
                 <priority>1.0</priority>
             </url>
             <url>
-                <loc>https://houber-japanlife.com/list?category=hot_post</loc>
-                <lastmod>2025-01-08</lastmod>
+                <loc>https://houber-japanlife.com/list?category=japan_review</loc>
                 <priority>0.8</priority>
             </url>
             <url>
                 <loc>https://houber-japanlife.com/list?category=working_holiday</loc>
-                <lastmod>2025-01-08</lastmod>
                 <priority>0.8</priority>
             </url>
             <url>
-                <loc>https://houber-japanlife.com/list?category=japan_reivew</loc>
-                <lastmod>2025-01-08</lastmod>
+                <loc>https://houber-japanlife.com/list?category=japan_property</loc>
                 <priority>0.8</priority>
             </url>
             <url>
                 <loc>https://houber-japanlife.com/list?category=japan_life</loc>
-                <lastmod>2025-01-08</lastmod>
-                <priority>0.8</priority>
-            </url>
-            <url>
-                <loc>https://houber-japanlife.com/list?category=houber_sns</loc>
-                <lastmod>2025-01-08</lastmod>
-                <priority>0.8</priority>
-            </url>
-            <url>
-                <loc>https://houber-japanlife.com/list?category=all</loc>
-                <lastmod>2025-01-08</lastmod>
                 <priority>0.8</priority>
             </url>
             <url>
                 <loc>https://houber-japanlife.com/search?keyword=houber</loc>
-                <lastmod>2025-01-08</lastmod>
                 <priority>0.8</priority>
             </url>
    """);

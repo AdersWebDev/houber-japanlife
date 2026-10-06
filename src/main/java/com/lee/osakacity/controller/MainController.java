@@ -33,7 +33,6 @@ public class MainController {
         model.addAttribute("siteUrl", "https://houber-japanlife.com");
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
         model.addAttribute("japan_review",postService.getReviewList(0, 10));
-        model.addAttribute("aders_count", postService.countRequest());
         model.addAttribute("event",postService.getList(Category.event, 10, null, null, null));
         model.addAttribute("japan_property",postService.getList(Category.japan_property, 10, null, null, null));
         model.addAttribute("working_holiday",postService.getList(Category.working_holiday, 10, null, null, null));
