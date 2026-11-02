@@ -35,9 +35,16 @@ public class ScrapService {
     private String KEY;
 
     public PostRequestDto houberBlogScrapper(long id, Category category, HttpServletRequest request) throws IOException {
-        String key =  request.getHeader("authorization");
-        if ( !key.equals(KEY) )
-            throw new IllegalArgumentException();
+        // 관리자 로그인 확인은 AdminInterceptor에서 함
+        PostRequestDto postRequestDto = parseBlog(id, category);
+        postService.create(request, postRequestDto);
+        return postRequestDto;
+    }
+
+    /**
+     * 하우버 네이버 블로그 글을 사이트 형식으로 변환 (사진은 S3로 옮김). 저장은 하지 않음
+     */
+    public PostRequestDto parseBlog(long id, Category category) throws IOException {
 
         // Step 1: 요청 보내서 메인 페이지 HTML 가져오기
         String mainUrl = "https://blog.naver.com/houber/" + id;
@@ -74,8 +81,6 @@ public class ScrapService {
         List<String> blankFilterList = this.processMainContent(mainContent);
 
         postRequestDto.setContent(String.join(System.lineSeparator(), blankFilterList));
-
-        postService.create(request, postRequestDto);
         return postRequestDto;
 
     }

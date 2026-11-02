@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +33,30 @@ public class S3Service {
      * @param file 업로드할 파일
      * @return 업로드된 파일의 S3 URL
      */
+    /**
+     * 관리자 글쓰기에서 올린 사진 저장 (브라우저에서 이미 화면용 크기로 줄여서 보냄)
+     * 글에 쓰이기 전까지는 isUsed=false, 글을 저장할 때 사용 중으로 바뀜
+     */
+    @Transactional
+    public ImgResponse uploadBytes(byte[] data, String contentType, String ext, String alt) {
+        // 기존 사진과 같은 위치(버킷 맨 위)에 저장해 같은 공개 설정을 받게 함
+        String fileName = "houber-" + LocalDate.now() + "-" + UUID.randomUUID() + "." + ext;
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(data.length);
+        metadata.setContentType(contentType);
+        metadata.setCacheControl("public, max-age=31536000");
+        amazonS3.putObject(new PutObjectRequest(bucketName, fileName, new ByteArrayInputStream(data), metadata));
+        String fileUrl = amazonS3.getUrl(bucketName, fileName).toString();
+        File fileEntity = File.builder()
+                .createDate(LocalDateTime.now())
+                .fileUrl(fileUrl)
+                .fileName(fileName)
+                .alt(alt == null || alt.isBlank() ? "houber" : alt)
+                .isUsed(false)
+                .build();
+        s3FileRepo.save(fileEntity);
+        return new ImgResponse(fileEntity);
+    }
     @Transactional
     public ImgResponse uploadFile(MultipartFile file) {
         try {

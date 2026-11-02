@@ -112,3 +112,5 @@
 .hb-event__sub{margin-top:6px;font-size:12.5px;line-height:1.5;color:#cfcfcf;letter-spacing:-0.2px}
 .hb-event__cta{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:#FEE500;color:#191919;font-size:13px;font-weight:700;padding:8px 12px;border-radius:999px}
 @media (min-width:768px){.hb-event{padding:14px 18px}.hb-event__title{font-size:19px}.hb-event__sub{font-size:13.5px}}
+/* 하우버 새 소식 제목 옆 NEW 표시 (최근 7일 안에 새 글이 있을 때) */
+.new-badge{display:inline-block;margin-left:6px;padding:2px 6px;border-radius:5px;background:#ff3b30;color:#fff;font-size:11px;font-weight:700;vertical-align:middle;letter-spacing:0}

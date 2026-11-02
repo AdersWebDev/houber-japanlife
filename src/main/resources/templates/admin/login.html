@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<title>하우버 관리자 로그인</title><link rel="stylesheet" href="/admin-assets/admin.css"></head>
+<body>
+<form class="login" method="post" action="/admin/login">
+  <img src="/asset/logo.png" alt="Houber">
+  <div style="font-size:17px;font-weight:700">관리자 로그인</div>
+  <th:block th:if="${configured}">
+    <input type="password" name="password" placeholder="비밀번호" autofocus autocomplete="current-password">
+    <button class="btn blue" style="width:100%" type="submit">로그인</button>
+  </th:block>
+  <div class="err" th:unless="${configured}">관리자 비밀번호가 서버에 아직 설정되지 않았습니다.<br>서버의 ~/japanlife/admin.yml을 먼저 만들어 주세요.</div>
+  <div class="err" th:if="${error}" th:text="${error}"></div>
+</form>
+</body>
+</html>
