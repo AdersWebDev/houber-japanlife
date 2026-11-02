@@ -64,4 +64,21 @@ public class Post{
     public void updateThumbnail(String url) {
         this.thumbnailUrl = url;
     }
+    public void update(Category category, String title, String thumbnailUrl, String description, String keyword, String content) {
+        this.category = category;
+        this.title = title;
+        this.thumbnailUrl = thumbnailUrl;
+        this.description = description;
+        this.keyword = keyword;
+        this.content = content;
+        this.modifiedDate = LocalDateTime.now();
+    }
+    public void setShow(boolean show) {
+        this.isShow = show;
+    }
+    public void addFiles(List<File> files) {
+        for (File f : files) {
+            if (!this.fileList.contains(f)) this.fileList.add(f);
+        }
+    }
 }

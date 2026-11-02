@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<meta name="admin-token" th:content="${token}">
+<title th:text="${post == null ? '새 글 쓰기' : '글 수정'} + ' | 하우버 관리자'">글쓰기</title>
+<link rel="stylesheet" href="/admin-assets/admin.css"><link rel="stylesheet" href="/admin-assets/editor.css"></head>
+<body>
+<div class="head">
+  <div class="left"><img src="/asset/logo.png" alt="Houber"><nav><a href="/admin/write" th:classappend="${post == null} ? 'on'">새 글 쓰기</a><a href="/admin/posts">글 관리</a><a href="/" target="_blank">사이트로 이동 ↗</a></nav></div>
+  <div class="right"><span id="save-state"></span><button class="btn" id="btn-preview" type="button">미리보기</button><button class="btn blue" id="btn-publish" type="button" th:text="${post == null ? '발행' : '저장'}">발행</button></div>
+</div>
+
+<!-- 넣기 버튼 -->
+<div class="ins" id="ins">
+  <button type="button" data-act="image"><b>📷</b>사진</button>
+  <button type="button" data-act="pair"><b>🖼</b>두 장 한 줄</button>
+  <button type="button" data-act="quote"><b>❝</b>인용구</button>
+  <button type="button" data-act="hr"><b>―</b>구분선</button>
+  <button type="button" data-act="link"><b>🔗</b>링크</button>
+  <button type="button" data-act="table"><b>▦</b>표</button>
+  <button type="button" data-act="youtube"><b>▶</b>유튜브</button>
+  <button type="button" data-act="template"><b>📄</b>양식</button>
+  <button type="button" data-act="import"><b>⇪</b>가져오기</button>
+  <button type="button" data-act="html" id="btn-html"><b>&lt;/&gt;</b>HTML</button>
+</div>
+<!-- 글자 서식 -->
+<div class="fmt" id="fmt">
+  <select id="fmt-block" title="문단 종류"><option value="p">본문</option><option value="h2">큰 제목</option><option value="h3">작은 제목</option></select>
+  <button type="button" data-cmd="bold" title="굵게"><b>B</b></button>
+  <button type="button" data-cmd="italic" title="기울임"><i>I</i></button>
+  <button type="button" data-cmd="underline" title="밑줄"><u>U</u></button>
+  <select id="fmt-color" title="글자색"><option value="">글자색</option><option value="#ffd60a">노랑</option><option value="#ff6b6b">빨강</option><option value="#4dabf7">파랑</option><option value="#69db7c">초록</option><option value="#aaaaaa">회색</option><option value="reset">기본색</option></select>
+  <button type="button" data-cmd="justifyCenter" title="가운데 정렬">≡ 가운데</button>
+  <button type="button" data-cmd="justifyLeft" title="왼쪽 정렬">≡ 왼쪽</button>
+  <button type="button" data-cmd="insertUnorderedList" title="목록">• 목록</button>
+  <button type="button" data-cmd="insertOrderedList" title="번호 목록">1. 목록</button>
+  <button type="button" data-cmd="undo" title="되돌리기">↶</button>
+  <button type="button" data-cmd="redo" title="다시 하기">↷</button>
+</div>
+
+<div class="notice" id="notice" hidden></div>
+<div class="page" id="page">
+  <input id="title" class="title" placeholder="제목" maxlength="200" th:value="${post == null ? '' : post.title}">
+  <div id="editor" class="editor" contenteditable="true" data-placeholder="본문에 내용을 입력하세요. 사진은 위의 📷 버튼을 누르거나 이 화면에 끌어다 놓으면 들어갑니다."></div>
+  <textarea id="html-view" class="html-view" spellcheck="false" hidden></textarea>
+</div>
+
+<!-- 글 정보 (수정할 때 서버가 채움) -->
+<textarea id="initial-content" hidden th:text="${post == null ? '' : post.content}"></textarea>
+<div id="post-data" hidden
+     th:attr="data-id=${post == null ? '' : post.id},
+              data-category=${post == null ? defaultCategory.name() : post.category.name()},
+              data-thumbnail=${post == null ? '' : post.thumbnailUrl},
+              data-description=${post == null ? '' : post.description},
+              data-show=${post == null ? 'true' : post.show}"></div>
+<input type="file" id="file-image" accept="image/*" multiple hidden>
+<input type="file" id="file-thumb" accept="image/*" hidden>
+
+<!-- 발행 설정 -->
+<div class="modal-bg" id="publish-modal" hidden><div class="modal">
+  <h4>발행 설정</h4>
+  <label>카테고리</label>
+  <select id="pub-category"><option th:each="c : ${categories}" th:value="${c.name()}" th:text="${c.title}"></option></select>
+  <label>대표 사진 <span class="sub">목록·메인에 정사각형으로 보입니다. 본문 사진 중에서 고르거나 새로 올리세요</span></label>
+  <div class="thumbs" id="pub-thumbs"></div>
+  <button type="button" class="btn small" id="pub-thumb-upload" style="margin-top:8px">다른 사진 올리기</button>
+  <label>요약 <span class="sub">검색·카톡 공유에 보이는 한 줄. 비우면 본문 앞부분이 들어갑니다</span></label>
+  <input id="pub-description" maxlength="200">
+  <label>공개</label>
+  <div class="radio"><label><input type="radio" name="pub-show" value="true"> 바로 공개</label><label><input type="radio" name="pub-show" value="false"> 숨김 (나중에 공개)</label></div>
+  <div class="modal-err" id="pub-err"></div>
+  <div class="modal-foot"><button type="button" class="btn" data-close>취소</button><button type="button" class="btn blue" id="pub-go">발행</button></div>
+</div></div>
+
+<!-- 양식 -->
+<div class="modal-bg" id="template-modal" hidden><div class="modal wide">
+  <h4>양식 불러오기 <span class="sub">고른 양식의 소제목이 본문 끝에 들어갑니다</span></h4>
+  <div class="tpl" id="tpl-list"></div>
+  <div class="modal-foot"><button type="button" class="btn" data-close>닫기</button></div>
+</div></div>
+
+<!-- 가져오기 -->
+<div class="modal-bg" id="import-modal" hidden><div class="modal wide">
+  <h4>가져오기</h4>
+  <div id="imp-step1">
+    <div class="tabs2" id="imp-tabs"><button type="button" data-tab="html" class="on">HTML 파일</button><button type="button" data-tab="zip">zip (HTML + 사진 폴더)</button><button type="button" data-tab="blog">네이버 블로그 주소</button></div>
+    <div data-pane="html"><div class="dz" data-drop="html">📄 .html 파일을 여기에 끌어다 놓거나 <u>파일 선택</u><div class="sub">워드·한글에서 "HTML로 저장"했다면 사진 폴더까지 zip으로 묶어 올려 주세요</div></div></div>
+    <div data-pane="zip" hidden><div class="dz" data-drop="zip">🗜 .zip 파일을 여기에 끌어다 놓거나 <u>파일 선택</u><div class="sub">HTML 파일과 사진 폴더를 함께 묶은 zip</div></div></div>
+    <div data-pane="blog" hidden><input id="imp-blog-url" placeholder="https://blog.naver.com/houber/224384295502"><div class="sub" style="margin-top:6px">하우버 블로그 글만 가져올 수 있습니다. 사진은 하우버 서버로 옮겨집니다</div></div>
+    <div class="file" id="imp-file" hidden></div>
+    <div class="opt" id="imp-opts">
+      <label><input type="checkbox" id="opt-title" checked> 첫 번째 제목을 글 제목으로 쓰기</label>
+      <label><input type="checkbox" id="opt-style" checked> 원래 글꼴·색·크기는 지우고 사이트 스타일로 맞추기</label>
+      <div class="sub">사진은 모두 하우버 서버(S3)로 옮기고 화면용 크기로 줄입니다 (원래 주소가 사라져도 안 깨짐)</div>
+    </div>
+    <div class="modal-err" id="imp-err"></div>
+    <div class="modal-foot"><button type="button" class="btn" data-close>취소</button><button type="button" class="btn blue" id="imp-go" disabled>변환하기</button></div>
+  </div>
+  <div id="imp-step2" hidden>
+    <div class="res"><div><h5 id="imp-left-title">원래 파일</h5><iframe id="imp-orig" sandbox></iframe></div><div><h5>사이트 모양으로 변환</h5><iframe id="imp-conv"></iframe></div></div>
+    <div class="report" id="imp-report"></div>
+    <div class="modal-foot"><button type="button" class="btn" id="imp-back">다시 올리기</button><button type="button" class="btn blue" id="imp-apply">편집기로 불러오기</button></div>
+  </div>
+  <input type="file" id="file-import" hidden>
+</div></div>
+
+<!-- 미리보기: 저장하지 않고 실제 상세 페이지 모양으로 새 창에서 봄 -->
+<form id="preview-form" method="post" action="/admin/preview" target="_blank" hidden>
+  <input type="hidden" name="_token" th:value="${token}"><input type="hidden" name="title"><input type="hidden" name="category"><input type="hidden" name="content">
+</form>
+<div class="toast" id="toast"></div>
+<script src="/admin-assets/editor.js"></script>
+</body>
+</html>

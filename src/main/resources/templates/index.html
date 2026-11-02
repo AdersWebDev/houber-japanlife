@@ -67,6 +67,26 @@
 
     <div class="content-spacer"></div>
 
+    <!-- 하우버 새 소식: 관리자 글쓰기(/admin)로 쓴 글. 글이 없으면 영역을 보이지 않음 -->
+    <th:block th:if="${not #lists.isEmpty(houber_news)}">
+    <div class="content-title">
+      <h3>하우버 새 소식 <span th:if="${new_value[4]}" class="new-badge">NEW</span></h3>
+      <p><a href="/list?category=houber_news">더보기</a></p>
+    </div>
+    <div class="slider-container">
+      <div class="slider">
+        <div th:each="item : ${houber_news}" class="item">
+          <a th:href="${item.link}">
+            <img th:src = "${item.thumbnailUrl}"
+                 th:alt = "${item.title}">
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-spacer"></div>
+    </th:block>
+
     <div class="content-title">
       <h3>하우버 입주자 스토리 & 맨션정보</h3>
       <p><a href="/list?category=japan_review">더보기</a></p>

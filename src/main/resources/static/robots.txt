@@ -1,5 +1,5 @@
 User-agent: *
-Disallow:
+Disallow: /admin
 
 Sitemap: https://houber-japanlife.com/sitemap.xml
 RSS: https://houber-japanlife.com/rss.xml

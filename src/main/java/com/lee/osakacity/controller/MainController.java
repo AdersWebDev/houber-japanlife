@@ -1,10 +1,12 @@
 package com.lee.osakacity.controller;
 
+import com.lee.osakacity.admin.AdminAuthService;
 import com.lee.osakacity.custom.Category;
 import com.lee.osakacity.dto.mvc.PostResponseDto;
 import com.lee.osakacity.dto.SnsContentResponseDto;
 import com.lee.osakacity.service.PostService;
 import com.lee.osakacity.service.SnsContentService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,6 +26,7 @@ import java.util.*;
 public class MainController {
     private final PostService postService;
     private final SnsContentService snsContentService;
+    private final AdminAuthService adminAuthService;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -32,6 +35,7 @@ public class MainController {
         model.addAttribute("keywords", "houber, 하우버, japan-life, 일본, 일본 워홀, 워킹홀리데이, 일본 워킹홀리데이");
         model.addAttribute("siteUrl", "https://houber-japanlife.com");
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
+        model.addAttribute("houber_news",postService.getList(Category.houber_news, 10, null, null, null));
         model.addAttribute("japan_review",postService.getReviewList(0, 10));
         model.addAttribute("event",postService.getList(Category.event, 10, null, null, null));
         model.addAttribute("japan_property",postService.getList(Category.japan_property, 10, null, null, null));
@@ -74,9 +78,10 @@ public class MainController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detailPage(@PathVariable Long id, Model model) {
+    public String detailPage(@PathVariable Long id, Model model, HttpServletRequest request) {
 
-        PostResponseDto dto = postService.getDetail(id);
+        // 숨김 글은 관리자만 볼 수 있음 (글쓰기 미리보기). 방문자에게 세션을 새로 만들지 않도록 getSession(false)
+        PostResponseDto dto = postService.getDetail(id, adminAuthService.isLoggedIn(request.getSession(false)));
         model.addAttribute("title",dto.getTitle());
         model.addAttribute("description", "houber-"+dto.getDescription());
         model.addAttribute("keywords", dto.getKeyword());

@@ -292,3 +292,47 @@ div.blank{
         object-fit: cover;
     }
 }
+
+/* 관리자 글쓰기로 쓴 글에서 쓰는 블록 */
+.detail-content .img-pair {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+.detail-content .img-pair img {
+    width: 50%;
+    object-fit: cover;
+}
+.detail-content .hb-quote {
+    margin: 3rem 0;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid #FEE500;
+    background-color: #2c2c2c;
+    font-size: 1.5rem;
+    line-height: 1.7;
+}
+.detail-content .hb-quote p {
+    margin: 0;
+}
+.detail-content hr {
+    border: none;
+    border-top: 1px solid #555;
+    margin: 3rem 0;
+}
+.detail-content .hb-video {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 1.5rem 0;
+}
+.detail-content .hb-video iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+.detail-content ul,
+.detail-content ol {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    padding-left: 2rem;
+}

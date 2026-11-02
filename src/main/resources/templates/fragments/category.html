@@ -2,6 +2,9 @@
     <ul>
         <li class="nav-title">Category</li>
         <li><a href="/">홈</a></li>
+        <li><a href="/list?category=houber_news" style="display: flex; align-items: center; gap: 4px">하우버 새 소식
+            <span th:if="${new_value[4]}" class="update-dot"></span>
+        </a></li>
         <li><a href="/list?category=japan_review" style="display: flex; align-items: center; gap: 4px">입주후기 & 맨션정보
             <span th:if="${new_value[0]}" class="update-dot"></span>
         </a></li>

@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,9 +51,7 @@ public class PostService {
     QSnsContent qSnsContent = QSnsContent.snsContent;
     @Transactional
     public void delete(Long id, HttpServletRequest request) {
-        String key =  request.getHeader("authorization");
-        if ( !key.equals(KEY) )
-            throw new IllegalArgumentException();
+        // 관리자 로그인 확인은 AdminInterceptor에서 함
 
         Post post = postRepo.findById(id).orElseThrow(()->new NotFoundException("e"));
         s3Service.deleteFileInjection(post.getFileList());
@@ -392,9 +392,19 @@ public class PostService {
     }
     @Transactional
     public PostResponseDto getDetail(Long id) {
+        return getDetail(id, false);
+    }
+    /**
+     * @param admin 관리자면 숨김 글도 보여주고(미리보기) 조회수는 올리지 않음
+     */
+    @Transactional // 조회수 저장 (클래스 기본값이 읽기 전용이라 꼭 필요)
+    public PostResponseDto getDetail(Long id, boolean admin) {
         Post post =  postRepo.findById(id)
-                .orElseThrow(()->new NotFoundException("404 NOT FOUND"));
-        post.increaseView();
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+        if (!admin && !post.isShow())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (!admin)
+            post.increaseView();
 
         return new PostResponseDto(post);
     }
@@ -402,9 +412,7 @@ public class PostService {
     //==================
     @Transactional
     public void create(HttpServletRequest request, PostRequestDto dto) {
-        String key =  request.getHeader("authorization");
-        if ( !key.equals(KEY) )
-            throw new IllegalArgumentException();
+        // 관리자 로그인 확인은 AdminInterceptor에서 함
 
         List<File> fileList = new ArrayList<>();
 
@@ -477,7 +485,8 @@ public class PostService {
                 0, Category.japan_review,
                 1, Category.japan_property,
                 2, Category.working_holiday,
-                3, Category.japan_life
+                3, Category.japan_life,
+                4, Category.houber_news
         );
 
         // 7일 전 기준

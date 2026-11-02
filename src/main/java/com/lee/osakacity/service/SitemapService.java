@@ -35,6 +35,7 @@ public class SitemapService {
                         Expressions.constant("detail/")
                 ))
                 .from(qPost)
+                .where(qPost.isShow.isTrue()) // 숨김 글(작성 중인 글 포함)은 넣지 않음
                 .fetch()
         );
         data.addAll(
@@ -61,6 +62,7 @@ public class SitemapService {
                                 Expressions.constant("detail/")
                         ))
                         .from(qPost)
+                        .where(qPost.isShow.isTrue())
                         .limit(20)
                         .orderBy(qPost.modifiedDate.desc())
                         .fetch()
@@ -98,6 +100,10 @@ public class SitemapService {
             <url>
                 <loc>https://houber-japanlife.com/</loc>
                 <priority>1.0</priority>
+            </url>
+            <url>
+                <loc>https://houber-japanlife.com/list?category=houber_news</loc>
+                <priority>0.8</priority>
             </url>
             <url>
                 <loc>https://houber-japanlife.com/list?category=japan_review</loc>
