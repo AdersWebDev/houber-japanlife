@@ -17,7 +17,7 @@
     <div style="margin: 0 auto; width: 100%; height: auto">
         <div th:replace="~{fragments/searchBar :: searchBar}"></div>
 
-        <img class="error" src="/asset/500.png" alt="server-error">
+        <img class="error" th:src="@{/asset/500.png}" alt="server-error">
         <p class="xs" style="text-align: center; margin: 1rem 0;">일시적인 오류가 발생했습니다.</p>
         <p style="text-align: center; margin: 0 0 1.5rem;"><a href="/">홈으로 가기</a></p>
         <div class="content-title">
@@ -47,6 +47,6 @@
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
-<script src="/js/main.js"></script>
-<script src="/js/navControl.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/navControl.js}"></script>
 </html>

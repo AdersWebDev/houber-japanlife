@@ -26,24 +26,24 @@
   <meta property="twitter:image" th:content="${thumbnail}">
   <meta name="twitter:creator" content="@houber">
 
-  <link rel="preload" href="/css/main.css" as="style">
+  <link rel="preload" th:href="@{/css/main.css}" as="style">
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="canonical" th:if="${noindex == null or !noindex}" th:href="${siteUrl}">
 
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/frag/header.css">
-  <link rel="stylesheet" href="/css/frag/footer.css">
-  <link rel="stylesheet" href="/css/frag/go-top.css">
-  <link rel="stylesheet" href="/css/frag/searchBar.css">
-  <link rel="stylesheet" href="/css/frag/category.css">
-  <link rel="stylesheet" href="/css/frag/content.css">
-  <link rel="stylesheet" href="/css/frag/indexing.css">
-  <link rel="stylesheet" href="/css/mainPage.css">
-  <link rel="stylesheet" href="/css/frag/grid-items.css">
-  <link rel="stylesheet" href="/css/detail.css">
-  <link rel="stylesheet" href="/css/searchPage.css">
-  <link rel="stylesheet" href="/css/frag/youtube.css">
-  <link rel="icon" href="/asset/favicon.png" type="image/png"/>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{/css/frag/header.css}">
+  <link rel="stylesheet" th:href="@{/css/frag/footer.css}">
+  <link rel="stylesheet" th:href="@{/css/frag/go-top.css}">
+  <link rel="stylesheet" th:href="@{/css/frag/searchBar.css}">
+  <link rel="stylesheet" th:href="@{/css/frag/category.css}">
+  <link rel="stylesheet" th:href="@{/css/frag/content.css}">
+  <link rel="stylesheet" th:href="@{/css/frag/indexing.css}">
+  <link rel="stylesheet" th:href="@{/css/mainPage.css}">
+  <link rel="stylesheet" th:href="@{/css/frag/grid-items.css}">
+  <link rel="stylesheet" th:href="@{/css/detail.css}">
+  <link rel="stylesheet" th:href="@{/css/searchPage.css}">
+  <link rel="stylesheet" th:href="@{/css/frag/youtube.css}">
+  <link rel="icon" th:href="@{/asset/favicon.png}" type="image/png"/>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T53KFWQ2QF"></script>
   <script>

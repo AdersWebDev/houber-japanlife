@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
 <meta name="admin-token" th:content="${token}">
-<title>글 관리 | 하우버 관리자</title><link rel="stylesheet" href="/admin-assets/admin.css"></head>
+<title>글 관리 | 하우버 관리자</title><link rel="stylesheet" th:href="@{/admin-assets/admin.css}"></head>
 <body>
 <div class="head">
-  <div class="left"><img src="/asset/logo.png" alt="Houber"><nav><a href="/admin/write">새 글 쓰기</a><a class="on" href="/admin/posts">글 관리</a><a href="/" target="_blank">사이트로 이동 ↗</a></nav></div>
+  <div class="left"><img th:src="@{/asset/logo.png}" alt="Houber"><nav><a href="/admin/write">새 글 쓰기</a><a class="on" href="/admin/posts">글 관리</a><a href="/" target="_blank">사이트로 이동 ↗</a></nav></div>
   <div class="right"><form method="post" action="/admin/logout" style="margin:0"><input type="hidden" name="_token" th:value="${token}"><button class="btn small">로그아웃</button></form></div>
 </div>
 <div class="wrap">
@@ -34,6 +34,6 @@
   </table>
 </div>
 <div class="toast" id="toast"></div>
-<script src="/admin-assets/posts.js"></script>
+<script th:src="@{/admin-assets/posts.js}"></script>
 </body>
 </html>
