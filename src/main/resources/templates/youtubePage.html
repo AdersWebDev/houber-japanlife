@@ -30,14 +30,14 @@
                 V-log / Japanese / Contents</p>
             <a href="https://www.youtube.com/@Houber_Official"><img src="/asset/shortcutYoutube.png" alt="유튜브 채널 바로가기(houber youtube shortcut)"></a>
         </div>
-        <div id="contact-us" onclick="window.open('http://pf.kakao.com/_qTEPj', '_blank')"></div>
+        <div id="contact-us" onclick="window.open('https://pf.kakao.com/_qTEPj/chat', '_blank')"></div>
         <h2>관련 콘텐츠 더보기</h2>
         <div class="slider">
             <div th:each="item : ${moreContents}" class="item">
                 <a th:href="${item.link}">
                     <div class="image-wrapper">
                         <img th:src = "${item.thumbnailUrl}"
-                             th:alt = "${item.title}">
+                             th:alt = "${item.title}" loading="lazy">
                         <div class="title" th:text = "${item.title}"></div>
                     </div>
                 </a>

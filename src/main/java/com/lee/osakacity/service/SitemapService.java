@@ -1,22 +1,28 @@
 package com.lee.osakacity.service;
 
+import com.lee.osakacity.custom.Category;
 import com.lee.osakacity.dto.restful.RssMap;
 import com.lee.osakacity.dto.restful.SiteMap;
 import com.lee.osakacity.infra.entity.QPost;
 import com.lee.osakacity.infra.entity.QSnsContent;
+import com.lee.osakacity.seo.DuplicatePosts;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +41,8 @@ public class SitemapService {
                         Expressions.constant("detail/")
                 ))
                 .from(qPost)
-                .where(qPost.isShow.isTrue()) // 숨김 글(작성 중인 글 포함)은 넣지 않음
+                // 숨김 글(작성 중인 글 포함)과 다른 글로 옮긴 중복 글은 넣지 않음
+                .where(qPost.isShow.isTrue().and(qPost.id.notIn(DuplicatePosts.REDIRECTS.keySet())))
                 .fetch()
         );
         data.addAll(
@@ -62,7 +69,7 @@ public class SitemapService {
                                 Expressions.constant("detail/")
                         ))
                         .from(qPost)
-                        .where(qPost.isShow.isTrue())
+                        .where(qPost.isShow.isTrue().and(qPost.id.notIn(DuplicatePosts.REDIRECTS.keySet())))
                         .limit(20)
                         .orderBy(qPost.modifiedDate.desc())
                         .fetch()
@@ -94,51 +101,53 @@ public class SitemapService {
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         xml.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
 
-        // 📌 고정 페이지: 카테고리 목록은 Category에 있는 이름만 (없는 이름은 400 오류)
-        //    내용이 글 목록에 따라 바뀌어 정확한 날짜가 없으므로 lastmod는 넣지 않음 (글·영상은 아래에서 실제 날짜로 넣음)
-        xml.append("""
-            <url>
-                <loc>https://houber-japanlife.com/</loc>
-                <priority>1.0</priority>
-            </url>
-            <url>
-                <loc>https://houber-japanlife.com/list?category=houber_news</loc>
-                <priority>0.8</priority>
-            </url>
-            <url>
-                <loc>https://houber-japanlife.com/list?category=japan_review</loc>
-                <priority>0.8</priority>
-            </url>
-            <url>
-                <loc>https://houber-japanlife.com/list?category=working_holiday</loc>
-                <priority>0.8</priority>
-            </url>
-            <url>
-                <loc>https://houber-japanlife.com/list?category=japan_property</loc>
-                <priority>0.8</priority>
-            </url>
-            <url>
-                <loc>https://houber-japanlife.com/list?category=japan_life</loc>
-                <priority>0.8</priority>
-            </url>
-            <url>
-                <loc>https://houber-japanlife.com/search?keyword=houber</loc>
-                <priority>0.8</priority>
-            </url>
-   """);
-        list.stream()
-                .map(s -> """
-            <url>
-                <loc>https://houber-japanlife.com/%s</loc>
-                <lastmod>%s</lastmod>
-                <priority>0.6</priority>
-            </url>
-        """.formatted(s.getLink(), s.getModifiedTime()))
-                .forEach(xml::append);
+        // 📌 고정 페이지 (홈, 전체 글, 카테고리 목록). lastmod는 그 목록에 들어가는 가장 최근 글의 수정일
+        //    priority는 Google이 쓰지 않으므로 넣지 않음. 검색 결과 페이지는 noindex라 넣지 않음
+        Map<Category, LocalDate> latest = latestByCategory();
+        LocalDateTime snsTime = jpaQueryFactory.select(qSnsContent.publishTime.max()).from(qSnsContent).fetchOne();
+        LocalDate latestSns = snsTime == null ? null : snsTime.toLocalDate();
+        LocalDate latestPost = latest.values().stream().max(Comparator.naturalOrder()).orElse(null);
+
+        appendUrl(xml, "", max(latestPost, latestSns));
+        appendUrl(xml, "list?category=all", latestPost);
+        for (Category c : new Category[]{Category.houber_news, Category.japan_review, Category.working_holiday,
+                Category.japan_property, Category.japan_life}) {
+            // 입주후기 & 맨션정보 목록에는 맨션 영상도 나옴
+            LocalDate d = c == Category.japan_review ? max(latest.get(c), latestSns) : latest.get(c);
+            appendUrl(xml, "list?category=" + c.name(), d);
+        }
+        list.forEach(s -> appendUrl(xml, s.getLink(), s.getModifiedTime()));
 
         xml.append("</urlset>");
         return xml.toString().trim();
 
+    }
+
+    private void appendUrl(StringBuilder xml, String path, LocalDate lastmod) {
+        xml.append("  <url>\n    <loc>https://houber-japanlife.com/").append(path).append("</loc>\n");
+        if (lastmod != null) xml.append("    <lastmod>").append(lastmod).append("</lastmod>\n");
+        xml.append("  </url>\n");
+    }
+
+    private static LocalDate max(LocalDate a, LocalDate b) {
+        if (a == null) return b;
+        if (b == null) return a;
+        return a.isAfter(b) ? a : b;
+    }
+
+    /** 카테고리별 공개 글 중 가장 최근 수정일 */
+    private Map<Category, LocalDate> latestByCategory() {
+        Map<Category, LocalDate> result = new EnumMap<>(Category.class);
+        for (Tuple t : jpaQueryFactory
+                .select(qPost.category, qPost.modifiedDate.max())
+                .from(qPost)
+                .where(qPost.isShow.isTrue())
+                .groupBy(qPost.category)
+                .fetch()) {
+            LocalDateTime time = t.get(qPost.modifiedDate.max());
+            if (t.get(qPost.category) != null && time != null) result.put(t.get(qPost.category), time.toLocalDate());
+        }
+        return result;
     }
 
     public String makeRss() {
