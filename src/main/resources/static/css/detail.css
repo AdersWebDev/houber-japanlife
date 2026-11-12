@@ -99,6 +99,12 @@
     margin: 3rem 0;
     padding: 0;
 }
+/* 제목 아래 게시일·수정일 */
+.detail-header p.detail-date {
+    margin: 0;
+    padding: 0 1rem;
+    color: #d0d0d0;
+}
 .detail-header-under {
     display: flex;
     justify-content: space-between;

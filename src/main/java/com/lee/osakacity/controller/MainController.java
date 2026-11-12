@@ -7,6 +7,7 @@ import com.lee.osakacity.dto.SnsContentResponseDto;
 import com.lee.osakacity.service.PostService;
 import com.lee.osakacity.seo.DuplicatePosts;
 import com.lee.osakacity.seo.SeoText;
+import com.lee.osakacity.seo.StructuredData;
 import com.lee.osakacity.service.SnsContentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -51,6 +52,7 @@ public class MainController {
         model.addAttribute("working_holiday",postService.getList(Category.working_holiday, 10, null, null, null));
         model.addAttribute("japan_life",postService.getList(Category.japan_life, 10, null, null, null));
         model.addAttribute("new_value",postService.checkUpdate());
+        model.addAttribute("jsonLd", StructuredData.home());
 
         return "index";
     }
@@ -118,13 +120,28 @@ public class MainController {
 
         // 숨김 글은 관리자만 볼 수 있음 (글쓰기 미리보기). 방문자에게 세션을 새로 만들지 않도록 getSession(false)
         PostResponseDto dto = postService.getDetail(id, adminAuthService.isLoggedIn(request.getSession(false)));
+        String description = SeoText.metaDescription(dto.getDescription(), dto.getContent());
+        String headline = SeoText.cleanTitle(dto.getTitle());
         model.addAttribute("title", SeoText.pageTitle(dto.getTitle()));
-        model.addAttribute("description", SeoText.metaDescription(dto.getDescription(), dto.getContent()));
+        model.addAttribute("description", description);
         model.addAttribute("keywords", dto.getKeyword());
         model.addAttribute("siteUrl", SITE + "/detail/"+id);
         model.addAttribute("thumbnail",dto.getThumbnailUrl());
         model.addAttribute("ogType", "article");
-        model.addAttribute("h1", SeoText.cleanTitle(dto.getTitle()));
+        model.addAttribute("h1", headline);
+
+        // 게시일·수정일 (화면 표시와 구조화 데이터가 같은 값을 씀)
+        java.time.format.DateTimeFormatter dateText = java.time.format.DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        model.addAttribute("publishedIso", StructuredData.isoDate(dto.getPublishedAt()));
+        model.addAttribute("publishedText", dto.getPublishedAt().format(dateText));
+        if (!dto.getModifiedAt().toLocalDate().equals(dto.getPublishedAt().toLocalDate())) {
+            model.addAttribute("modifiedIso", StructuredData.isoDate(dto.getModifiedAt()));
+            model.addAttribute("modifiedText", dto.getModifiedAt().format(dateText));
+        }
+        Category cat = dto.getCategory();
+        model.addAttribute("jsonLd", StructuredData.article(SITE + "/detail/" + id, headline, description,
+                dto.getThumbnailUrl(), dto.getPublishedAt(), dto.getModifiedAt(),
+                cat == null ? null : cat.getTitle(), cat == null ? null : SITE + "/list?category=" + cat.name()));
         model.addAttribute("category", dto.getCategory());
         model.addAttribute("view",dto.getView());
         model.addAttribute("new_value",postService.checkUpdate());

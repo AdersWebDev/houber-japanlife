@@ -29,6 +29,8 @@
   <link rel="preload" th:href="@{/css/main.css}" as="style">
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="canonical" th:if="${noindex == null or !noindex}" th:href="${siteUrl}">
+  <!-- 구조화 데이터 (홈: 회사·사이트, 글: 글·이동 경로) -->
+  <script type="application/ld+json" th:if="${jsonLd != null}" th:utext="${jsonLd}"></script>
 
   <link rel="stylesheet" th:href="@{/css/main.css}">
   <link rel="stylesheet" th:href="@{/css/frag/header.css}">
