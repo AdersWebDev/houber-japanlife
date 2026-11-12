@@ -33,7 +33,8 @@ async function fetchMoreContent() {
             cursorView ? `cursorView=${cursorView}` : null,
             cursorId ? `cursorId=${cursorId}` : null,
             actualCursorTime ? `cursorTime=${actualCursorTime}` : null,
-            `offset=${contentContainer.querySelectorAll('.grid-item').length}` // 이미 불러온 개수 (입주후기 & 맨션정보에서 사용)
+            // 이미 불러온 개수 (입주후기 & 맨션정보에서 사용). 2페이지 이후로 들어왔으면 앞 페이지 개수만큼 더함
+            `offset=${(parseInt(contentContainer.dataset.offset, 10) || 0) + contentContainer.querySelectorAll('.grid-item').length}`
         ].filter(Boolean);
 
         const apiUrl = `/post/list?${queryParams.join('&')}`;
@@ -68,6 +69,9 @@ async function fetchMoreContent() {
                 contentContainer.appendChild(gridItem);
             });
             updateCursorFromLastItem();
+            // 스크롤로 이어 불러왔으면 페이지 링크는 숨김 (검색엔진용 링크라 화면에서는 필요 없음)
+            const pager = document.querySelector('.list-pager');
+            if (pager) pager.style.display = 'none';
         } else {
             window.removeEventListener('scroll', handleScroll);
         }
