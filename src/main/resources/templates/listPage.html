@@ -41,7 +41,7 @@
 
     <!-- mainContent가 비어있거나 null인 경우 -->
 
-      <img class="error" th:if="${mainContent == null or #lists.isEmpty(mainContent)}" src="/asset/500.png" alt="No Content Available">
+      <img class="error" th:if="${mainContent == null or #lists.isEmpty(mainContent)}" th:src="@{/asset/500.png}" alt="No Content Available">
 
   </div>
     </div>
@@ -52,8 +52,8 @@
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
-<script src="/js/main.js"></script>
-<script src="/js/navControl.js"></script>
-<script src="/js/infiniteScroll.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/navControl.js}"></script>
+<script th:src="@{/js/infiniteScroll.js}"></script>
 
 </html>

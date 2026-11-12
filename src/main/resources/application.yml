@@ -33,10 +33,15 @@ spring:
     cache: false
   web:
     resources:
-      cache:
-        period: 0
+      # 정적 파일(css/js/이미지) 주소에 파일 내용 해시를 붙임 (예: /css/main-<해시>.css).
+      # 파일이 바뀌면 주소도 바뀌므로 브라우저가 1년 동안 캐시해도 항상 최신 파일을 받는다.
+      # 캐시 헤더는 seo/StaticCacheFilter에서 붙임 (해시 붙은 주소: 1년, 해시 없는 주소: 매번 변경 확인)
       chain:
-        cache: false
+        cache: true
+        strategy:
+          content:
+            enabled: true
+            paths: /css/**,/js/**,/asset/**,/admin-assets/**
   data:
     redis:
       host: localhost

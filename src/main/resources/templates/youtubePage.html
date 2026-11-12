@@ -28,7 +28,7 @@
         <div class="slider-head">
             <p>Based in Osaka.<br>
                 V-log / Japanese / Contents</p>
-            <a href="https://www.youtube.com/@Houber_Official"><img src="/asset/shortcutYoutube.png" alt="유튜브 채널 바로가기(houber youtube shortcut)"></a>
+            <a href="https://www.youtube.com/@Houber_Official"><img th:src="@{/asset/shortcutYoutube.png}" alt="유튜브 채널 바로가기(houber youtube shortcut)"></a>
         </div>
         <div id="contact-us" onclick="window.open('https://pf.kakao.com/_qTEPj/chat', '_blank')"></div>
         <h2>관련 콘텐츠 더보기</h2>
@@ -52,8 +52,8 @@
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
-<script src="/js/main.js"></script>
-<script src="/js/navControl.js"></script>
-<script src="/js/slideItem.js"></script>
-<script src="/js/youtubeErrorControl.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/navControl.js}"></script>
+<script th:src="@{/js/slideItem.js}"></script>
+<script th:src="@{/js/youtubeErrorControl.js}"></script>
 </html>

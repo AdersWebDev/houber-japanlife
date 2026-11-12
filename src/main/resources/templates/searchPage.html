@@ -25,7 +25,7 @@
                         <h3 th:text="${item.title}"></h3>
                         <p th:text="${item.description}"></p>
                         <div class="view-count-box">
-                            <img src="/asset/viewCount.png" alt="게시글이 읽힌 수(counting post view)">
+                            <img th:src="@{/asset/viewCount.png}" alt="게시글이 읽힌 수(counting post view)">
                             <span class="s" th:text="${item.view}"></span>
                         </div>
                     </div>
@@ -47,8 +47,8 @@
 </section>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
-<script src="/js/main.js"></script>
-<script src="/js/navControl.js"></script>
-<script src="/js/searchControl.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/navControl.js}"></script>
+<script th:src="@{/js/searchControl.js}"></script>
 
 </html>
