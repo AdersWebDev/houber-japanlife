@@ -1,7 +1,8 @@
 <head th:fragment="head(title, description, keywords, siteUrl, thumbnail)">
   <title th:text="${title}">Default Title</title>
   <meta charset="UTF-8">
-  <meta name="robots" content="index, follow">
+  <!-- 오류·검색 결과 페이지는 컨트롤러에서 noindex=true -->
+  <meta name="robots" th:content="${noindex != null and noindex} ? 'noindex, follow' : 'index, follow'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" th:content="${description}">
   <meta name="keywords" th:content="${keywords}">
@@ -12,13 +13,14 @@
 
   <meta property="og:locale" content="ko_KR">
   <meta property="og:site_name" content="houber-japanlife.com">
-  <meta property="og:type" content="article">
+  <!-- 글 상세는 article, 홈·목록 등은 website -->
+  <meta property="og:type" th:content="${ogType != null} ? ${ogType} : 'website'">
   <meta property="og:title" th:content="${title}">
   <meta property="og:url" th:content="${siteUrl}">
   <meta property="og:description" th:content="${description}">
   <meta property="og:image" th:content="${thumbnail}">
 
-  <meta property="twitter:card" content="article">
+  <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:title" th:content="${title}">
   <meta property="twitter:description" th:content="${description}">
   <meta property="twitter:image" th:content="${thumbnail}">
@@ -26,7 +28,7 @@
 
   <link rel="preload" href="/css/main.css" as="style">
   <link rel="preconnect" href="https://www.googletagmanager.com">
-  <link rel="canonical"  th:href="${siteUrl}">
+  <link rel="canonical" th:if="${noindex == null or !noindex}" th:href="${siteUrl}">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/frag/header.css">

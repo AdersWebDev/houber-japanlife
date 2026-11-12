@@ -25,6 +25,7 @@ public class GlobalErrorController implements ErrorController {
             if (statusCode == 404) {
                 return setHtml(model);
             } else if (statusCode == 500) {
+                model.addAttribute("noindex", true); // 오류 페이지는 검색엔진에 올리지 않음
                 model.addAttribute("title", "서버 오류입니다.");
                 model.addAttribute("description", "서버에서 오류가 발생했습니다.");
                 model.addAttribute("keywords", "");
@@ -41,6 +42,7 @@ public class GlobalErrorController implements ErrorController {
     }
 
     private String setHtml(Model model) {
+        model.addAttribute("noindex", true); // 오류 페이지는 검색엔진에 올리지 않음 (canonical도 넣지 않음)
         model.addAttribute("title", "찾을 수 없는 페이지입니다.");
         model.addAttribute("description", "잘못된 페이지로 접속하셨습니다.");
         model.addAttribute("keywords", "");

@@ -22,14 +22,15 @@
     <!-- mainContent가 비어있지 않은 경우 -->
     <div class="items" th:if="${mainContent != null and !#lists.isEmpty(mainContent)}">
       <div class="grid-items">
-        <div class="grid-item" th:each="item : ${mainContent}">
+        <div class="grid-item" th:each="item, st : ${mainContent}">
           <a th:href="${item.link}">
             <div class="image-wrapper">
               <img th:src="${item.thumbnailUrl}"
                    th:alt="${item.title}"
                    th:data-id="${item.id}"
                    th:data-view="${item.view}"
-                   th:data-time="${item.cursorTime}">
+                   th:data-time="${item.cursorTime}"
+                   th:loading="${st.index >= 6} ? 'lazy' : null">
               <div class="title" th:text="${item.title}"></div>
             </div>
           </a>

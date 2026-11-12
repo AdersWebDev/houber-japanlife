@@ -26,15 +26,18 @@
       </defs>
     </svg>
   </div>
-    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
+    <!-- 카카오 SDK는 페이지 표시를 막지 않도록 defer로 불러오고, 초기화는 페이지를 다 읽은 뒤에 함 -->
+    <script defer src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
     <script>
-        Kakao.init("e0e6b63939a221ec31468e72d5817697");
-
-        document.getElementById("consulting-box").addEventListener("click", function (e) {
+        function houberKakaoChat(e) {
             e.preventDefault();
-            Kakao.Channel.chat({
-                channelPublicId: "_qTEPj", // pf.kakao.com/_qTEPj 의 그 값
-            });
-        });
+            if (window.Kakao) {
+                if (!Kakao.isInitialized()) Kakao.init("e0e6b63939a221ec31468e72d5817697");
+                Kakao.Channel.chat({ channelPublicId: "_qTEPj" }); // pf.kakao.com/_qTEPj 의 그 값
+            } else {
+                window.open("https://pf.kakao.com/_qTEPj/chat", "_blank"); // SDK를 못 불러온 경우
+            }
+        }
+        document.getElementById("consulting-box").addEventListener("click", houberKakaoChat);
     </script>
 </aside>

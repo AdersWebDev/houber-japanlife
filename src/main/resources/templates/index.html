@@ -75,10 +75,11 @@
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${houber_news}" class="item">
+        <div th:each="item, st : ${houber_news}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
-                 th:alt = "${item.title}">
+                 th:alt = "${item.title}"
+                 th:loading="${st.index >= 4} ? 'lazy' : null">
           </a>
         </div>
       </div>
@@ -93,10 +94,11 @@
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${japan_review}" class="item">
+        <div th:each="item, st : ${japan_review}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
-                 th:alt = "${item.title}">
+                 th:alt = "${item.title}"
+                 th:loading="${st.index >= 4} ? 'lazy' : null">
           </a>
         </div>
       </div>
@@ -110,10 +112,11 @@
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${working_holiday}" class="item">
+        <div th:each="item, st : ${working_holiday}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
-                 th:alt = "${item.title}">
+                 th:alt = "${item.title}"
+                 th:loading="${st.index >= 4} ? 'lazy' : null">
           </a>
         </div>
       </div>
@@ -143,10 +146,11 @@
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${japan_property}" class="item">
+        <div th:each="item, st : ${japan_property}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
-                 th:alt = "${item.title}">
+                 th:alt = "${item.title}"
+                 th:loading="${st.index >= 4} ? 'lazy' : null">
           </a>
         </div>
       </div>
@@ -162,10 +166,11 @@
     </div>
     <div class="slider-container">
       <div class="slider">
-        <div th:each="item : ${japan_life}" class="item">
+        <div th:each="item, st : ${japan_life}" class="item">
           <a th:href="${item.link}">
             <img th:src = "${item.thumbnailUrl}"
-                 th:alt = "${item.title}">
+                 th:alt = "${item.title}"
+                 th:loading="${st.index >= 4} ? 'lazy' : null">
           </a>
         </div>
       </div>

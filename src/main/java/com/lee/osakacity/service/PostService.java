@@ -272,6 +272,25 @@ public class PostService {
         }
         return result;
     }
+    /**
+     * 전체 글 목록 (/list?category=all). 모든 카테고리의 공개 글을 최신 글부터.
+     * 이어 불러오기는 마지막 글 번호(cursorId)보다 작은 글.
+     */
+    public List<SimpleResponse> getAllList(int limit, Long cursorId) {
+        return jpaQueryFactory
+                .select(Projections.constructor(SimpleResponse.class,
+                        qPost.id,
+                        qPost.view,
+                        qPost.title,
+                        qPost.thumbnailUrl,
+                        Expressions.constant("/detail/")
+                ))
+                .from(qPost)
+                .where(qPost.isShow.isTrue().and(cursorId != null ? qPost.id.lt(cursorId) : null))
+                .orderBy(qPost.id.desc())
+                .limit(limit)
+                .fetch();
+    }
     public List<SimpleResponse> getGuideOnly(int limit) {
         return jpaQueryFactory
                 .select(Projections.constructor(SimpleResponse.class,

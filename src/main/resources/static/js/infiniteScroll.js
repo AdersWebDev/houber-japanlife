@@ -53,6 +53,7 @@ async function fetchMoreContent() {
                 const img = document.createElement('img');
                 img.src = item.thumbnailUrl;
                 img.alt = item.title;
+                img.loading = 'lazy';
                 img.dataset.id = item.id;
                 img.dataset.view = item.view;
                 img.dataset.time = item.cursorTime;

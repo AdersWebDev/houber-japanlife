@@ -15,7 +15,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
@@ -37,7 +39,7 @@ public class SnsContentService {
     @Transactional
     public SnsContentResponseDto getDetail(Long id) {
         SnsContent snsContent =  snsContentRepo.findById(id)
-                .orElseThrow(()->new NotFoundException("404 NOT FOUND"));
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND)); // 없는 영상은 404 페이지
         snsContent.increaseView();
         return new SnsContentResponseDto(snsContent);
     }
