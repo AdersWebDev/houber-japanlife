@@ -291,6 +291,43 @@ public class PostService {
                 .limit(limit)
                 .fetch();
     }
+    /** 목록 페이지(/list?category=..&page=N)용: offset부터 limit개. 입주후기 & 맨션정보는 입주후기 → 영상 순서 */
+    public List<SimpleResponse> getListPage(Category category, int offset, int limit) {
+        if (category.equals(Category.japan_review)) {
+            return getReviewList(offset, limit);
+        }
+        return jpaQueryFactory
+                .select(Projections.constructor(SimpleResponse.class,
+                        qPost.id,
+                        qPost.view,
+                        qPost.title,
+                        qPost.thumbnailUrl,
+                        Expressions.constant("/detail/")
+                ))
+                .from(qPost)
+                .where(qPost.isShow.isTrue().and(qPost.category.eq(category)))
+                .orderBy(qPost.id.desc())
+                .offset(offset)
+                .limit(limit)
+                .fetch();
+    }
+    /** 전체 글 목록 페이지용: offset부터 limit개 (최신 글부터) */
+    public List<SimpleResponse> getAllPage(int offset, int limit) {
+        return jpaQueryFactory
+                .select(Projections.constructor(SimpleResponse.class,
+                        qPost.id,
+                        qPost.view,
+                        qPost.title,
+                        qPost.thumbnailUrl,
+                        Expressions.constant("/detail/")
+                ))
+                .from(qPost)
+                .where(qPost.isShow.isTrue())
+                .orderBy(qPost.id.desc())
+                .offset(offset)
+                .limit(limit)
+                .fetch();
+    }
     public List<SimpleResponse> getGuideOnly(int limit) {
         return jpaQueryFactory
                 .select(Projections.constructor(SimpleResponse.class,

@@ -57,41 +57,65 @@ public class MainController {
         return "index";
     }
 
+    private static final int LIST_PAGE_SIZE = 20;
+
     @GetMapping("/list")
-    public String listPage(@RequestParam(required = false) String category, Model model, HttpServletResponse response) {
+    public String listPage(@RequestParam(required = false) String category,
+                           @RequestParam(required = false) Integer page,
+                           Model model, HttpServletResponse response) {
         // 카테고리 없이 들어오면 전체 글 목록으로 영구 이동
         if (category == null || category.isBlank()) {
             return movedPermanently(response, "/list?category=all");
         }
-        if ("all".equals(category)) {
-            model.addAttribute("title", "전체 글 | " + SeoText.BRAND);
-            model.addAttribute("description", "하우버가 전하는 일본 워킹홀리데이, 일본 생활, 일본 부동산 정보를 최신 글부터 모두 모았습니다.");
-            model.addAttribute("keywords", "하우버, 일본, 일본 정보, 일본 워홀, 워킹홀리데이, 일본 생활");
-            model.addAttribute("siteUrl", SITE + "/list?category=all");
-            model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
-            model.addAttribute("mainContent", postService.getAllList(20, null));
-            model.addAttribute("content_h1", "전체 글");
-            model.addAttribute("content_p", "하우버의 모든 일본 생활 정보를 최신 글부터 모았습니다.");
-            model.addAttribute("new_value",postService.checkUpdate());
-            return "listPage";
+        Category cat = null;
+        if (!"all".equals(category)) {
+            try {
+                cat = Category.valueOf(category);
+            } catch (IllegalArgumentException e) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND); // 없는 카테고리
+            }
         }
-        Category cat;
-        try {
-            cat = Category.valueOf(category);
-        } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND); // 없는 카테고리
+        String baseUrl = "/list?category=" + category;
+        // 1페이지는 page 없는 주소 하나로 (중복 주소 방지)
+        if (page != null && page == 1) {
+            return movedPermanently(response, baseUrl);
         }
+        int pageNum = page == null ? 1 : page;
+        if (pageNum < 1) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        model.addAttribute("title", cat.getTitle() + " | " + SeoText.BRAND);
-        model.addAttribute("description", cat.getTitle() +"에서 최신 일본 워킹홀리데이 및 생활 정보를 확인하세요. 하우버가 전하는 생생한 포스트를 만나보세요!");
-        model.addAttribute("keywords", "하우버, "+cat.getTitle()+", 일본, 일본 정보, 일본 워홀, 워킹홀리데이");
-        model.addAttribute("siteUrl", SITE + "/list?category="+cat);
+        // 다음 페이지가 있는지 알기 위해 1개 더 가져옴
+        int offset = (pageNum - 1) * LIST_PAGE_SIZE;
+        List<com.lee.osakacity.dto.mvc.SimpleResponse> items = cat == null
+                ? postService.getAllPage(offset, LIST_PAGE_SIZE + 1)
+                : postService.getListPage(cat, offset, LIST_PAGE_SIZE + 1);
+        if (items.isEmpty() && pageNum > 1) throw new ResponseStatusException(HttpStatus.NOT_FOUND); // 범위를 벗어난 페이지
+        boolean hasNext = items.size() > LIST_PAGE_SIZE;
+        if (hasNext) items = items.subList(0, LIST_PAGE_SIZE);
+
+        String name = cat == null ? "전체 글" : cat.getTitle();
+        String pageSuffix = pageNum > 1 ? " (" + pageNum + "페이지)" : "";
+        String pageUrl = pageNum > 1 ? baseUrl + "&page=" + pageNum : baseUrl;
+
+        model.addAttribute("title", name + pageSuffix + " | " + SeoText.BRAND);
+        model.addAttribute("description", (cat == null
+                ? "하우버가 전하는 일본 워킹홀리데이, 일본 생활, 일본 부동산 정보를 최신 글부터 모두 모았습니다."
+                : cat.getTitle() + "에서 최신 일본 워킹홀리데이 및 생활 정보를 확인하세요. 하우버가 전하는 생생한 포스트를 만나보세요!")
+                + pageSuffix);
+        model.addAttribute("keywords", cat == null
+                ? "하우버, 일본, 일본 정보, 일본 워홀, 워킹홀리데이, 일본 생활"
+                : "하우버, " + cat.getTitle() + ", 일본, 일본 정보, 일본 워홀, 워킹홀리데이");
+        model.addAttribute("siteUrl", SITE + pageUrl); // canonical은 각 페이지 자기 자신
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
-        model.addAttribute("mainContent",postService.getList(cat, 20, null, null, null));
-        model.addAttribute("content_h1",cat.getTitle());
-        model.addAttribute("content_p",cat.getDescription());
+        model.addAttribute("mainContent", items);
+        model.addAttribute("content_h1", name);
+        model.addAttribute("content_p", cat == null ? "하우버의 모든 일본 생활 정보를 최신 글부터 모았습니다." : cat.getDescription());
         model.addAttribute("new_value",postService.checkUpdate());
 
+        // 검색엔진이 따라갈 수 있는 페이지 링크 (화면에서는 무한 스크롤도 그대로 동작)
+        model.addAttribute("pageNum", pageNum);
+        model.addAttribute("listOffset", offset);
+        model.addAttribute("prevUrl", pageNum > 1 ? (pageNum == 2 ? baseUrl : baseUrl + "&page=" + (pageNum - 1)) : null);
+        model.addAttribute("nextUrl", hasNext ? baseUrl + "&page=" + (pageNum + 1) : null);
         return "listPage";
     }
 

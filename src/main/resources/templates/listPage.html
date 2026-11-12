@@ -21,7 +21,7 @@
 
     <!-- mainContent가 비어있지 않은 경우 -->
     <div class="items" th:if="${mainContent != null and !#lists.isEmpty(mainContent)}">
-      <div class="grid-items">
+      <div class="grid-items" th:data-offset="${listOffset}">
         <div class="grid-item" th:each="item, st : ${mainContent}">
           <a th:href="${item.link}">
             <div class="image-wrapper">
@@ -37,6 +37,12 @@
         </div>
       </div>
       <div id="loading" style="display: none;">Loading...</div>
+      <!-- 페이지 링크: 검색엔진이 2페이지 이후 글도 따라갈 수 있게 (스크롤로 더 불러오면 숨김) -->
+      <nav class="list-pager" th:if="${prevUrl != null or nextUrl != null}" aria-label="목록 페이지">
+        <a th:if="${prevUrl != null}" th:href="${prevUrl}" rel="prev">‹ 이전 페이지</a>
+        <span th:text="${pageNum} + ' 페이지'"></span>
+        <a th:if="${nextUrl != null}" th:href="${nextUrl}" rel="next">다음 페이지 ›</a>
+      </nav>
     </div>
 
     <!-- mainContent가 비어있거나 null인 경우 -->
