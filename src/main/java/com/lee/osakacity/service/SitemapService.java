@@ -45,16 +45,7 @@ public class SitemapService {
                 .where(qPost.isShow.isTrue().and(qPost.id.notIn(DuplicatePosts.REDIRECTS.keySet())))
                 .fetch()
         );
-        data.addAll(
-                jpaQueryFactory
-                        .select(Projections.constructor(SiteMap.class,
-                                qSnsContent.id,
-                                qSnsContent.publishTime,
-                                Expressions.constant("detail/sns-content/")
-                        ))
-                        .from(qSnsContent)
-                        .fetch()
-        );
+        // 영상(sns-content) 페이지는 noindex라 사이트맵에 넣지 않음
         return data;
     }
     private List<RssMap> RssQueryFactory() {
@@ -74,20 +65,7 @@ public class SitemapService {
                         .orderBy(qPost.modifiedDate.desc())
                         .fetch()
         );
-        data.addAll(
-                jpaQueryFactory
-                        .select(Projections.constructor(RssMap.class,
-                                qSnsContent.title,
-                                qSnsContent.description,
-                                qSnsContent.id,
-                                qSnsContent.publishTime,
-                                Expressions.constant("detail/sns-content/")
-                        ))
-                        .from(qSnsContent)
-                        .limit(20)
-                        .orderBy(qSnsContent.publishTime.desc())
-                        .fetch()
-        );
+        // 영상(sns-content) 페이지는 noindex라 RSS에도 넣지 않음
         // 날짜 기준 내림차순 정렬
         // 상위 20개만 선택
         return data.stream()
