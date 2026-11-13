@@ -221,6 +221,8 @@ public class MainController {
         model.addAttribute("ogType", "article");
         model.addAttribute("keywords", dto.getKeyword());
         model.addAttribute("siteUrl", SITE + "/detail/sns-content/"+id);
+        // 영상 페이지는 짧은 캡션뿐이라 검색 결과에는 올리지 않음 (페이지와 목록 노출은 그대로)
+        model.addAttribute("noindex", true);
         model.addAttribute("thumbnail", dto.getThumbnailUrl());
         model.addAttribute("new_value",postService.checkUpdate());
 
