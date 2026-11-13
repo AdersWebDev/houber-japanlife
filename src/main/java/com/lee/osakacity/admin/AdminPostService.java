@@ -30,6 +30,7 @@ public class AdminPostService {
     private final PostRepo postRepo;
     private final PostService postService;
     private final JPAQueryFactory jpaQueryFactory;
+    private final com.lee.osakacity.seo.IndexNowService indexNow;
     private final QPost qPost = QPost.post;
     private final QFile qFile = QFile.file;
 
@@ -103,18 +104,26 @@ public class AdminPostService {
             post.setShow(req.show());
             post.addFiles(files);
         }
+        // 검색엔진(Bing·네이버 등)에 바뀐 주소 알림 (숨김 글은 404가 되었음을 알리는 용도)
+        if (id != null || req.show()) { // 처음부터 숨김으로 저장한 새 글은 알릴 필요 없음
+            indexNow.notifyChanged("/detail/" + post.getId(), "/list?category=" + req.category().name());
+        }
         return post.getId();
     }
 
     @Transactional
     public void setShow(Long id, boolean show) {
-        get(id).setShow(show);
+        Post post = get(id);
+        post.setShow(show);
+        indexNow.notifyChanged("/detail/" + id, "/list?category=" + post.getCategory().name());
     }
 
     @Transactional
     public void delete(Long id) {
-        get(id);
+        Post post = get(id);
+        String listPath = "/list?category=" + post.getCategory().name();
         postService.delete(id, null); // 기존 삭제 로직: 글에 연결된 S3 사진도 함께 지움
+        indexNow.notifyChanged("/detail/" + id, listPath); // 삭제된 주소(404)도 알림
     }
 
     private static ResponseStatusException bad(String msg) {
