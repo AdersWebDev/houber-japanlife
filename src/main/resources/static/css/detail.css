@@ -353,3 +353,50 @@ div.blank{
     line-height: 1.8;
     padding-left: 2rem;
 }
+
+/* ───────── 하우버 글 표준 틀 블록 (2026-11-17) ─────────
+   detail.css 맨 아래에 둠 (글 상세 영역 .detail-content 안에서만 적용). 이 CSS가 없어도 글은 읽히고 모양만 밋밋해요.
+   쓰는 class: hb-meta(기준 줄) · hb-summary(핵심 요약) · hb-toc(목차) · hb-tip(하우버 TIP) · hb-series(시리즈 이어 읽기) · hb-sources(참고 자료) · hb-box-title(상자 제목) */
+
+/* 본문 링크: 지금은 브라우저 기본 파랑이라 어두운 바탕에서 잘 안 보여요 */
+.detail-content a { color: #9db7ff; text-underline-offset: 3px; }
+
+.detail-content .hb-meta {
+    margin: 1.5rem 0;
+    padding: 0.8rem 0;
+    font-size: 1.3rem;
+    color: #c8c8c8;
+    border-top: 1px solid #4D4D4D;
+    border-bottom: 1px solid #4D4D4D;
+}
+.detail-content .hb-summary,
+.detail-content .hb-toc,
+.detail-content .hb-tip,
+.detail-content .hb-series,
+.detail-content .hb-sources {
+    margin: 3rem 0;
+    padding: 1.4rem 1.8rem;
+    border-radius: 12px;
+    background-color: #2c2c2c;
+    font-size: 1.5rem;
+    line-height: 1.7;
+}
+.detail-content .hb-summary { border: 2px solid #0123b3; }
+.detail-content .hb-toc { border: 1px solid #4D4D4D; }
+.detail-content .hb-tip { border-left: 4px solid #0123b3; border-radius: 0 12px 12px 0; }
+.detail-content .hb-series { border: 2px solid #354692; }
+.detail-content .hb-sources { border: 1px dashed #4D4D4D; font-size: 1.3rem; color: #d0d0d0; }
+.detail-content .hb-box-title { margin: 0 0 0.6rem; font-weight: 700; color: #FEE500; }
+.detail-content .hb-summary p,
+.detail-content .hb-tip p,
+.detail-content .hb-sources p { margin: 0.4rem 0; }
+.detail-content .hb-summary ul,
+.detail-content .hb-toc ul,
+.detail-content .hb-sources ul { margin: 0; padding-left: 1.8rem; font-size: inherit; line-height: inherit; }
+.detail-content .hb-toc ul { list-style: none; padding-left: 0; }
+.detail-content .hb-toc li { margin: 0.3rem 0; }
+.detail-content .hb-toc a { color: #fff; }
+.detail-content .hb-series ol { margin: 0; padding-left: 2.4rem; font-size: inherit; line-height: inherit; }
+.detail-content .hb-series li { margin: 0.2rem 0; }
+.detail-content .hb-series .hb-now { color: #FEE500; font-weight: 700; }
+.detail-content .hb-series .hb-nav { margin: 1rem 0 0; padding-top: 0.8rem; border-top: 1px solid #4D4D4D; }
