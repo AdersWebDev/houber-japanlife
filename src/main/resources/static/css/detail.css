@@ -38,6 +38,17 @@
     object-position: center; /* 이미지 중앙 정렬 */
 
 }
+/* 본문 사진: 대표 사진 뒤에 오는 상자는 원래 비율로 */
+.detail-content .detail-thumbnail ~ .detail-thumbnail {
+    aspect-ratio: auto;
+    background-color: transparent;
+}
+.detail-content .detail-thumbnail ~ .detail-thumbnail img {
+    aspect-ratio: auto;
+    max-width: 100%;
+    max-height: none;
+    height: auto;
+}
 .detail-content .center-div {
     display: block;
     margin: 0 auto;
