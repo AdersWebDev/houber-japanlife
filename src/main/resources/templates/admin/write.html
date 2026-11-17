@@ -89,7 +89,8 @@
     <div data-pane="blog" hidden><input id="imp-blog-url" placeholder="https://blog.naver.com/houber/224384295502"><div class="sub" style="margin-top:6px">하우버 블로그 글만 가져올 수 있습니다. 사진은 하우버 서버로 옮겨집니다</div></div>
     <div class="file" id="imp-file" hidden></div>
     <div class="opt" id="imp-opts">
-      <label><input type="checkbox" id="opt-title" checked> 첫 번째 제목을 글 제목으로 쓰기</label>
+      <label><input type="checkbox" id="opt-keep"> 하우버 형식으로 만든 HTML 그대로 가져오기 (class·style·구조 유지, 사이트 class가 있으면 자동 선택)</label>
+      <label><input type="checkbox" id="opt-title" checked> 큰 제목(&lt;h1&gt;)을 글 제목으로 쓰기 (없으면 &lt;title&gt;)</label>
       <label><input type="checkbox" id="opt-style" checked> 원래 글꼴·색·크기는 지우고 사이트 스타일로 맞추기</label>
       <div class="sub">사진은 모두 하우버 서버(S3)로 옮기고 화면용 크기로 줄입니다 (원래 주소가 사라져도 안 깨짐)</div>
     </div>

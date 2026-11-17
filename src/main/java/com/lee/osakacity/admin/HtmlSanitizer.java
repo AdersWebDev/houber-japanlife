@@ -19,11 +19,16 @@ public final class HtmlSanitizer {
     private static final Pattern YOUTUBE = Pattern.compile("^https://www\\.youtube(-nocookie)?\\.com/embed/[A-Za-z0-9_-]{6,20}(\\?[A-Za-z0-9=&_-]*)?$");
     private static final Set<String> STYLE_PROPS = Set.of(
             "color", "background", "background-color", "text-align", "font-weight", "font-style",
-            "text-decoration", "text-decoration-line", "aspect-ratio", "width", "max-width");
+            "text-decoration", "text-decoration-line", "aspect-ratio", "width", "max-width",
+            // 표·상자 꾸밈용 (가져오기 파일의 표 테두리·여백·글자 크기)
+            "border", "border-top", "border-right", "border-bottom", "border-left", "border-color", "border-width",
+            "border-style", "border-collapse", "border-radius", "padding", "padding-top", "padding-right",
+            "padding-bottom", "padding-left", "margin", "margin-top", "margin-right", "margin-bottom", "margin-left",
+            "font-size", "line-height", "vertical-align", "white-space", "text-indent", "letter-spacing", "height", "min-width");
 
     private static final Safelist SAFELIST = new Safelist()
             .addTags("p", "br", "b", "strong", "i", "em", "u", "s", "span", "a", "h2", "h3", "ul", "ol", "li",
-                    "table", "thead", "tbody", "tr", "th", "td", "blockquote", "hr", "div", "img", "iframe")
+                    "table", "caption", "thead", "tbody", "tfoot", "tr", "th", "td", "blockquote", "hr", "div", "img", "iframe")
             .addAttributes(":all", "class", "style")
             .addAttributes("a", "href", "target", "rel")
             .addAttributes("img", "src", "alt")
@@ -32,7 +37,8 @@ public final class HtmlSanitizer {
             .addAttributes("iframe", "src", "title", "allowfullscreen", "frameborder", "allow")
             .addProtocols("a", "href", "http", "https", "mailto")
             .addProtocols("img", "src", "https", "http")
-            .addProtocols("iframe", "src", "https");
+            .addProtocols("iframe", "src", "https")
+            .preserveRelativeLinks(true); // 사이트 안 주소(/detail/7)는 그대로 둠
 
     private HtmlSanitizer() {}
 
@@ -45,7 +51,13 @@ public final class HtmlSanitizer {
             if (!YOUTUBE.matcher(f.attr("src")).matches()) f.remove();
         }
         for (Element a : doc.select("a[href]")) {
-            if (a.attr("href").startsWith("http")) {
+            String href = a.attr("href");
+            // 우리 사이트 주소는 사이트 안 주소로 바꾸고 같은 창에서 열림
+            if (href.matches("^https?://(www\\.)?houber-japanlife\\.com(/.*)?$")) {
+                String path = href.replaceFirst("^https?://(www\\.)?houber-japanlife\\.com", "");
+                a.attr("href", path.isEmpty() ? "/" : path);
+                a.removeAttr("target");
+            } else if (href.startsWith("http")) {
                 a.attr("target", "_blank");
                 a.attr("rel", "noopener");
             }

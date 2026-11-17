@@ -104,17 +104,24 @@ async function makeSquareThumb(url) {
 /* ---------- 편집기 형식 <-> 사이트 형식 ---------- */
 function parseBody(html) { return new DOMParser().parseFromString('<body>' + (html || '') + '</body>', 'text/html').body; }
 function unwrap(el) { el.replaceWith(...el.childNodes); }
-function figureOf(imgs, cls) {
+function figureOf(imgs, cls, box) {
   const f = document.createElement('figure'); f.className = cls; f.contentEditable = 'false';
-  imgs.forEach(i => { const n = document.createElement('img'); n.src = i.getAttribute('src') || ''; n.alt = i.getAttribute('alt') || ''; f.append(n); });
+  // 사진 상자에 붙어 있던 다른 class·style은 저장할 때 되살리도록 기억해 둠
+  if (box) {
+    const extra = [...box.classList].filter(c => c !== 'detail-thumbnail' && c !== 'img-pair');
+    if (extra.length) f.dataset.boxClass = extra.join(' ');
+    if (box.getAttribute('style')) f.dataset.boxStyle = box.getAttribute('style');
+  }
+  // 사진의 속성(style·class 등)도 그대로 둠
+  imgs.forEach(i => { const n = i.cloneNode(false); n.removeAttribute('data-imp'); if (!n.hasAttribute('alt')) n.alt = ''; f.append(n); });
   return f;
 }
 /** 사이트 형식(저장된 본문) -> 편집기 */
 function fromSite(html) {
   const b = parseBody(html);
   $$('.middle-title-box', b).forEach(box => { const h = $('h2', box); if (h) box.replaceWith(h); else unwrap(box); });
-  $$('div.detail-thumbnail', b).forEach(d => { const imgs = $$('img', d); if (!imgs.length) d.remove(); else d.replaceWith(figureOf(imgs, 'ed-img')); });
-  $$('div.img-pair', b).forEach(d => d.replaceWith(figureOf($$('img', d), 'ed-pair')));
+  $$('div.detail-thumbnail', b).forEach(d => { const imgs = $$('img', d); if (!imgs.length) d.remove(); else d.replaceWith(figureOf(imgs, 'ed-img', d)); });
+  $$('div.img-pair', b).forEach(d => d.replaceWith(figureOf($$('img', d), 'ed-pair', d)));
   $$('div.hb-video', b).forEach(d => d.setAttribute('contenteditable', 'false'));
   return b.innerHTML.trim() || '<p><br></p>';
 }
@@ -126,13 +133,15 @@ function toSite(html) {
     const imgs = $$('img', f).filter(i => i.getAttribute('src'));
     if (!imgs.length) return f.remove();
     const d = document.createElement('div');
-    d.className = f.classList.contains('ed-pair') ? 'img-pair' : 'detail-thumbnail';
-    imgs.forEach(i => { const n = document.createElement('img'); n.src = i.getAttribute('src'); n.alt = i.getAttribute('alt') || ''; d.append(n); });
+    d.className = (f.classList.contains('ed-pair') ? 'img-pair' : 'detail-thumbnail') + (f.dataset.boxClass ? ' ' + f.dataset.boxClass : '');
+    if (f.dataset.boxStyle) d.setAttribute('style', f.dataset.boxStyle);
+    imgs.forEach(i => { const n = i.cloneNode(false); n.removeAttribute('data-imp'); d.append(n); });
     f.replaceWith(d);
   });
   $$('h2', b).forEach(h => { if (!h.parentElement.classList.contains('middle-title-box')) { const box = document.createElement('div'); box.className = 'middle-title-box'; h.replaceWith(box); box.append(h); } });
-  $$('blockquote', b).forEach(q => q.className = 'hb-quote');
-  $$('table', b).forEach(t => t.className = 'detail-table');
+  // class가 없을 때만 사이트 기본 모양을 붙임 (직접 넣은 class는 그대로)
+  $$('blockquote', b).forEach(q => { if (!q.className) q.className = 'hb-quote'; });
+  $$('table', b).forEach(t => { if (!t.className) t.className = 'detail-table'; });
   $$('img[data-imp]', b).forEach(i => i.removeAttribute('data-imp'));
   while (b.lastElementChild && b.lastElementChild.tagName === 'P' && !b.lastElementChild.textContent.trim() && !$('img', b.lastElementChild)) b.lastElementChild.remove();
   return b.innerHTML;
@@ -482,7 +491,8 @@ function convertInline(node, opts) {
     else if (tag === 'u') wrap = document.createElement('u');
     else if (tag === 'a') {
       const href = (ch.getAttribute('href') || '').trim();
-      if (/^(https?:|mailto:)/i.test(href)) { wrap = document.createElement('a'); wrap.href = href; }
+      // 인터넷 주소, 메일, 사이트 안 주소(/detail/7 같은 것)는 링크로 남김
+      if (/^(https?:|mailto:)/i.test(href) || /^\/(?!\/)/.test(href)) { wrap = document.createElement('a'); wrap.setAttribute('href', href); }
     } else if (opts.keepStyle) {
       const color = (ch.getAttribute('color') || ((ch.getAttribute('style') || '').match(/(?:^|;)\s*color\s*:\s*([^;]+)/i) || [])[1] || '').trim();
       if (color && !/url\(|expression/i.test(color)) { wrap = document.createElement('span'); wrap.style.color = color; }
@@ -507,7 +517,8 @@ function convertDoc(doc, opts) {
   stats.styles += $$('font', body).length;
   let title = '';
   if (opts.extractTitle) {
-    const h = $('h1', body) || $('h2', body);
+    // 글 제목은 <h1>이나 <title>에서만 가져옴 (<h2>는 본문 소제목이라 지우지 않음)
+    const h = $('h1', body);
     if (h && h.textContent.trim()) { title = h.textContent.replace(/\s+/g, ' ').trim(); h.remove(); }
     else if (doc.title && doc.title.trim()) title = doc.title.trim();
   }
@@ -520,6 +531,32 @@ function convertDoc(doc, opts) {
   return {
     html: out.innerHTML, title, images: ctx.images,
     stats: Object.assign(stats, { headings: $$('h2,h3', out).length, paragraphs: $$('p', out).length, tables: $$('table', out).length, lists: $$('ul,ol', out).length }),
+  };
+}
+/**
+ * 하우버 형식으로 만든 HTML 파일: 블록 변환 없이 구조·class·style을 그대로 두고 위험한 것만 지움.
+ * 사진은 그대로 S3로 옮긴다. (서버가 저장할 때 한 번 더 거름)
+ */
+function keepDoc(doc, opts) {
+  const body = doc.body || doc.documentElement;
+  const stats = { styles: 0, scripts: doc.querySelectorAll('script').length, floats: 0 };
+  let title = '';
+  if (opts.extractTitle) {
+    const h = $('h1', body);
+    if (h && h.textContent.trim()) { title = h.textContent.replace(/\s+/g, ' ').trim(); h.remove(); }
+    else if (doc.title && doc.title.trim()) title = doc.title.trim();
+  }
+  const b = parseBody(basicClean(body.innerHTML)); // DOMParser 문서라 사진을 미리 불러오지 않음
+  const tw = b.ownerDocument.createTreeWalker(b, NodeFilter.SHOW_COMMENT); const comments = []; while (tw.nextNode()) comments.push(tw.currentNode); comments.forEach(c => c.remove());
+  // 사이트 본문은 h2·h3만 쓰므로 나머지 제목은 맞춰 줌 (class·style은 유지)
+  const retag = (el, tag) => { const n = b.ownerDocument.createElement(tag); [...el.attributes].forEach(a => n.setAttribute(a.name, a.value)); n.append(...el.childNodes); el.replaceWith(n); };
+  $$('h1', b).forEach(h => retag(h, 'h2'));
+  $$('h4,h5,h6', b).forEach(h => retag(h, 'h3'));
+  const images = [];
+  $$('img', b).forEach(img => { const id = images.length; images.push({ id, src: (img.getAttribute('src') || '').trim() }); img.setAttribute('data-imp', id); img.removeAttribute('src'); });
+  return {
+    html: b.innerHTML, title, images,
+    stats: Object.assign(stats, { headings: $$('h2,h3', b).length, paragraphs: $$('p', b).length, tables: $$('table', b).length, lists: $$('ul,ol', b).length }),
   };
 }
 function newParaCtx(ctx, align) { ctx.para = document.createElement('p'); if (align) ctx.para.style.textAlign = align; }
@@ -668,6 +705,7 @@ function resetImport() {
   impFile = null; impResult = null;
   $('#imp-step1').hidden = false; $('#imp-step2').hidden = true;
   $('#imp-file').hidden = true; $('#imp-err').textContent = ''; $('#imp-blog-url').value = '';
+  $('#opt-keep').checked = false; syncKeepOpt();
   setImpTab('html');
 }
 function setImpTab(tab) {
@@ -687,7 +725,12 @@ function pickImportFile(f) {
   $('#imp-file').innerHTML = `<span>${impTab === 'zip' ? '🗜' : '📄'} <b>${esc(f.name)}</b> · ${f.size < 1048576 ? Math.ceil(f.size / 1024) + 'KB' : mb(f.size)}</span><span style="color:#999;cursor:pointer" id="imp-clear">✕</span>`;
   $('#imp-clear').onclick = () => { impFile = null; $('#imp-file').hidden = true; $('#imp-go').disabled = true; };
   $('#imp-err').textContent = ''; $('#imp-go').disabled = false;
+  // 하우버 사이트 class를 쓴 파일이면 '그대로 가져오기'를 자동으로 켬
+  if (impTab === 'html') f.text().then(t => { if (SITE_CLASS.test(t)) { $('#opt-keep').checked = true; syncKeepOpt(); } }).catch(() => {});
 }
+const SITE_CLASS = /class\s*=\s*["'][^"']*\b(detail-thumbnail|middle-title-box|checkList|center-text|center-div|highlight|quote-container|img-pair|hb-quote)\b/;
+function syncKeepOpt() { const k = $('#opt-keep').checked; $('#opt-style').disabled = k; $('#opt-style').closest('label').style.opacity = k ? 0.45 : 1; }
+$('#opt-keep').addEventListener('change', syncKeepOpt);
 $$('.dz').forEach(dz => {
   dz.addEventListener('click', () => { const f = $('#file-import'); f.accept = impTab === 'zip' ? '.zip' : '.html,.htm'; f.click(); });
   dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
@@ -710,6 +753,7 @@ $('#imp-go').addEventListener('click', async () => {
 
 async function importFile(btn) {
   if (!impFile) throw new Error('파일을 골라 주세요');
+  const keep = $('#opt-keep').checked;
   const opts = { extractTitle: $('#opt-title').checked, keepStyle: !$('#opt-style').checked };
   let htmlText, resolver, sourceName = impFile.name;
   if (impTab === 'zip') {
@@ -740,11 +784,13 @@ async function importFile(btn) {
   }
   btn.textContent = '변환 중…';
   const doc = new DOMParser().parseFromString(htmlText, 'text/html');
-  const conv = convertDoc(doc, opts);
+  const conv = keep ? keepDoc(doc, opts) : convertDoc(doc, opts);
   const holder = document.createElement('div'); holder.innerHTML = conv.html;
   const moved = await rehostImages(conv.images, id => $(`img[data-imp="${id}"]`, holder), resolver,
     (i, n) => (btn.textContent = `사진 옮기는 중… (${i}/${n})`));
-  return { kind: 'file', sourceName, original: htmlText, title: conv.title, html: holder.innerHTML, stats: conv.stats, images: conv.images.length, moved };
+  // 그대로 가져오기: 사이트 형식 -> 편집기 형식 (사진 상자의 class·style은 기억해 둠)
+  const html = keep ? fromSite(holder.innerHTML) : holder.innerHTML;
+  return { kind: 'file', keep, sourceName, original: htmlText, title: conv.title, html, stats: conv.stats, images: conv.images.length, moved };
 }
 
 async function importBlog(btn) {
@@ -776,7 +822,7 @@ function showImportResult(r) {
     const m = r.moved;
     if (r.images) lines.push(`<span class="ok">✔ 사진 ${m.moved}장</span> 하우버 서버로 옮김 (화면용 크기로 맞춤${m.after < m.before * 0.9 ? `, 합계 ${mb(m.before)} → ${mb(m.after)}` : ''})`);
     const s = r.stats;
-    lines.push(`<span class="ok">✔ 소제목 ${s.headings}개, 문단 ${s.paragraphs}개${s.tables ? `, 표 ${s.tables}개` : ''}${s.lists ? `, 목록 ${s.lists}개` : ''}</span> 사이트 스타일로 변환`);
+    lines.push(`<span class="ok">✔ 소제목 ${s.headings}개, 문단 ${s.paragraphs}개${s.tables ? `, 표 ${s.tables}개` : ''}${s.lists ? `, 목록 ${s.lists}개` : ''}</span> ${r.keep ? '파일의 구조·class·style 그대로' : '사이트 스타일로 변환'}`);
     const removed = [];
     if (s.styles) removed.push(`글꼴·색·크기 설정 ${s.styles}곳`);
     if (s.floats) removed.push(`사진 옆 배치 ${s.floats}곳`);
