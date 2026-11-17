@@ -24,7 +24,12 @@ public final class HtmlSanitizer {
             "border", "border-top", "border-right", "border-bottom", "border-left", "border-color", "border-width",
             "border-style", "border-collapse", "border-radius", "padding", "padding-top", "padding-right",
             "padding-bottom", "padding-left", "margin", "margin-top", "margin-right", "margin-bottom", "margin-left",
-            "font-size", "line-height", "vertical-align", "white-space", "text-indent", "letter-spacing", "height", "min-width");
+            "font-size", "line-height", "vertical-align", "white-space", "text-indent", "letter-spacing", "height", "min-width",
+            "display", "caption-side");
+    /** display는 배치용 값만 허용 (none으로 글을 숨기면 검색엔진이 '숨긴 글'로 볼 수 있어 제외) */
+    private static final Set<String> DISPLAY_VALUES = Set.of(
+            "block", "inline", "inline-block", "flex", "inline-flex", "grid", "inline-grid",
+            "table", "table-row", "table-cell", "table-caption", "list-item", "flow-root");
 
     private static final Safelist SAFELIST = new Safelist()
             .addTags("p", "br", "b", "strong", "i", "em", "u", "s", "span", "a", "h2", "h3", "ul", "ol", "li",
@@ -82,6 +87,7 @@ public final class HtmlSanitizer {
             String lower = value.toLowerCase(Locale.ROOT);
             if (!STYLE_PROPS.contains(prop) || value.isEmpty()
                     || lower.contains("url(") || lower.contains("expression") || lower.contains("javascript") || lower.contains("\\")) continue;
+            if (prop.equals("display") && !DISPLAY_VALUES.contains(lower)) continue;
             kept.add(prop + ": " + value);
         }
         return String.join("; ", kept);
