@@ -400,3 +400,4 @@ div.blank{
 .detail-content .hb-series li { margin: 0.2rem 0; }
 .detail-content .hb-series .hb-now { color: #FEE500; font-weight: 700; }
 .detail-content .hb-series .hb-nav { margin: 1rem 0 0; padding-top: 0.8rem; border-top: 1px solid #4D4D4D; }
+.detail-content .detail-table caption { color: #d0d0d0; padding: 0.4rem 0; }
