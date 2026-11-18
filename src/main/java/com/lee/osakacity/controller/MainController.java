@@ -119,6 +119,30 @@ public class MainController {
         return "listPage";
     }
 
+    /** 개인정보처리방침 (구글 브랜드 인증에 필요한 공개 주소). 검색엔진 차단하지 않음 */
+    @GetMapping("/privacy")
+    public String privacyPage(Model model) {
+        legalModel(model, "개인정보처리방침", "/privacy",
+                "houber-japanlife.com 개인정보처리방침. 사이트는 회원 가입이나 문의 양식이 없으며 이름·연락처 등 개인정보를 받지 않습니다.");
+        return "privacy";
+    }
+
+    @GetMapping("/terms")
+    public String termsPage(Model model) {
+        legalModel(model, "이용약관", "/terms",
+                "houber-japanlife.com 이용약관. 오사카 임대 주택과 생활 정보 안내, 매물 정보 기준, 콘텐츠 권리, 문의 방법을 안내합니다.");
+        return "terms";
+    }
+
+    private void legalModel(Model model, String name, String path, String description) {
+        model.addAttribute("title", name + " | " + SeoText.BRAND);
+        model.addAttribute("description", description);
+        model.addAttribute("keywords", "하우버, houber, " + name);
+        model.addAttribute("siteUrl", SITE + path);
+        model.addAttribute("thumbnail", "https://houber-japanlife.com/asset/logo.png");
+        model.addAttribute("new_value", postService.checkUpdate());
+    }
+
     @GetMapping("/search")
     public String searchPage(@RequestParam String keyword, Model model) {
         model.addAttribute("title", "'" + keyword + "' 검색 결과 | " + SeoText.BRAND);

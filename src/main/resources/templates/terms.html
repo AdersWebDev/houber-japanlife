@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head th:replace="~{fragments/head :: head(
+    title=${title},
+    description=${description},
+    keywords=${keywords},
+    siteUrl=${siteUrl},
+    thumbnail=${thumbnail}
+    )}"></head>
+<body>
+<div th:replace="~{fragments/go-top :: go-top}"></div>
+<section class="content">
+  <div class="page-layout">
+    <div class="layout-main">
+      <header th:replace="~{fragments/header :: header}"></header>
+  <!-- 문구는 회사에서 받은 그대로 (법률·회사 정보라 바꾸지 않음) -->
+  <article class="legal-page">
+    <h1>이용약관</h1>
+    <ol>
+      <li>houber-japanlife.com(운영: 株式会社エイダス · houber)은 일본 오사카 임대 주택과 생활 정보를 안내하는 사이트입니다.</li>
+      <li>사이트의 매물 · 금액 · 조건 정보는 작성 시점 기준이며, 실제 공실 여부와 조건은 문의 때 다시 확인해 드립니다.</li>
+      <li>임대 계약은 일본 법령과 각 관리회사 · 집주인의 조건에 따라 진행됩니다.</li>
+      <li>사이트의 글 · 사진 · 영상의 권리는 회사에 있으며, 허락 없이 복제하거나 다른 곳에 쓸 수 없습니다.</li>
+      <li>문의는 카카오톡 채널 「하우버」로 받습니다.</li>
+    </ol>
+    <h2>운영</h2>
+    <ul>
+      <li>株式会社エイダス(houber)</li>
+      <li>〒550-0004 大阪府大阪市西区靱本町1-7-17 7F</li>
+      <li>宅地建物取引業 大阪府知事(2)第62361号</li>
+    </ul>
+    <p class="legal-date">시행일: 2026년 11월 20일</p>
+  </article>
+    </div>
+    <div class="layout-nav-wrapper" id="category-nav-wrapper">
+      <nav id="category-box" th:replace="~{fragments/category :: category(new_value=${new_value})}"></nav>
+    </div>
+  </div>
+</section>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/navControl.js}"></script>
+</html>

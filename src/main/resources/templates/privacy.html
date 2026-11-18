@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head th:replace="~{fragments/head :: head(
+    title=${title},
+    description=${description},
+    keywords=${keywords},
+    siteUrl=${siteUrl},
+    thumbnail=${thumbnail}
+    )}"></head>
+<body>
+<div th:replace="~{fragments/go-top :: go-top}"></div>
+<section class="content">
+  <div class="page-layout">
+    <div class="layout-main">
+      <header th:replace="~{fragments/header :: header}"></header>
+  <!-- 문구는 회사에서 받은 그대로 (법률·회사 정보라 바꾸지 않음) -->
+  <article class="legal-page">
+    <h1>개인정보처리방침</h1>
+    <p>houber-japanlife.com(운영: 株式会社エイダス · houber)은 회원 가입이나 문의 양식이 없으며, 사이트에서 이름 · 연락처 등 개인정보를 받지 않습니다.</p>
+    <p>문의는 카카오톡 채널 「하우버」로 받습니다.</p>
+    <p>회사는 Google Ads API를 회사 자신의 광고 계정의 키워드 조사에만 사용하며, 방문자의 Google 계정 정보는 받거나 저장하지 않습니다.</p>
+    <h2>문의처</h2>
+    <ul>
+      <li>株式会社エイダス(houber)</li>
+      <li>〒550-0004 大阪府大阪市西区靱本町1-7-17 7F</li>
+      <li>宅地建物取引業 大阪府知事(2)第62361号</li>
+      <li>카카오톡 「하우버」</li>
+    </ul>
+    <p class="legal-date">시행일: 2026년 11월 20일</p>
+  </article>
+    </div>
+    <div class="layout-nav-wrapper" id="category-nav-wrapper">
+      <nav id="category-box" th:replace="~{fragments/category :: category(new_value=${new_value})}"></nav>
+    </div>
+  </div>
+</section>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/navControl.js}"></script>
+</html>
