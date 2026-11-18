@@ -401,3 +401,19 @@ div.blank{
 .detail-content .hb-series .hb-now { color: #FEE500; font-weight: 700; }
 .detail-content .hb-series .hb-nav { margin: 1rem 0 0; padding-top: 0.8rem; border-top: 1px solid #4D4D4D; }
 .detail-content .detail-table caption { color: #d0d0d0; padding: 0.4rem 0; }
+
+/* PDF 열기 / 받기 상자 (관리자 글쓰기의 📎 PDF) */
+.detail-content .hb-file { margin: 2rem 0; }
+.detail-content .hb-file a {
+    display: flex; align-items: center; gap: 1.2rem;
+    padding: 1.2rem 1.4rem; border: 1px solid #4D4D4D; border-radius: 12px;
+    background-color: #2c2c2c; color: #fff; text-decoration: none;
+}
+.detail-content .hb-file-icon { font-size: 2.4rem; line-height: 1; }
+.detail-content .hb-file-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.2rem; }
+.detail-content .hb-file-name { font-size: 1.5rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.detail-content .hb-file-meta { font-size: 1.2rem; color: #c8c8c8; }
+.detail-content .hb-file-btn {
+    font-size: 1.3rem; font-weight: 700; padding: 0.7rem 1.1rem; border-radius: 8px;
+    background-color: #0123b3; color: #fff; white-space: nowrap;
+}

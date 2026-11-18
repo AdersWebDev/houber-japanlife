@@ -41,6 +41,33 @@ public class AdminApiController {
         return s3Service.uploadBytes(data, type, AdminImageTypes.ext(type), alt);
     }
 
+    private static final int MAX_PDF = 20 * 1024 * 1024;
+
+    /** PDF 올리기: 본문에 '열기 / 받기' 상자로 들어감. 내려받을 때 원래 파일 이름이 유지되게 함 */
+    @PostMapping("/file")
+    public Map<String, Object> uploadPdf(@RequestParam MultipartFile file) throws Exception {
+        if (file.isEmpty()) throw bad("파일을 골라 주세요");
+        if (file.getSize() > MAX_PDF) throw bad("PDF는 20MB 이하만 올릴 수 있습니다");
+        byte[] data = file.getBytes();
+        if (data.length < 5 || data[0] != '%' || data[1] != 'P' || data[2] != 'D' || data[3] != 'F' || data[4] != '-')
+            throw bad("PDF 파일만 올릴 수 있습니다");
+        String name = pdfName(file.getOriginalFilename());
+        String disposition = "inline; filename=\"document.pdf\"; filename*=UTF-8''"
+                + java.net.URLEncoder.encode(name, java.nio.charset.StandardCharsets.UTF_8).replace("+", "%20");
+        ImgResponse saved = s3Service.uploadBytes(data, "application/pdf", "pdf", name, disposition);
+        return Map.of("url", saved.getUrl(), "name", name, "size", data.length);
+    }
+
+    /** 파일 이름 정리: 경로·따옴표·제어문자 제거, 100자 이내, .pdf로 끝나게 */
+    static String pdfName(String original) {
+        String n = original == null ? "" : original;
+        n = n.replaceAll("^.*[\\\\/]", "").replaceAll("[\\p{Cntrl}\"<>]", "").trim();
+        if (n.toLowerCase().endsWith(".pdf")) n = n.substring(0, n.length() - 4).trim();
+        if (n.isEmpty()) n = "document";
+        if (n.length() > 96) n = n.substring(0, 96);
+        return n + ".pdf";
+    }
+
     /** 가져오기: 인터넷 주소의 사진을 대신 받아 브라우저로 넘김 (브라우저가 크기를 줄인 뒤 /image로 올림) */
     @GetMapping("/fetch-image")
     public ResponseEntity<byte[]> fetchImage(@RequestParam String url) throws Exception {

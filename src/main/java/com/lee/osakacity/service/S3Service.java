@@ -39,11 +39,17 @@ public class S3Service {
      */
     @Transactional
     public ImgResponse uploadBytes(byte[] data, String contentType, String ext, String alt) {
+        return uploadBytes(data, contentType, ext, alt, null);
+    }
+    /** @param contentDisposition 내려받을 때 쓸 파일 이름 등 (PDF용, 없으면 null) */
+    @Transactional
+    public ImgResponse uploadBytes(byte[] data, String contentType, String ext, String alt, String contentDisposition) {
         // 기존 사진과 같은 위치(버킷 맨 위)에 저장해 같은 공개 설정을 받게 함
         String fileName = "houber-" + LocalDate.now() + "-" + UUID.randomUUID() + "." + ext;
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(data.length);
         metadata.setContentType(contentType);
+        if (contentDisposition != null) metadata.setContentDisposition(contentDisposition);
         metadata.setCacheControl("public, max-age=31536000");
         amazonS3.putObject(new PutObjectRequest(bucketName, fileName, new ByteArrayInputStream(data), metadata));
         String fileUrl = amazonS3.getUrl(bucketName, fileName).toString();

@@ -98,6 +98,13 @@ public final class HtmlSanitizer {
         return Jsoup.parse(html == null ? "" : html).text().replaceAll("\\s+", " ").trim();
     }
 
+    /** 본문의 링크 주소 (올린 PDF를 '사용 중'으로 표시할 때 씀) */
+    public static List<String> linkUrls(String html) {
+        List<String> urls = new ArrayList<>();
+        for (Element a : Jsoup.parseBodyFragment(html == null ? "" : html).select("a[href]")) urls.add(a.attr("href"));
+        return urls;
+    }
+
     public static List<String> imageUrls(String html) {
         List<String> urls = new ArrayList<>();
         for (Element img : Jsoup.parseBodyFragment(html == null ? "" : html).select("img[src]")) urls.add(img.attr("src"));

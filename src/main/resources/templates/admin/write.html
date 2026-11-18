@@ -19,6 +19,7 @@
   <button type="button" data-act="link"><b>🔗</b>링크</button>
   <button type="button" data-act="table"><b>▦</b>표</button>
   <button type="button" data-act="youtube"><b>▶</b>유튜브</button>
+  <button type="button" data-act="pdf"><b>📎</b>PDF</button>
   <button type="button" data-act="template"><b>📄</b>양식</button>
   <button type="button" data-act="import"><b>⇪</b>가져오기</button>
   <button type="button" data-act="html" id="btn-html"><b>&lt;/&gt;</b>HTML</button>
@@ -54,6 +55,7 @@
               data-description=${post == null ? '' : post.description},
               data-show=${post == null ? 'true' : post.show}"></div>
 <input type="file" id="file-image" accept="image/*" multiple hidden>
+<input type="file" id="file-pdf" accept="application/pdf,.pdf" hidden>
 <input type="file" id="file-thumb" accept="image/*" hidden>
 
 <!-- 발행 설정 -->
