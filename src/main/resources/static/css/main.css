@@ -184,3 +184,4 @@ button:focus-visible,
 .legal-page ol, .legal-page ul { margin: 0 0 1.2rem; padding-left: 2.2rem; }
 .legal-page li { margin: 0.4rem 0; }
 .legal-page .legal-date { margin-top: 3rem; color: #c8c8c8; }
+.legal-page a { color: #9db7ff; word-break: break-all; }
