@@ -75,6 +75,8 @@ public class AdminPostService {
         if (description.isEmpty()) description = title;
         if (description.length() > 250) description = description.substring(0, 250);
 
+        String keyword = cleanKeywords(req.keyword());
+
         // 이 글에 쓰인 사진을 '사용 중'으로 바꿔 둔다 (미사용 사진 정리 때 지워지지 않게, 글 삭제 때 함께 지워지게)
         List<String> urls = new ArrayList<>(images);
         urls.add(thumbnail);
@@ -93,14 +95,13 @@ public class AdminPostService {
                     .title(title)
                     .view(0)
                     .description(description)
-                    .keyword(DEFAULT_KEYWORD)
+                    .keyword(keyword)
                     .content(content)
                     .isShow(req.show())
                     .build();
             postRepo.save(post);
         } else {
             post = get(id);
-            String keyword = post.getKeyword() == null || post.getKeyword().isBlank() ? DEFAULT_KEYWORD : post.getKeyword();
             post.update(req.category(), title, thumbnail, description, keyword, content);
             post.setShow(req.show());
             post.addFiles(files);
@@ -125,6 +126,26 @@ public class AdminPostService {
         String listPath = "/list?category=" + post.getCategory().name();
         postService.delete(id, null); // 기존 삭제 로직: 글에 연결된 S3 사진도 함께 지움
         indexNow.notifyChanged("/detail/" + id, listPath); // 삭제된 주소(404)도 알림
+    }
+
+    /**
+     * 메타 키워드 정리: 쉼표(, ， 、)로 나누고 앞뒤 공백·중복·빈 칸을 없앰. 비우면 기본 키워드.
+     * DB 칸(255자)을 넘지 않게 250자 안에서 키워드 단위로 자름.
+     */
+    static String cleanKeywords(String raw) {
+        if (raw == null) return DEFAULT_KEYWORD;
+        java.util.LinkedHashSet<String> words = new java.util.LinkedHashSet<>();
+        for (String w : raw.replaceAll("[<>\"\\p{Cntrl}]", " ").split("[,，、]")) {
+            String t = w.trim().replaceAll("\\s+", " ");
+            if (!t.isEmpty()) words.add(t);
+        }
+        StringBuilder out = new StringBuilder();
+        for (String w : words) {
+            if (out.length() + w.length() + 2 > 250) break;
+            if (out.length() > 0) out.append(", ");
+            out.append(w);
+        }
+        return out.length() == 0 ? DEFAULT_KEYWORD : out.toString();
     }
 
     private static ResponseStatusException bad(String msg) {
