@@ -19,8 +19,8 @@ spring:
     import: optional:file:./admin.yml,optional:file:/home/ec2-user/japanlife/admin.yml
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 12MB
+      max-file-size: 21MB      # PDF 20MB까지 (nginx client_max_body_size도 21m 이상이어야 함)
+      max-request-size: 22MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(cR1lVrscKe+ScuVh1R5uOFgIpbKdunx9L29qp9s+CHpjRJLiKEApu3sTU6HLDzXWHWYa8+pKB5mDXWXayo9B3zbak43OzpkD+fNNNXMkrRnob2ECm4Yg7HbUpGYnGQRDzBD83T62XkQ=)

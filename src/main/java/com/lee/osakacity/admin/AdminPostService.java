@@ -78,6 +78,7 @@ public class AdminPostService {
         // 이 글에 쓰인 사진을 '사용 중'으로 바꿔 둔다 (미사용 사진 정리 때 지워지지 않게, 글 삭제 때 함께 지워지게)
         List<String> urls = new ArrayList<>(images);
         urls.add(thumbnail);
+        urls.addAll(HtmlSanitizer.linkUrls(content)); // 본문에 넣은 PDF도 글과 함께 관리 (글 삭제 때 함께 지움)
         List<File> files = jpaQueryFactory.selectFrom(qFile).where(qFile.fileUrl.in(urls)).fetch();
         files.forEach(f -> f.isUsed(true));
 

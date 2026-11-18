@@ -53,3 +53,9 @@
 .report{margin-top:12px;border:1px solid #ddd;border-radius:10px;padding:12px 16px;line-height:1.9;font-size:13.5px}
 .report .ok{color:#14883e}.report .warn{color:#b26b00}
 @media (max-width:700px){.page{padding:24px 18px}.res{grid-template-columns:1fr}.tpl{grid-template-columns:1fr}.ins button{width:62px}}
+
+/* PDF 상자 (편집기) */
+.editor .hb-file{margin:14px 0}.editor .hb-file a{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #d5d9e0;border-radius:10px;background:#f7f8fa;color:#222;text-decoration:none;cursor:default}
+.editor .hb-file-icon{font-size:24px}.editor .hb-file-text{flex:1;min-width:0;display:flex;flex-direction:column}.editor .hb-file-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.editor .hb-file-meta{font-size:12px;color:#777}
+.editor .hb-file-btn{font-size:12px;padding:6px 10px;border-radius:6px;background:#0123b4;color:#fff;white-space:nowrap}
+.editor .hb-file.sel a{outline:3px solid #0123b4}.editor .hb-file.uploading{opacity:.5}

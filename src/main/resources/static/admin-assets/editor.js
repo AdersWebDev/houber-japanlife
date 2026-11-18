@@ -122,12 +122,15 @@ function fromSite(html) {
   $$('.middle-title-box', b).forEach(box => { const h = $('h2', box); if (h) box.replaceWith(h); else unwrap(box); });
   $$('div.detail-thumbnail', b).forEach(d => { const imgs = $$('img', d); if (!imgs.length) d.remove(); else d.replaceWith(figureOf(imgs, 'ed-img', d)); });
   $$('div.img-pair', b).forEach(d => d.replaceWith(figureOf($$('img', d), 'ed-pair', d)));
-  $$('div.hb-video', b).forEach(d => d.setAttribute('contenteditable', 'false'));
+  $$('div.hb-video, div.hb-file', b).forEach(d => d.setAttribute('contenteditable', 'false'));
   return b.innerHTML.trim() || '<p><br></p>';
 }
 /** 편집기 -> 사이트 형식 (detail.css가 꾸미는 모양) */
 function toSite(html) {
   const b = parseBody(html);
+  $$('.hb-file.uploading', b).forEach(e => e.remove()); // 다 안 올라간 PDF는 저장하지 않음
+  $$('.sel', b).forEach(e => e.classList.remove('sel'));
+  $$('[class=""]', b).forEach(e => e.removeAttribute('class'));
   $$('[contenteditable]', b).forEach(e => e.removeAttribute('contenteditable'));
   $$('figure', b).forEach(f => {
     const imgs = $$('img', f).filter(i => i.getAttribute('src'));
@@ -228,16 +231,53 @@ async function uploadFigure(fig, files) {
     fig.remove(); toast('사진을 올리지 못했습니다: ' + e.message, 5000);
   }
 }
+/* ---------- PDF 넣기: 본문에 '열기 / 받기' 상자 ---------- */
+const PDF_MAX = 20 * 1024 * 1024;
+function sizeText(n) { return n >= 1048576 ? (n / 1048576).toFixed(1) + 'MB' : Math.max(1, Math.round(n / 1024)) + 'KB'; }
+function fileBox(url, name, size) {
+  const d = document.createElement('div'); d.className = 'hb-file'; d.contentEditable = 'false';
+  const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener';
+  const icon = document.createElement('span'); icon.className = 'hb-file-icon'; icon.textContent = '📄';
+  const text = document.createElement('span'); text.className = 'hb-file-text';
+  const n = document.createElement('span'); n.className = 'hb-file-name'; n.textContent = name;
+  const m = document.createElement('span'); m.className = 'hb-file-meta'; m.textContent = 'PDF · ' + sizeText(size);
+  text.append(n, m);
+  const btn = document.createElement('span'); btn.className = 'hb-file-btn'; btn.textContent = '열기 / 받기';
+  a.append(icon, text, btn); d.append(a);
+  return d;
+}
+async function insertPdf(file) {
+  if (!file) return;
+  if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') return toast('PDF 파일만 올릴 수 있습니다');
+  if (file.size > PDF_MAX) return toast(`PDF는 20MB 이하만 올릴 수 있습니다 (이 파일 ${mb(file.size)})`, 4000);
+  restoreRange();
+  const box = fileBox('#', file.name, file.size); box.classList.add('uploading');
+  insertBlock(box);
+  try {
+    const fd = new FormData(); fd.append('file', file, file.name);
+    const res = await fetch('/admin/api/file', { method: 'POST', headers: { 'X-Admin-Token': token }, body: fd });
+    if (res.status === 413) throw new Error('서버의 업로드 크기 제한에 걸렸습니다 (nginx client_max_body_size 설정 필요)');
+    const data = await handle(res);
+    box.replaceWith(fileBox(data.url, data.name, data.size));
+    toast('PDF를 올렸습니다');
+  } catch (e) {
+    box.remove(); toast('PDF를 올리지 못했습니다: ' + e.message, 6000);
+  }
+  changed();
+}
+$('#file-pdf').addEventListener('change', e => { insertPdf(e.target.files[0]); e.target.value = ''; });
+
 $('#file-image').addEventListener('change', e => { const pair = e.target.dataset.pair === '1'; insertImages(e.target.files, pair); e.target.value = ''; });
 
 // 사진 선택(클릭) -> Delete/Backspace로 지우기
 editor.addEventListener('click', e => {
-  $$('figure.sel', editor).forEach(f => f.classList.remove('sel'));
-  const f = e.target.closest('figure, .hb-video');
+  $$('figure.sel, .hb-video.sel, .hb-file.sel', editor).forEach(f => f.classList.remove('sel'));
+  if (e.target.closest('.hb-file a')) e.preventDefault(); // 편집 중에는 PDF를 열지 않음
+  const f = e.target.closest('figure, .hb-video, .hb-file');
   if (f && editor.contains(f)) f.classList.add('sel');
 });
 editor.addEventListener('keydown', e => {
-  const sel = $('figure.sel, .hb-video.sel', editor);
+  const sel = $('figure.sel, .hb-video.sel, .hb-file.sel', editor);
   if (sel && (e.key === 'Delete' || e.key === 'Backspace')) {
     e.preventDefault(); const next = sel.nextElementSibling; sel.remove(); if (next) placeCaret(next); changed();
   }
@@ -293,6 +333,7 @@ const actions = {
     for (let r = 0; r < 3; r++) { const tr = document.createElement('tr'); for (let c = 0; c < 2; c++) { const td = document.createElement('td'); td.innerHTML = r === 0 && c === 0 ? '항목' : (r === 0 ? '내용' : '<br>'); tr.append(td); } tb.append(tr); }
     const first = $('td', t); insertBlock(t, first); getSelection().selectAllChildren(first);
   },
+  pdf() { saveRange(); $('#file-pdf').click(); },
   youtube() {
     restoreRange();
     const url = prompt('유튜브 영상 주소를 넣어 주세요');
@@ -426,7 +467,7 @@ function renderThumbs() {
 $('#btn-publish').addEventListener('click', () => {
   const m = $('#publish-modal');
   if (!titleEl.value.trim()) return toast('제목을 입력해 주세요');
-  if ($('figure.uploading', editor)) return toast('사진을 올리는 중입니다. 잠시 후 다시 눌러 주세요');
+  if ($('figure.uploading, .hb-file.uploading', editor)) return toast('사진·PDF를 올리는 중입니다. 잠시 후 다시 눌러 주세요');
   $('#pub-category').value = currentCategory();
   if (!m.dataset.opened) {
     $('#pub-description').value = postData.description || '';
