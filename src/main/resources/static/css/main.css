@@ -175,3 +175,12 @@ button:focus-visible,
         line-height: normal;
     }
 }
+
+/* 개인정보처리방침 · 이용약관 */
+.legal-page { max-width: 72rem; margin: 0 auto; padding: 2rem 1.6rem 12rem; color: #fff; font-size: 1.5rem; line-height: 1.8; }
+.legal-page h1 { font-size: 2.4rem; margin: 1rem 0 2rem; }
+.legal-page h2 { font-size: 1.8rem; margin: 3rem 0 1rem; }
+.legal-page p { margin: 0 0 1.2rem; }
+.legal-page ol, .legal-page ul { margin: 0 0 1.2rem; padding-left: 2.2rem; }
+.legal-page li { margin: 0.4rem 0; }
+.legal-page .legal-date { margin-top: 3rem; color: #c8c8c8; }

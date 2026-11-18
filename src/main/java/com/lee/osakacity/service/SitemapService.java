@@ -95,6 +95,8 @@ public class SitemapService {
             appendUrl(xml, "list?category=" + c.name(), d);
         }
         list.forEach(s -> appendUrl(xml, s.getLink(), s.getModifiedTime()));
+        appendUrl(xml, "privacy", null);
+        appendUrl(xml, "terms", null);
 
         xml.append("</urlset>");
         return xml.toString().trim();
