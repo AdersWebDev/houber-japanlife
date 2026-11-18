@@ -414,37 +414,34 @@ public class PostService {
         result.sort(Comparator.comparing(SearchResponseDto::getDateTime).reversed());
         return result;
     }
+    /**
+     * 글 하단 '이어지는 가이드': 같은 카테고리에서 지금 글 바로 다음 글부터 15개.
+     * 다음 글이 15개가 안 되면 바로 앞 글부터 거슬러 올라가며 채운다 (모든 글이 고르게 다른 글에서 링크되도록).
+     */
     public List<SimpleResponse> moreContents(Category category, long id) {
-        List<SimpleResponse> dtoList = new ArrayList<>(
-                jpaQueryFactory
-                        .select(Projections.constructor(SimpleResponse.class,
-                                qPost.id,
-                                qPost.view,
-                                qPost.title,
-                                qPost.thumbnailUrl,
-                                Expressions.constant("/detail/")
-                        ))
-                        .from(qPost)
-                        .where(qPost.isShow.isTrue().and(
-                                qPost.category.eq(category).and(qPost.id.ne(id))
-                        ))
-                        .limit(15)
-                        .orderBy(qPost.id.asc())
-                        .fetch()
-        );
+        final int size = 15;
+        List<SimpleResponse> next = moreContentsQuery(qPost.id.gt(id), category, qPost.id.asc(), size);
+        if (next.size() >= size) return next;
+        List<SimpleResponse> result = new ArrayList<>(next);
+        result.addAll(moreContentsQuery(qPost.id.lt(id), category, qPost.id.desc(), size - next.size()));
+        return result;
+    }
 
-        // 2. 리스트 분리 및 재정렬
-        List<SimpleResponse> greaterList = dtoList.stream()
-                .filter(dto -> dto.getId() > id)
-                .toList();
-
-        List<SimpleResponse> lesserList = dtoList.stream()
-                .filter(dto -> dto.getId() < id)
-                .toList();
-
-        // 3. 최종 리스트 합치기 (큰 값이 먼저, 그 뒤 작은 값)
-        return Stream.concat(greaterList.stream(), lesserList.stream())
-                .collect(Collectors.toList());
+    private List<SimpleResponse> moreContentsQuery(com.querydsl.core.types.Predicate range, Category category,
+                                                   com.querydsl.core.types.OrderSpecifier<Long> order, int limit) {
+        return jpaQueryFactory
+                .select(Projections.constructor(SimpleResponse.class,
+                        qPost.id,
+                        qPost.view,
+                        qPost.title,
+                        qPost.thumbnailUrl,
+                        Expressions.constant("/detail/")
+                ))
+                .from(qPost)
+                .where(qPost.isShow.isTrue().and(qPost.category.eq(category)).and(range))
+                .orderBy(order)
+                .limit(limit)
+                .fetch();
     }
     @Transactional
     public PostResponseDto getDetail(Long id) {
