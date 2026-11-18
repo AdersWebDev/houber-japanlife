@@ -471,6 +471,7 @@ $('#btn-publish').addEventListener('click', () => {
   $('#pub-category').value = currentCategory();
   if (!m.dataset.opened) {
     $('#pub-description').value = postData.description || '';
+    $('#pub-keyword').value = postData.keyword || '';
     const show = postData.show !== 'false';
     $$('input[name="pub-show"]').forEach(r => (r.checked = (r.value === String(show))));
     m.dataset.opened = '1';
@@ -500,7 +501,7 @@ $('#pub-go').addEventListener('click', async () => {
     btn.textContent = '저장 중…';
     const body = {
       category: $('#pub-category').value, title: titleEl.value.trim(), content: toSite(currentHtml()),
-      thumbnailUrl: thumb, description: $('#pub-description').value.trim(),
+      thumbnailUrl: thumb, description: $('#pub-description').value.trim(), keyword: $('#pub-keyword').value.trim(),
       show: $('input[name="pub-show"]:checked').value === 'true',
     };
     const data = postId ? await api('PUT', '/admin/api/posts/' + postId, body) : await api('POST', '/admin/api/posts', body);

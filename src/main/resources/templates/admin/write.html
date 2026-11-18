@@ -53,6 +53,7 @@
               data-category=${post == null ? defaultCategory.name() : post.category.name()},
               data-thumbnail=${post == null ? '' : post.thumbnailUrl},
               data-description=${post == null ? '' : post.description},
+              data-keyword=${post == null ? '' : post.keyword},
               data-show=${post == null ? 'true' : post.show}"></div>
 <input type="file" id="file-image" accept="image/*" multiple hidden>
 <input type="file" id="file-pdf" accept="application/pdf,.pdf" hidden>
@@ -68,6 +69,8 @@
   <button type="button" class="btn small" id="pub-thumb-upload" style="margin-top:8px">다른 사진 올리기</button>
   <label>요약 <span class="sub">검색·카톡 공유에 보이는 한 줄. 비우면 본문 앞부분이 들어갑니다</span></label>
   <input id="pub-description" maxlength="200">
+  <label>메타 키워드 <span class="sub">쉼표(,)로 구분. 비우면 기본 키워드(하우버, houber, 일본, 일본 생활, 일본 워홀, 워킹홀리데이, 오사카)가 들어갑니다</span></label>
+  <input id="pub-keyword" maxlength="250" placeholder="예: 텐노지, 오사카 원룸, 일본 워홀 집, 입주후기">
   <label>공개</label>
   <div class="radio"><label><input type="radio" name="pub-show" value="true"> 바로 공개</label><label><input type="radio" name="pub-show" value="false"> 숨김 (나중에 공개)</label></div>
   <div class="modal-err" id="pub-err"></div>
