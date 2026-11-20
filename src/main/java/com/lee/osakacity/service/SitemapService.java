@@ -154,9 +154,9 @@ public class SitemapService {
                     <pubDate>%s</pubDate>
                 </item>
             """.formatted(
-                    r.getTitle(),
-                    r.getLink(),
-                    r.getDescription(),
+                    xmlText(r.getTitle()),       // 제목·설명의 & < > 를 XML 규칙대로 (예: Q&A)
+                    xmlText(r.getLink()),
+                    xmlText(r.getDescription()),
                     formatToRFC1123(r.getModifiedTime()) // RFC-1123 포맷 적용
             ));
         }
@@ -166,6 +166,26 @@ public class SitemapService {
 
         return rss.toString().trim();
     }
+    /** XML 글자로 바꿈: & < > " ' 는 엔티티로, XML에 쓸 수 없는 제어 문자는 뺌 */
+    static String xmlText(String s) {
+        if (s == null) return "";
+        StringBuilder out = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '&' -> out.append("&amp;");
+                case '<' -> out.append("&lt;");
+                case '>' -> out.append("&gt;");
+                case '"' -> out.append("&quot;");
+                case '\'' -> out.append("&apos;");
+                default -> {
+                    if (c >= 0x20 || c == '\t' || c == '\n' || c == '\r') out.append(c);
+                }
+            }
+        }
+        return out.toString();
+    }
+
     private String formatToRFC1123(LocalDateTime localDateTime) {
         return ZonedDateTime.of(localDateTime, ZoneId.systemDefault()) // 시스템 타임존 적용
                 .format(DateTimeFormatter.RFC_1123_DATE_TIME);
