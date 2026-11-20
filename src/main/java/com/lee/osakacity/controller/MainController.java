@@ -40,9 +40,10 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("title", "하우버 | 일본 생활의 모든 정보를 한눈에");
-        model.addAttribute("description", "일본 생활 정보, 워킹홀리데이, 유학등 모든 콘텐츠를 알려드려요!");
-        model.addAttribute("keywords", "houber, 하우버, japan-life, 일본, 일본 워홀, 워킹홀리데이, 일본 워킹홀리데이");
+        // 메인 검색 제목·설명: 메인 키워드 「일본 부동산」 기준 (2026-11-20 지시, 문구 그대로)
+        model.addAttribute("title", "일본 부동산 하우버 | 오사카 워홀 · 유학 집 구하기");
+        model.addAttribute("description", "일본 워홀 · 유학 · 취업으로 오사카에 오시나요? 일본 부동산 하우버가 집 구하기를 한국어로 도와드려요. 월세 · 초기비용 · 계약 순서와 실제 입주 후기를 확인해 보세요.");
+        model.addAttribute("keywords", "일본 부동산, 하우버, 오사카 부동산, 일본 집 구하기, 일본 워홀, 워킹홀리데이, 일본 부동산 사이트, 오사카 한인부동산");
         model.addAttribute("siteUrl", SITE + "/"); // 사이트맵의 홈 주소와 같은 형식 (끝 슬래시)
         model.addAttribute("thumbnail","https://houber-japanlife.com/asset/logo.png");
         model.addAttribute("houber_news",postService.getList(Category.houber_news, 10, null, null, null));

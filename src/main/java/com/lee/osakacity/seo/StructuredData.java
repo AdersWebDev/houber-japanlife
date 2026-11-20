@@ -36,7 +36,7 @@ public final class StructuredData {
         o.put("url", SITE + "/");
         o.put("logo", LOGO);
         o.put("image", LOGO);
-        o.put("description", "오사카 한인 부동산 하우버. 일본 워킹홀리데이·유학·취업으로 오시는 분들의 집 구하기를 돕습니다.");
+        o.put("description", "일본 부동산 하우버. 오사카에서 일본 워킹홀리데이·유학·취업으로 오시는 분들의 집 구하기를 한국어로 돕습니다.");
         Map<String, Object> address = new LinkedHashMap<>();
         address.put("@type", "PostalAddress");
         address.put("postalCode", "550-0004");
