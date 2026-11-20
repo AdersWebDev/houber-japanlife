@@ -138,9 +138,9 @@ public class SitemapService {
         rss.append("<channel>\n");
         rss.append("""
 
-                <title>하우버 - 일본 생활의 모든 정보를 한눈에</title>
+                <title>일본 부동산 하우버 | 오사카 워홀 · 유학 집 구하기</title>
                 <link>https://houber-japanlife.com</link>
-                <description>일본 생활 정보, 워킹홀리데이, 유학등 모든 콘텐츠를 알려드려요!</description>
+                <description>일본 워홀 · 유학 · 취업으로 오사카에 오시나요? 일본 부동산 하우버가 집 구하기를 한국어로 도와드려요. 월세 · 초기비용 · 계약 순서와 실제 입주 후기를 확인해 보세요.</description>
                 <lastBuildDate>%s</lastBuildDate>
                 <language>ko</language>
         """.formatted(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)));
