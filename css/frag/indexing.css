@@ -1,0 +1,110 @@
+#indexing-control {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 1rem;
+    background-color: #535353;
+    width: 1.9rem;
+    height: 6rem;
+    z-index: 5;
+    border-radius: 2px;
+    overflow: hidden;
+}
+#indexing-control img {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+#indexing-control.active{
+    transform: rotate(180deg);
+}
+#indexing-modal {
+    position: fixed;
+    top: 53%;
+    left: -10%;
+    background-color: #323232;
+    width: 15rem;
+    height: 30rem;
+    z-index: 5;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    transform: translateY(-50%);
+    transition: left 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.5s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+#indexing-modal.active {
+    left: 1rem;
+    opacity: 1;
+    visibility: visible;
+}
+#indexing-modal.closing {
+    left: -100%;
+    opacity: 0;
+    visibility: hidden;
+}
+/* 제목 스타일 */
+#indexing-modal h3 {
+    font-size: 1.8rem;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0 1.5rem;
+}
+
+/* 목록 스타일 */
+#indexing-modal ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+/**/
+
+#indexing-modal li {
+    font-size: 1.4rem;
+    color: #d9d9d9;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+#indexing-modal li:hover {
+    background-color: #444;
+    color: #fff;
+}
+#indexing-modal li.active {
+    background-color: #0044ff;
+    color: #fff;
+}
+#indexing-modal li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+#indexing-modal::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+#indexing-modal::-webkit-scrollbar-track {
+    background: #616060;
+
+}
+#indexing-modal::-webkit-scrollbar-thumb {
+    background: #323232;
+}
+@media (min-width: 1024px) {
+    #indexing-control{
+        display: none;
+    }
+    #indexing-modal {
+        top: 24.2rem;
+        /*left: 10%;*/
+        z-index: 10;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 1rem;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+    }
+}

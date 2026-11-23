@@ -1,0 +1,176 @@
+footer {
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #212121;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.m-footer-left {
+    width: 13rem;
+    padding: 1.7rem 0 0 2.3rem ;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.2rem;
+    display: inline-flex;
+}
+.m-footer-logo {
+    font-size: 10rem;
+    font-weight: bold;
+    margin: 0;
+    color: #aaa;
+    width: 10rem;
+    height: 2.18rem;
+    opacity: 0.40
+}
+.m-footer-left p {
+    width: 13rem;
+    opacity: 0.2;
+    color: white;
+    word-wrap: break-word;
+    letter-spacing: normal;
+    line-height: normal;
+    margin: 0;
+}
+.m-footer-right {
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    display: inline-flex;
+}
+.m-footer-right a {
+    min-width: 4.4rem;
+    min-height: 4.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.m-footer-right img {
+    width: 3rem;
+    height: 3rem;
+}
+/* 왼쪽 영역 (로고) */
+.footer-left {
+    display: none;
+    width: 14rem;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.footer-left img.footer-logo {
+    height: 3rem; /* 로고 높이 지정 */
+    object-fit: contain;
+    opacity: 0.40
+}
+
+/* 중간 영역 (소개 텍스트) */
+.footer-middle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left; /* 텍스트 중앙 정렬 */
+    width: 21rem;
+}
+
+footer .xs {
+    margin: 0.3rem 0; /* 텍스트 간격 */
+    font-size: 0.9rem;
+    opacity: 0.4;
+}
+
+/* 오른쪽 영역 (아이콘 및 주소) */
+.footer-right {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 16.5rem;
+}
+.footer-right .xxs {
+    font-size: 0.7rem;
+    opacity: 0.4;
+    margin: 0;
+    line-height: normal;
+}
+.footer-right .icons {
+    display: flex;
+    gap: 1.5rem; /* 아이콘 간 간격 */
+    margin-bottom: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.footer-right img {
+    width: 2rem; /* 아이콘 크기 설정 */
+    height: 2rem;
+    object-fit: contain;
+}
+
+@media (min-width: 1024px) {
+    .m-footer-left,
+    .m-footer-right {
+        display: none;
+    }
+    footer {
+        gap: 2rem;
+        height: 5rem;
+    }
+    footer .xs {
+        margin: 0.1rem;
+    }
+    .footer-left,
+    .footer-middle,
+    .footer-right {
+        display: flex;
+    }
+    .footer-right .icons {
+        margin: 0;
+    }
+}
+@media (min-width: 1440px) {
+    .m-footer-left,
+    .m-footer-right {
+        display: none;
+    }
+    footer {
+        gap: 2rem;
+        height: 8rem;
+    }
+    footer .xs {
+        font-size: 1rem;
+        margin: 0.1rem;
+    }
+    .footer-left,
+    .footer-middle,
+    .footer-right {
+        display: flex;
+    }
+    .footer-right .icons {
+        margin: 0;
+    }
+}
+
+/* 개인정보처리방침 · 이용약관 링크 (작은 회색 글씨) */
+footer .footer-legal {
+    margin: 0.2rem 0 0;
+    font-size: 0.9rem;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #fff;
+    opacity: 0.45;
+}
+.m-footer-left .footer-legal { width: auto; opacity: 0.45; }
+footer .footer-legal a { color: inherit; text-decoration: none; }
+footer .footer-legal a:hover { text-decoration: underline; }
+.footer-middle .footer-legal { margin-top: 0.3rem; }
+/* 모바일: 링크 한 줄이 고정 높이(7rem) 푸터 안에 들어가도록 위 여백을 줄임 */
+@media (max-width: 1023px) {
+    .m-footer-left { padding-top: 0.4rem; gap: 0.1rem; }
+    .m-footer-left .footer-legal { margin-top: 0; }
+}

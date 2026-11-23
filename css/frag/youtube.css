@@ -1,0 +1,47 @@
+.youtube-box {
+    display: block;
+}
+
+.plane {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16/9;
+    margin: 0 auto;
+}
+.short {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9/16;
+    margin: 0 auto;
+}
+iframe.instagram-media {
+    min-width: 0 !important;
+}
+.slider-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2.5rem 0;
+}
+.slider-head p {
+    font-size: 1.1rem;
+    line-height: normal;
+}
+.slider-head a {
+    width: 20rem;
+}
+.slider-head a img {
+    width: 100%;
+    height: auto;
+}
+
+.instagram-box {
+    display: block;
+    margin: 0 auto;
+}
+@media (min-width: 768px) {
+    .short {
+        width: 60%;
+    }
+}
+

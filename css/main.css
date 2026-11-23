@@ -1,0 +1,187 @@
+/* 브레이크포인트: 모바일 default, 768px 태블릿, 1024px 데스크톱 */
+:root {
+    --color-surface: #212121;
+    --color-border: #4D4D4D;
+    --space-footer: 7rem;
+    --z-floating: 100;
+    --z-header: 10;
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+.content-spacer {
+    display: block;
+    height: 4rem;
+}
+
+.content-spacer--large {
+    height: 10rem;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+html, body {
+    width: 100%;
+    min-width: 100%;
+    font-size: 10px;
+}
+html {
+    min-height: 100vh;
+    min-height: 100dvh;
+    min-height: -webkit-fill-available;
+}
+body {
+    font-family: 'Pretendard-Regular', sans-serif;
+    background-color: #212121;
+    color: white;
+    overflow-wrap: break-word;
+    padding: 0;
+    max-width: 74rem;
+    margin: 0 auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    min-height: 100vh;
+    min-height: 100dvh;
+    min-height: -webkit-fill-available;
+}
+img {
+    user-drag: none; /* Safari 브라우저 지원 */
+    -webkit-user-drag: none; /* Safari와 Chrome 브라우저 지원 */
+}
+.error {
+    display: block;
+    max-width: 70%;
+    margin: 0 auto;
+}
+::-webkit-scrollbar {
+    width: 12px; /* 세로 스크롤바의 너비 */
+    height: 12px; /* 가로 스크롤바의 높이 */
+}
+::-webkit-scrollbar-track {
+    background: #616060; /* 트랙의 기본 배경색 */
+
+}
+::-webkit-scrollbar-thumb {
+    background: #323232; /* 핸들의 색상 */
+    border: 3px solid rgba(240, 240, 240, 0); /* 핸들의 외곽선, 트랙 배경과 동일한 색상 */
+}
+
+/*#go-top {*/
+/*    display: flex;*/
+/*    position: fixed;*/
+/*    top: 64rem;*/
+/*    left: 76%;*/
+/*    width: 3rem;*/
+/*    height: 5rem;*/
+/*    z-index: 5;*/
+/*    flex-direction: column;*/
+/*    cursor: pointer;*/
+/*}*/
+/*#go-top svg{*/
+/*    width: 100%;*/
+/*    height: auto;*/
+/*    display: block;*/
+/*    fill: #525252;*/
+/*}*/
+/*#go-top span {*/
+/*    font-size: 1.5rem;*/
+/*    color: #d3d3d3;*/
+/*    margin: 0 auto;*/
+/*}*/
+/*default - mobile 375*/
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 25px;
+}
+h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+h3 {
+    font-size: 1.7rem;
+    font-weight: 500;
+}
+p,u,strike {
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 20px;
+}
+.s {
+    font-size: 1.2rem;
+}
+.xs {
+    font-size: 0.9rem;
+
+}
+a:focus-visible,
+button:focus-visible,
+[tabindex="0"]:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+}
+
+.update-dot {
+    width: 1.4rem;
+    height: 1.4rem;
+    background: center center no-repeat url('/asset/new_icon.svg');
+    background-size: contain;
+    display: inline-block;
+}
+@media (min-width: 1023px) {
+
+    h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        line-height: 34px;
+    }
+    h2 {
+        font-size: 2.4rem;
+        font-weight: 600;
+        line-height: 30px;
+    }
+    h3 {
+        font-size: 2.1rem;
+        font-weight: 600;
+        line-height: 25px;
+    }
+    p,u,strike {
+        font-size: 1.5rem;
+        font-weight: 400;
+        line-height: 25px;
+    }
+    .s {
+        font-size: 1.2rem;
+        line-height: 0;
+    }
+    .xs {
+        font-size: 0.9rem;
+        line-height: normal;
+    }
+}
+
+/* 개인정보처리방침 · 이용약관 */
+.legal-page { max-width: 72rem; margin: 0 auto; padding: 2rem 1.6rem 12rem; color: #fff; font-size: 1.5rem; line-height: 1.8; }
+.legal-page h1 { font-size: 2.4rem; margin: 1rem 0 2rem; }
+.legal-page h2 { font-size: 1.8rem; margin: 3rem 0 1rem; }
+.legal-page p { margin: 0 0 1.2rem; }
+.legal-page ol, .legal-page ul { margin: 0 0 1.2rem; padding-left: 2.2rem; }
+.legal-page li { margin: 0.4rem 0; }
+.legal-page .legal-date { margin-top: 3rem; color: #c8c8c8; }
+.legal-page a { color: #9db7ff; word-break: break-all; }
