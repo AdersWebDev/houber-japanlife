@@ -1,0 +1,428 @@
+.detail-content {
+    position: relative;
+    display: block;
+    max-width: 100%;
+    margin-bottom: 15rem;
+    /* 한글이 단어 중간에서 줄바꿈되지 않게 (띄어쓰기에서만 줄바꿈). 긴 주소 등은 넘치지 않게 끊음 */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+/* 표는 칸이 좁고 띄어쓰기 없는 일본어가 많아서 예전처럼 (안 그러면 폰에서 표가 화면 밖으로 나감) */
+.detail-content table {
+    word-break: normal;
+}
+
+#contact-us {
+    display: block;
+    width: 100%;
+    min-height: 8rem;
+    height: 8rem;
+    background: url("/asset/detail-banner.png") center / cover;
+    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    #contact-us {
+        height: 14rem;
+    }
+}
+/*****************************/
+
+.detail-content .detail-thumbnail {
+    display: flex;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 1.5rem 0;
+    justify-content: center; /* 이미지 수평 중앙 정렬 */
+    align-items: center; /* 이미지 수직 중앙 정렬 */
+    background-color: #454545;
+}
+.detail-thumbnail img {
+    aspect-ratio: 1 / 1; /* 이미지의 비율을 1:1로 유지 */
+    max-width: 100%; /* 너비 최대로 */
+    max-height: 100%; /* 높이 최대로 */
+    object-fit: contain; /* 여백을 유지하면서 중앙을 채움 */
+    object-position: center; /* 이미지 중앙 정렬 */
+
+}
+/* 본문 사진: 대표 사진 뒤에 오는 상자는 원래 비율로 */
+.detail-content .detail-thumbnail ~ .detail-thumbnail {
+    aspect-ratio: auto;
+    background-color: transparent;
+}
+.detail-content .detail-thumbnail ~ .detail-thumbnail img {
+    aspect-ratio: auto;
+    max-width: 100%;
+    max-height: none;
+    height: auto;
+}
+.detail-content .center-div {
+    display: block;
+    margin: 0 auto;
+    border: #0123b4 2px solid;
+    background-color: #525252;
+    border-radius: 20px 5px 20px 5px;
+    max-width: 75%;
+    height: auto;
+    padding: 0.5rem;
+}
+.detail-content .center-text {
+    display: block;
+    text-align: center;
+    margin: 1.5rem auto;
+}
+
+.detail-content img {
+    max-width: 100%;
+    height: auto;
+}
+.detail-content p {
+    margin: 3rem 0;
+    /* 사이트 공통 p는 줄 간격 20px 고정이라, 목록(1.8)·상자(1.7)와 줄 간격이 달라 보임 → 글 본문은 글자 크기에 맞춰 1.7 */
+    line-height: 1.7;
+}
+.detail-content .checkList {
+    margin: 1.5rem 0;
+}
+.detail-content .checkList-li{
+    margin: 1.5rem 0 1.5rem 1rem;
+}
+.detail-content h3 {
+    height: auto;
+    padding-left: 0.5rem;
+    background-color: #403f3f;
+    margin: 3rem 0;
+}
+.detail-content .middle-title-box {
+    margin: 3rem 0;
+    height: auto;
+    background-color: #0123b3;
+}
+.detail-content .middle-title-box h2{
+    margin-left: 1rem;
+    padding-left: 1rem;
+    background-color: #403f3f;
+}
+/*****************************/
+.detail-header {
+    background-color: #323232;
+    margin-bottom: 1.5rem;
+}
+.detail-header h1 {
+    margin: 0;
+    padding: 0.5rem 1rem;
+}
+.detail-header p,
+.detail-header h3 {
+    letter-spacing: normal;
+    line-height: normal;
+    margin: 3rem 0;
+    padding: 0;
+}
+/* 제목 아래 게시일·수정일 */
+.detail-header p.detail-date {
+    margin: 0;
+    padding: 0 1rem;
+    color: #d0d0d0;
+}
+.detail-header-under {
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+.view-count-box {
+    display: flex;
+    justify-content: flex-start;
+    justify-items: center;
+    align-items: center;
+    gap: 0.5rem
+}
+.view-count-box img {
+    max-width: 1rem;
+    margin: 0;
+    height: auto;
+    object-fit: cover;
+}
+.highlight {
+    background-color: #354692;
+}
+
+hr.line1 {
+    width: 30%;
+    background-color: rgb(221, 221, 221);
+    margin: 3rem auto;
+
+}
+hr.line2 {
+    width: 100%;
+    margin: 3rem auto;
+    background-color: rgb(221, 221, 221);
+}
+hr.line3 {
+    height: 0.3rem;
+    width: 20%;
+    background-color: rgb(239, 239, 239);
+    margin: 3rem auto;
+}
+hr.line8 {
+    height: 5rem;
+    width: 1px;
+    background-color: rgb(239, 239, 239);
+    margin: 3rem auto;
+}
+div.blank{
+    height: 3rem;
+    width: 100%;
+    background: none;
+}
+/*-----------------------------------*/
+.quote-container.center {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 3rem auto;
+}
+.quote {
+    position: relative;
+    max-width: 60%;
+    flex-direction: column;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+.quote::before,
+.quote::after {
+    content: '❝'; /* Opening quotation mark */
+    font-size: 3.5rem;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.7;
+}
+.quote::before {
+    top: -4rem;
+    margin-bottom: 0;
+}
+.quote::after {
+    content: '❞'; /* Closing quotation mark */
+    margin-top: 0;
+}
+.quote p{
+    font-style: italic;
+    margin: 1rem;
+    padding: 0;
+}
+.quote-container.postit {
+    position: relative;
+    display: block;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    max-width: 40rem;
+    border: 3px solid #d3d3d3;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.quote-container.postit::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    border: 2rem solid #212121;
+    border-top-color: #f4f4f4;
+    border-left-color: #f4f4f4;
+    z-index: 2;
+}
+.quote-container.postit p {
+    margin: 1rem;
+    padding: 0;
+}
+.img-col {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem
+}
+.img-col .img-row {
+    display: flex;
+    flex-direction: row;
+    max-width: 50%;
+    gap: 0.5rem;
+}
+.img-col .img-col .img-row img{
+    object-fit: cover;
+    height: auto;
+}
+.embed-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 35rem;
+    height: auto;
+    margin: 3rem auto;
+    border: 1px solid #a5a5a5;
+    border-radius: 5px;
+    background-color: white;
+    gap: 0;
+}
+.embed-box a {
+    text-decoration: none;
+    color: white;
+}
+.embed-box .text-area {
+    display: block;
+    margin: 0;
+    padding: 1.5rem 2rem 1.3rem;
+    border: none;
+    box-shadow: none;
+    background-color: white;
+    color: black;
+    border-radius: 0;
+}
+.embed-box .text-area p{
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.embed-box .text-area .text-title {
+    font-size: 1.6rem;
+}
+.embed-box .text-area .text-description {
+    font-size: 1.2rem;
+    font-weight: 200;
+    color: #6a6a6a;
+}
+.detail-content .detail-table {
+    background-color: white;
+    color: black;
+}
+.detail-table, th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+.detail-table tbody tr td p {
+    margin: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+    .view-count-box img {
+        max-width: 1.5rem;
+        margin: 0;
+        height: auto;
+        object-fit: cover;
+    }
+}
+
+/* 관리자 글쓰기로 쓴 글에서 쓰는 블록 */
+.detail-content .img-pair {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+.detail-content .img-pair img {
+    width: 50%;
+    object-fit: cover;
+}
+.detail-content .hb-quote {
+    margin: 3rem 0;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid #FEE500;
+    background-color: #2c2c2c;
+    font-size: 1.5rem;
+    line-height: 1.7;
+}
+.detail-content .hb-quote p {
+    margin: 0;
+}
+.detail-content hr {
+    border: none;
+    border-top: 1px solid #555;
+    margin: 3rem 0;
+}
+.detail-content .hb-video {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 1.5rem 0;
+}
+.detail-content .hb-video iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+.detail-content ul,
+.detail-content ol {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    padding-left: 2rem;
+}
+
+/* ───────── 하우버 글 표준 틀 블록 (2026-11-17) ─────────
+   detail.css 맨 아래에 둠 (글 상세 영역 .detail-content 안에서만 적용). 이 CSS가 없어도 글은 읽히고 모양만 밋밋해요.
+   쓰는 class: hb-meta(기준 줄) · hb-summary(핵심 요약) · hb-toc(목차) · hb-tip(하우버 TIP) · hb-series(시리즈 이어 읽기) · hb-sources(참고 자료) · hb-box-title(상자 제목) */
+
+/* 본문 링크: 지금은 브라우저 기본 파랑이라 어두운 바탕에서 잘 안 보여요 */
+.detail-content a { color: #9db7ff; text-underline-offset: 3px; }
+
+.detail-content .hb-meta {
+    margin: 1.5rem 0;
+    padding: 0.8rem 0;
+    font-size: 1.3rem;
+    color: #c8c8c8;
+    border-top: 1px solid #4D4D4D;
+    border-bottom: 1px solid #4D4D4D;
+}
+.detail-content .hb-summary,
+.detail-content .hb-toc,
+.detail-content .hb-tip,
+.detail-content .hb-series,
+.detail-content .hb-sources {
+    margin: 3rem 0;
+    padding: 1.4rem 1.8rem;
+    border-radius: 12px;
+    background-color: #2c2c2c;
+    font-size: 1.5rem;
+    line-height: 1.7;
+}
+.detail-content .hb-summary { border: 2px solid #0123b3; }
+.detail-content .hb-toc { border: 1px solid #4D4D4D; }
+.detail-content .hb-tip { border-left: 4px solid #0123b3; border-radius: 0 12px 12px 0; }
+.detail-content .hb-series { border: 2px solid #354692; }
+.detail-content .hb-sources { border: 1px dashed #4D4D4D; font-size: 1.3rem; color: #d0d0d0; }
+.detail-content .hb-box-title { margin: 0 0 0.6rem; font-weight: 700; color: #FEE500; }
+.detail-content .hb-summary p,
+.detail-content .hb-tip p,
+.detail-content .hb-sources p { margin: 0.4rem 0; font-size: inherit; line-height: inherit; }
+.detail-content .hb-summary ul,
+.detail-content .hb-toc ul,
+.detail-content .hb-sources ul { margin: 0; padding-left: 1.8rem; font-size: inherit; line-height: inherit; }
+.detail-content .hb-toc ul { list-style: none; padding-left: 0; }
+.detail-content .hb-toc li { margin: 0.3rem 0; }
+.detail-content .hb-toc a { color: #fff; }
+.detail-content .hb-series ol { margin: 0; padding-left: 2.4rem; font-size: inherit; line-height: inherit; }
+.detail-content .hb-series li { margin: 0.2rem 0; }
+.detail-content .hb-series .hb-now { color: #FEE500; font-weight: 700; }
+.detail-content .hb-series .hb-nav { margin: 1rem 0 0; padding-top: 0.8rem; border-top: 1px solid #4D4D4D; }
+.detail-content .detail-table caption { color: #d0d0d0; padding: 0.4rem 0; }
+
+/* PDF 열기 / 받기 상자 (관리자 글쓰기의 📎 PDF) */
+.detail-content .hb-file { margin: 2rem 0; }
+.detail-content .hb-file a {
+    display: flex; align-items: center; gap: 1.2rem;
+    padding: 1.2rem 1.4rem; border: 1px solid #4D4D4D; border-radius: 12px;
+    background-color: #2c2c2c; color: #fff; text-decoration: none;
+}
+.detail-content .hb-file-icon { font-size: 2.4rem; line-height: 1; }
+.detail-content .hb-file-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.2rem; }
+.detail-content .hb-file-name { font-size: 1.5rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.detail-content .hb-file-meta { font-size: 1.2rem; color: #c8c8c8; }
+.detail-content .hb-file-btn {
+    font-size: 1.3rem; font-weight: 700; padding: 0.7rem 1.1rem; border-radius: 8px;
+    background-color: #0123b3; color: #fff; white-space: nowrap;
+}

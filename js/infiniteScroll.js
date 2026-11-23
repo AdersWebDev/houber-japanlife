@@ -1,0 +1,109 @@
+/** 리스트 페이지 무한 스크롤 ( .grid-items, #loading 존재 시에만 동작 ) */
+// 무한 스크롤 설정
+let cursorView = null;
+let cursorId = null;
+let cursorTime = null;
+let isLoading = false; // 중복 호출 방지
+
+const contentContainer = document.querySelector('.grid-items');
+const loadingIndicator = document.getElementById('loading');
+
+// 📌 URL에서 category 파라미터 가져오기
+const urlParams = new URLSearchParams(window.location.search);
+const category = urlParams.get('category') || 'hot_post'; // 기본값 설정
+
+// 📌 마지막 요소에서 커서 정보 가져오기
+function updateCursorFromLastItem() {
+    if (!contentContainer) return;
+    const lastImg = contentContainer.querySelector('.grid-item:last-child img');
+    if (lastImg) {
+        cursorId = lastImg.dataset.id || null;
+        cursorView = lastImg.dataset.view || null;
+        cursorTime = lastImg.dataset.time || null;
+    }
+}
+
+// 📌 API 호출 함수
+async function fetchMoreContent() {
+    if (!contentContainer || !loadingIndicator) return;
+    try {
+        const actualCursorTime = cursorTime === "null" ? null : cursorTime;
+        const queryParams = [
+            `category=${category}`,
+            cursorView ? `cursorView=${cursorView}` : null,
+            cursorId ? `cursorId=${cursorId}` : null,
+            actualCursorTime ? `cursorTime=${actualCursorTime}` : null,
+            // 이미 불러온 개수 (입주후기 & 맨션정보에서 사용). 2페이지 이후로 들어왔으면 앞 페이지 개수만큼 더함
+            `offset=${(parseInt(contentContainer.dataset.offset, 10) || 0) + contentContainer.querySelectorAll('.grid-item').length}`
+        ].filter(Boolean);
+
+        const apiUrl = `/post/list?${queryParams.join('&')}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (response.ok && data.length > 0) {
+            data.forEach(item => {
+                const gridItem = document.createElement('div');
+                gridItem.className = 'grid-item';
+
+                const link = document.createElement('a');
+                link.href = item.link;
+
+                const imageWrapper = document.createElement('div');
+                imageWrapper.classList.add('image-wrapper');
+                const img = document.createElement('img');
+                img.src = item.thumbnailUrl;
+                img.alt = item.title;
+                img.loading = 'lazy';
+                img.dataset.id = item.id;
+                img.dataset.view = item.view;
+                img.dataset.time = item.cursorTime;
+                const divTitle = document.createElement('div');
+                divTitle.classList.add('title');
+                divTitle.innerText = item.title;
+
+                imageWrapper.appendChild(img);
+                imageWrapper.appendChild(divTitle);
+                link.appendChild(imageWrapper);
+                gridItem.appendChild(link);
+                contentContainer.appendChild(gridItem);
+            });
+            updateCursorFromLastItem();
+            // 스크롤로 이어 불러왔으면 페이지 링크는 숨김 (검색엔진용 링크라 화면에서는 필요 없음)
+            const pager = document.querySelector('.list-pager');
+            if (pager) pager.style.display = 'none';
+        } else {
+            window.removeEventListener('scroll', handleScroll);
+        }
+    } catch (error) {
+        console.error('데이터를 불러오는 중 오류 발생:', error);
+    } finally {
+        isLoading = false;
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+    }
+}
+
+let scrollTimeout = null;
+function handleScroll() {
+    if (!contentContainer || !loadingIndicator) return;
+    if (scrollTimeout) return;
+    if (isLoading) return;
+    scrollTimeout = setTimeout(() => {
+        scrollTimeout = null;
+        // 바닥 근처일 때만 로딩 상태로 바꾼다 (바닥이 아닐 때 로딩 상태가 풀리지 않아 더 불러오지 못하던 문제 수정)
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+            isLoading = true;
+            loadingIndicator.style.display = 'block';
+            fetchMoreContent();
+        }
+    }, 300);
+}
+
+// 스크롤 리스너는 컨테이너와 로딩 요소가 모두 있을 때만 등록
+if (contentContainer && loadingIndicator) {
+    window.addEventListener('scroll', handleScroll);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (contentContainer) updateCursorFromLastItem();
+});

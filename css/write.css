@@ -1,0 +1,96 @@
+/* 글쓰기 페이지 공통 스타일 */
+.write-container {
+    position: relative;
+    display: block;
+    gap: 20px;
+    width: 100%;
+    min-height: 70rem;
+    background-color: #212121;
+}
+
+/* 글쓰기 영역 */
+.editor {
+    display: block;
+    width: 100%;
+    min-height: 70rem;
+    border: 1px solid #ddd;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #212121;
+}
+
+/* 사이드바 */
+.cssSidebar {
+    display: block;
+    position: fixed;
+    top: 10rem;
+    right: 40rem;
+    border-left: 1px solid #ddd;
+    padding: 10px;
+    background-color: #212121;
+}
+
+/* 스타일 버튼 */
+.style-btn {
+    display: block;
+    margin: 5px 0;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* 저장 버튼 */
+.save-btn {
+    margin: 20px auto;
+    display: block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* 공통 스타일 */
+.post-info {
+    display: block;
+    position: fixed;
+    top: 10rem;
+    left: 40rem;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+    background-color: #212121;
+}
+
+.post-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.post-info input[type="text"],
+.post-info select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.post-info input[type="text"]:focus,
+.post-info select:focus {
+    border-color: #0078d7;
+    outline: none;
+}
+
+.post-info select {
+    background-color: #fff;
+    color: #333;
+}
+
+.post-info label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #555;
+}
