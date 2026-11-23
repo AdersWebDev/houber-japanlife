@@ -69,6 +69,13 @@ public final class StructuredData {
     public static String article(String url, String headline, String description, String image,
                                  LocalDateTime published, LocalDateTime modified,
                                  String categoryName, String categoryUrl) {
+        return article(url, headline, description, image, published, modified, categoryName, categoryUrl, List.of());
+    }
+
+    /** @param faq 본문 '자주 묻는 질문' 섹션의 [질문, 답] 목록. 있으면 FAQPage도 함께 넣음 */
+    public static String article(String url, String headline, String description, String image,
+                                 LocalDateTime published, LocalDateTime modified,
+                                 String categoryName, String categoryUrl, List<String[]> faq) {
         Map<String, Object> post = new LinkedHashMap<>();
         post.put("@type", "BlogPosting");
         post.put("@id", url + "#article");
@@ -96,7 +103,18 @@ public final class StructuredData {
         crumbs.put("itemListElement", categoryName == null
                 ? List.of(crumb(1, "홈", SITE + "/"), crumb(2, headline, url))
                 : List.of(crumb(1, "홈", SITE + "/"), crumb(2, categoryName, categoryUrl), crumb(3, headline, url)));
-        return write(graph(List.of(post, crumbs)));
+        if (faq == null || faq.isEmpty()) return write(graph(List.of(post, crumbs)));
+        Map<String, Object> faqPage = new LinkedHashMap<>();
+        faqPage.put("@type", "FAQPage");
+        faqPage.put("@id", url + "#faq");
+        faqPage.put("mainEntity", faq.stream().map(qa -> {
+            Map<String, Object> q = new LinkedHashMap<>();
+            q.put("@type", "Question");
+            q.put("name", qa[0]);
+            q.put("acceptedAnswer", Map.of("@type", "Answer", "text", qa[1]));
+            return q;
+        }).toList());
+        return write(graph(List.of(post, crumbs, faqPage)));
     }
 
     private static Map<String, Object> crumb(int position, String name, String item) {
