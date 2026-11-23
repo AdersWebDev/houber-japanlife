@@ -31,6 +31,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MainController {
     private static final String SITE = "https://houber-japanlife.com";
+    /** 무료 PDF 4종 글 주소 (메인 이벤트 띠 버튼 · 첫 번째 혜택 카드가 연결됨) */
+    private static final String PDF4_URL = "/detail/127";
     /** 카카오톡 채널 프로필 주소 (본문 링크는 바로 상담 채팅으로 연결) */
     private static final java.util.regex.Pattern KAKAO_PROFILE =
             java.util.regex.Pattern.compile("^https?://pf\\.kakao\\.com/_qTEPj/?$");
@@ -54,6 +56,7 @@ public class MainController {
         model.addAttribute("japan_life",postService.getList(Category.japan_life, 10, null, null, null));
         model.addAttribute("new_value",postService.checkUpdate());
         model.addAttribute("jsonLd", StructuredData.home());
+        model.addAttribute("pdf4Url", PDF4_URL);
 
         return "index";
     }
@@ -188,9 +191,10 @@ public class MainController {
             model.addAttribute("modifiedText", dto.getModifiedAt().format(dateText));
         }
         Category cat = dto.getCategory();
+        List<String[]> faq = dto.getContent() == null ? List.of() : faqFromContent(Jsoup.parse(dto.getContent()));
         model.addAttribute("jsonLd", StructuredData.article(SITE + "/detail/" + id, headline, description,
                 dto.getThumbnailUrl(), dto.getPublishedAt(), dto.getModifiedAt(),
-                cat == null ? null : cat.getTitle(), cat == null ? null : SITE + "/list?category=" + cat.name()));
+                cat == null ? null : cat.getTitle(), cat == null ? null : SITE + "/list?category=" + cat.name(), faq));
         model.addAttribute("category", dto.getCategory());
         model.addAttribute("view",dto.getView());
         model.addAttribute("new_value",postService.checkUpdate());
@@ -263,6 +267,43 @@ public class MainController {
 //        else
             return "youtubePage";
 
+    }
+
+    /**
+     * 본문의 '자주 묻는 질문' 섹션에서 [질문, 답]을 뽑음 (구조화 데이터 FAQPage용).
+     * 제목(h2)에 '자주 묻는 질문'이나 'FAQ'가 들어간 섹션 안에서, "Q."로 시작하는 소제목(h3)이 질문,
+     * 그 아래 다음 소제목·구분선 전까지의 글이 답. 화면에 보이는 글자 그대로 씀.
+     */
+    static List<String[]> faqFromContent(Document doc) {
+        List<String[]> faq = new ArrayList<>();
+        boolean inFaq = false;
+        String question = null;
+        StringBuilder answer = new StringBuilder();
+        for (Element el : doc.body().children()) {
+            boolean isH2 = el.tagName().equals("h2") || !el.select("> h2").isEmpty();
+            if (isH2 || el.tagName().equals("hr")) {
+                addFaq(faq, question, answer);
+                question = null;
+                inFaq = isH2 && el.text().matches("(?i).*(자주 묻는 질문|FAQ).*");
+                continue;
+            }
+            if (!inFaq) continue;
+            if (el.tagName().equals("h3")) {
+                addFaq(faq, question, answer);
+                String q = el.text().trim();
+                question = q.matches("^(Q|Q\\.|Q:|질문)\\s*.*") ? q.replaceFirst("^(Q\\.|Q:|Q|질문)\\s*", "").trim() : null;
+            } else if (question != null) {
+                String t = el.text().trim();
+                if (!t.isEmpty()) answer.append(answer.length() > 0 ? " " : "").append(t);
+            }
+        }
+        addFaq(faq, question, answer);
+        return faq;
+    }
+
+    private static void addFaq(List<String[]> faq, String question, StringBuilder answer) {
+        if (question != null && !question.isEmpty() && answer.length() > 0) faq.add(new String[]{question, answer.toString()});
+        answer.setLength(0);
     }
 
     /** 301 영구 이동. nginx 뒤에서도 https 주소가 그대로 나가도록 전체 주소를 직접 넣는다 */
